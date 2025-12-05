@@ -10,11 +10,13 @@ class EnvConfig {
   final AppEnvironment environment;
   final String supabaseUrl;
   final String supabaseAnonKey;
+  final String supabaseRedirectUrl;
 
   const EnvConfig({
     required this.environment,
     required this.supabaseUrl,
     required this.supabaseAnonKey,
+    required this.supabaseRedirectUrl,
   });
 
   factory EnvConfig.fromDotEnv(AppEnvironment env) {
@@ -22,6 +24,7 @@ class EnvConfig {
       environment: env,
       supabaseUrl: dotenv.get('SUPABASE_URL', fallback: ''),
       supabaseAnonKey: dotenv.get('SUPABASE_ANON_KEY', fallback: ''),
+      supabaseRedirectUrl: dotenv.get('SUPABASE_REDIRECT_URL', fallback: ''),
     );
   }
 
