@@ -1,0 +1,19 @@
+{
+  "@@locale": "en",
+  "appName": "Thinkr",
+
+  "home_title": "What do you want to decide today?",
+  "home_newDecision": "New decision",
+  "home_history": "History",
+
+  "login_signIn": "Sign in",
+  "login_signOut": "Sign out",
+
+  "settings_language": "Language",
+  "settings_language_english": "English",
+  "settings_language_indonesian": "Indonesian",
+
+  "login_title": "Login",
+  "login_welcome": "Welcome to Thinkr",
+  "login_signInWithGoogle": "Sign in with Google"
+}

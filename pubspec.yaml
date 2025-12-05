@@ -55,6 +55,8 @@ dependencies:
   # Freezed
   freezed_annotation: ^3.1.0
 
+  flutter_dotenv: ^6.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -67,7 +69,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
   build_runner: ^2.10.4
-  injectable_generator: ^2.11.1
+  injectable_generator: ^2.9.1
   freezed: ^3.2.3
 
 # For information on the generic Dart part of this file, see the

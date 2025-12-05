@@ -1,0 +1,19 @@
+{
+  "@@locale": "id",
+  "appName": "Thinkr",
+
+  "home_title": "Mau mengambil keputusan apa hari ini?",
+  "home_newDecision": "Keputusan baru",
+  "home_history": "Riwayat",
+
+  "login_signIn": "Masuk",
+  "login_signOut": "Keluar",
+
+  "settings_language": "Bahasa",
+  "settings_language_english": "Inggris",
+  "settings_language_indonesian": "Indonesia",
+
+  "login_title": "Masuk",
+  "login_welcome": "Selamat datang di Thinkr",
+  "login_signInWithGoogle": "Masuk dengan Google"
+}
