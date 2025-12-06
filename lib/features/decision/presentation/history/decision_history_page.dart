@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
+import 'package:thinkr/core/widgets/top_snackbar.dart';
 import 'package:thinkr/features/decision/domain/entities/decision.dart';
 
 import 'decision_history_cubit.dart';
@@ -54,9 +55,7 @@ class _DecisionHistoryPageState extends State<DecisionHistoryPage> {
         body: BlocConsumer<DecisionHistoryCubit, DecisionHistoryState>(
           listener: (context, state) {
             if (state.errorMessage != null) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+              showTopSnackBar(context, state.errorMessage!, isError: true);
             }
           },
           builder: (context, state) {
