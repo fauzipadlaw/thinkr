@@ -10,7 +10,7 @@ Personal decision assistant built with Flutter, Supabase, and Edge Functions (mu
 ## Setup
 1) Install deps
 ```bash
-flutter pub get
+fvm flutter pub get
 ```
 2) Generate env files from the example (creates .env.development/.staging/.production if missing)
 ```bash
@@ -27,7 +27,7 @@ SUPABASE_REDIRECT_URL=...
 
 ## Run
 ```bash
-flutter run -t lib/main_development.dart
+fvm flutter run -t lib/main_development.dart
 ```
 (use `main_staging.dart` / `main_production.dart` for other flavors)
 
@@ -45,6 +45,14 @@ flutter run -t lib/main_development.dart
 
 ## Documentation
 - User guide with expandable sections: `docs/USAGE.md`
+
+## Branding & launcher icons
+- Source asset: `assets/branding/app_icon.png`
+- Regenerate platform icons (Android/iOS/Web/macOS/Windows):
+```bash
+fvm flutter pub run flutter_launcher_icons
+```
+- Launcher/splash background color is `#141C30` to match the icon.
 
 ## Scripts
 - `script/generate-envs.sh` / `script/generate-envs.bat`: scaffold env files from `.env.example`.
