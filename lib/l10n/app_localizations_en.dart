@@ -180,6 +180,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Add options, criteria, weights, and scores to get a ranked recommendation.';
 
   @override
+  String get decision_editor_methodLabel => 'Decision method';
+
+  @override
+  String get decision_editor_methodWeighted => 'Weighted Sum';
+
+  @override
+  String get decision_editor_methodAhp => 'AHP';
+
+  @override
+  String get decision_editor_methodFuzzy => 'Fuzzy Weighted';
+
+  @override
   String get decision_editor_evaluate => 'Evaluate';
 
   @override
@@ -560,4 +572,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get docs_methodItem2 =>
       'Computed in Supabase Edge Function `evaluate_decision`.';
+
+  @override
+  String get docs_methodItem3 =>
+      'AHP & Fuzzy: accepted by the Edge Function; current build aggregates with provided weights/scores (pairwise/fuzzy inputs coming later).';
 }

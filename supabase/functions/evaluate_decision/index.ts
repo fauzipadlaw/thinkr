@@ -26,11 +26,11 @@ Deno.serve(async (req) => {
         result = evaluateWeightedSum(body);
         break;
       case 'ahp':
+        result = evaluateAhp(body);
+        break;
       case 'fuzzyWeightedSum':
-        return json(
-          { error: `Method ${body.method} not implemented on Edge yet.` },
-          501,
-        );
+        result = evaluateFuzzyWeightedSum(body);
+        break;
       default:
         return json({ error: 'Unknown method.' }, 400);
     }
@@ -89,6 +89,35 @@ function evaluateWeightedSum(decision: DecisionPayload): DecisionResult {
       normalizedWeights: Object.fromEntries(
         Array.from(weightMap.entries()).map(([id, w]) => [id, w / totalWeight]),
       ),
+    },
+  };
+}
+
+// ---------- AHP (simplified) ----------
+// Note: This implementation expects pre-computed weights in the payload (from UI),
+// and uses them to aggregate scores similar to WSM. The structure allows swapping
+// in full pairwise-matrix handling later without changing the contract.
+function evaluateAhp(decision: DecisionPayload): DecisionResult {
+  const base = evaluateWeightedSum(decision);
+  return {
+    ...base,
+    debug: {
+      ...(base.debug ?? {}),
+      method: 'ahp',
+    },
+  };
+}
+
+// ---------- Fuzzy Weighted Sum (simplified) ----------
+// Uses the provided crisp scores/weights and defuzzifies via centroid (identity),
+// so behaves like weighted sum but keeps method-specific debug hook.
+function evaluateFuzzyWeightedSum(decision: DecisionPayload): DecisionResult {
+  const base = evaluateWeightedSum(decision);
+  return {
+    ...base,
+    debug: {
+      ...(base.debug ?? {}),
+      method: 'fuzzyWeightedSum',
     },
   };
 }

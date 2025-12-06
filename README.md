@@ -44,6 +44,7 @@ fvm flutter run -t lib/main_development.dart
   - Score per option: `score(option) = Σ (w_i_normalized * score(option, criterion_i))`  
   - Result: best option id, per-option scores, sorted ranking.  
   - Computed remotely via `evaluate_decision` Edge Function.
+- **AHP (simplified)** and **Fuzzy Weighted Sum (placeholder)** are accepted by the Edge function and currently aggregate using provided weights/scores (ready for future pairwise/fuzzy data without breaking clients).
 
 ## Documentation
 - User guide with expandable sections: `docs/USAGE.md`

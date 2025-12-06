@@ -234,57 +234,55 @@ class _HistoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          InkWell(
-            onTap: () {
-              if (decision.result != null) {
-                context.push('/app/decisions/result', extra: decision);
-              } else {
-                context.push('/app/decisions/edit', extra: decision);
-              }
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  decision.title,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                if (decision.description != null &&
-                    decision.description!.trim().isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    decision.description!,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.white70,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ],
+    void goToDestination() {
+      if (decision.result != null) {
+        context.push('/app/decisions/result', extra: decision);
+      } else {
+        context.push('/app/decisions/edit', extra: decision);
+      }
+    }
+
+    return InkWell(
+      onTap: goToDestination,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              decision.title,
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            badge,
-            style: theme.textTheme.bodySmall?.copyWith(color: Colors.white60),
-          ),
-        ],
+            if (decision.description != null &&
+                decision.description!.trim().isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(
+                decision.description!,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.white70,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+            const SizedBox(height: 6),
+            Text(
+              badge,
+              style: theme.textTheme.bodySmall?.copyWith(color: Colors.white60),
+            ),
+          ],
+        ),
       ),
     );
   }

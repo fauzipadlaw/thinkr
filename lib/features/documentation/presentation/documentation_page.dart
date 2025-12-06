@@ -122,6 +122,7 @@ class DocumentationPage extends StatelessWidget {
           [
             loc.docs_methodItem1,
             loc.docs_methodItem2,
+            loc.docs_methodItem3,
           ],
         ),
       ];

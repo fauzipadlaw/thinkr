@@ -428,6 +428,30 @@ abstract class AppLocalizations {
   /// **'Add options, criteria, weights, and scores to get a ranked recommendation.'**
   String get decision_editor_subtitle;
 
+  /// No description provided for @decision_editor_methodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Decision method'**
+  String get decision_editor_methodLabel;
+
+  /// No description provided for @decision_editor_methodWeighted.
+  ///
+  /// In en, this message translates to:
+  /// **'Weighted Sum'**
+  String get decision_editor_methodWeighted;
+
+  /// No description provided for @decision_editor_methodAhp.
+  ///
+  /// In en, this message translates to:
+  /// **'AHP'**
+  String get decision_editor_methodAhp;
+
+  /// No description provided for @decision_editor_methodFuzzy.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuzzy Weighted'**
+  String get decision_editor_methodFuzzy;
+
   /// No description provided for @decision_editor_evaluate.
   ///
   /// In en, this message translates to:
@@ -1105,6 +1129,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Computed in Supabase Edge Function `evaluate_decision`.'**
   String get docs_methodItem2;
+
+  /// No description provided for @docs_methodItem3.
+  ///
+  /// In en, this message translates to:
+  /// **'AHP & Fuzzy: accepted by the Edge Function; current build aggregates with provided weights/scores (pairwise/fuzzy inputs coming later).'**
+  String get docs_methodItem3;
 }
 
 class _AppLocalizationsDelegate

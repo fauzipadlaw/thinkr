@@ -757,6 +757,8 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildMethodSelector(loc, decision),
+          const SizedBox(height: 12),
           TextFormField(
             controller: _titleController,
             focusNode: _titleFocus,
@@ -788,6 +790,46 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
         ],
       ),
     );
+  }
+
+  Widget _buildMethodSelector(AppLocalizations loc, Decision decision) {
+    final theme = Theme.of(context);
+    final methods = DecisionMethod.values;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          loc.decision_editor_methodLabel,
+          style: theme.textTheme.titleSmall,
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: methods.map((m) {
+            final selected = decision.method == m;
+            return ChoiceChip(
+              label: Text(_methodLabel(loc, m)),
+              selected: selected,
+              onSelected: (_) {
+                context.read<DecisionEditorCubit>().setMethod(m);
+              },
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  String _methodLabel(AppLocalizations loc, DecisionMethod method) {
+    switch (method) {
+      case DecisionMethod.weightedSum:
+        return loc.decision_editor_methodWeighted;
+      case DecisionMethod.ahp:
+        return loc.decision_editor_methodAhp;
+      case DecisionMethod.fuzzyWeightedSum:
+        return loc.decision_editor_methodFuzzy;
+    }
   }
 
   Widget _buildOptionsCard(
