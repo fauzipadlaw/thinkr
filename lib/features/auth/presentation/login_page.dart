@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hcaptcha_flutter/hcaptcha_flutter.dart';
+import 'package:thinkr/core/env/environment.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
 import 'package:thinkr/l10n/app_localizations.dart';
 import 'package:thinkr/core/widgets/top_snackbar.dart';
@@ -21,6 +25,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _obscure = true;
+  late final String _captchaSiteKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _captchaSiteKey = GetIt.I<EnvConfig>().supabaseCaptchaSiteKey;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +46,16 @@ class _LoginPageState extends State<LoginPage> {
             prev.successMessage != curr.successMessage,
         listener: (context, state) {
           if (state.errorMessage != null) {
+            if (_isCaptchaError(state.errorMessage)) return;
             final msg = _localizeError(state.errorMessage!, loc);
             showTopSnackBar(context, msg, isError: true);
           } else if (state.successMessage != null) {
             final key = state.successMessage!;
             final msg = key == 'login_signupSuccess'
                 ? loc.login_signupSuccess
-                : loc.login_signinSuccess;
+                : key == 'login_guestSuccess'
+                    ? loc.login_guestSuccess
+                    : loc.login_signinSuccess;
             showTopSnackBar(context, msg);
           }
         },
@@ -229,7 +243,36 @@ class _LoginPageState extends State<LoginPage> {
                                           child: ElevatedButton(
                                             onPressed: state.isSubmitting
                                                 ? null
-                                                : cubit.submit,
+                                                  : () async {
+                                                    final success =
+                                                        await cubit.submit();
+                                                    if (!context.mounted ||
+                                                        success) {
+                                                      return;
+                                                    }
+
+                                                    final needsCaptcha =
+                                                        await cubit.shouldRunCaptcha(
+                                                      requiresCaptcha: _requiresCaptcha,
+                                                      errorMessage:
+                                                          cubit.state.errorMessage,
+                                                    );
+                                                    if (!needsCaptcha ||
+                                                        !context.mounted) {
+                                                      return;
+                                                    }
+                                                    final token =
+                                                        await _solveCaptcha(
+                                                      context,
+                                                    );
+                                                    if (token == null ||
+                                                        !context.mounted) {
+                                                      return;
+                                                    }
+                                                    await cubit.submit(
+                                                      captchaToken: token,
+                                                    );
+                                                  },
                                             style: ElevatedButton.styleFrom(
                                               padding: const EdgeInsets.symmetric(
                                                 vertical: 14,
@@ -330,13 +373,63 @@ class _LoginPageState extends State<LoginPage> {
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(14),
                                         ),
-                                      ),
-                                      label: Text(loc.login_signInWithGoogle),
                                     ),
-                                  ],
-                                ),
+                                    label: Text(loc.login_signInWithGoogle),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  OutlinedButton.icon(
+                                    onPressed: state.isSubmitting
+                                        ? null
+                                        : () async {
+                                            final success =
+                                                await cubit.signInAnonymously();
+                                            if (!context.mounted || success) {
+                                              return;
+                                            }
+
+                                            final needsCaptcha =
+                                                await cubit.shouldRunCaptcha(
+                                              requiresCaptcha: _requiresCaptcha,
+                                              errorMessage:
+                                                  cubit.state.errorMessage,
+                                            );
+                                            if (!needsCaptcha ||
+                                                !context.mounted) {
+                                              return;
+                                            }
+                                            final token =
+                                                await _solveCaptcha(context);
+                                            if (token == null ||
+                                                !context.mounted) {
+                                              return;
+                                            }
+                                            await cubit.signInAnonymously(
+                                              captchaToken: token,
+                                            );
+                                          },
+                                    icon: const Icon(
+                                      Icons.person_outline,
+                                      color: Colors.white,
+                                    ),
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      side: BorderSide(
+                                        color: Colors.white.withValues(alpha: 0.3),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                        horizontal: 16,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                    ),
+                                    label: Text(loc.login_continueAsGuest),
+                                  ),
+                                ],
                               ),
                             ),
+                          ),
                           ),
                         ),
                       ),
@@ -399,6 +492,50 @@ class _LoginPageState extends State<LoginPage> {
       default:
         return key;
     }
+  }
+
+  bool get _requiresCaptcha => _captchaSiteKey.isNotEmpty;
+
+  bool _isCaptchaError(String? message) {
+    if (message == null) return false;
+    final lower = message.toLowerCase();
+    return lower.contains('captcha required') ||
+        lower.contains('captcha verification') ||
+        lower.contains('captcha_token');
+  }
+
+  Future<String?> _solveCaptcha(BuildContext context) async {
+    final completer = Completer<String?>();
+    HCaptchaFlutter.setMethodCallHandler((MethodCall call) async {
+      if (call.method == 'success' && call.arguments != null) {
+        final res = call.arguments as Map<dynamic, dynamic>;
+        final token = res['token'] as String?;
+        if (!completer.isCompleted) completer.complete(token);
+      } else if (call.method == 'error' || call.method == 'cancel') {
+        if (!completer.isCompleted) completer.complete(null);
+      }
+      return null;
+    });
+
+    try {
+      await HCaptchaFlutter.show({
+        'siteKey': _captchaSiteKey,
+        'language': Localizations.localeOf(context).languageCode,
+      });
+    } catch (e) {
+      if (!completer.isCompleted) completer.complete(null);
+      if (context.mounted) {
+        showTopSnackBar(
+          context,
+          context.loc.login_errorGeneric,
+          isError: true,
+        );
+      }
+    }
+
+    final token =
+        await completer.future.timeout(const Duration(seconds: 60), onTimeout: () => null);
+    return token;
   }
 
   Future<bool> _confirmDiscard(

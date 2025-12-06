@@ -248,6 +248,30 @@ abstract class AppLocalizations {
   /// **'Account created'**
   String get login_signupSuccess;
 
+  /// No description provided for @login_continueAsGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue as guest'**
+  String get login_continueAsGuest;
+
+  /// No description provided for @login_guestSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as guest'**
+  String get login_guestSuccess;
+
+  /// No description provided for @login_captchaRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please complete the captcha to continue.'**
+  String get login_captchaRequired;
+
+  /// No description provided for @login_errorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get login_errorGeneric;
+
   /// No description provided for @login_discardTitle.
   ///
   /// In en, this message translates to:
