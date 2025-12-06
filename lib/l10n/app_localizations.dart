@@ -122,6 +122,18 @@ abstract class AppLocalizations {
   /// **'History'**
   String get home_history;
 
+  /// No description provided for @home_recentDecisions.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent decisions'**
+  String get home_recentDecisions;
+
+  /// No description provided for @home_viewAllHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'See all history'**
+  String get home_viewAllHistory;
+
   /// No description provided for @login_signIn.
   ///
   /// In en, this message translates to:
@@ -133,6 +145,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign out'**
   String get login_signOut;
+
+  /// No description provided for @login_subtitleSignin.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back. Sign in to continue.'**
+  String get login_subtitleSignin;
+
+  /// No description provided for @login_subtitleSignup.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account to save your decisions.'**
+  String get login_subtitleSignup;
+
+  /// No description provided for @login_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get login_email;
+
+  /// No description provided for @login_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get login_password;
+
+  /// No description provided for @login_confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get login_confirmPassword;
+
+  /// No description provided for @login_emailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get login_emailRequired;
+
+  /// No description provided for @login_emailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get login_emailInvalid;
+
+  /// No description provided for @login_passwordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get login_passwordRequired;
+
+  /// No description provided for @login_passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get login_passwordTooShort;
+
+  /// No description provided for @login_passwordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get login_passwordMismatch;
+
+  /// No description provided for @login_signinCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get login_signinCta;
+
+  /// No description provided for @login_signupCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get login_signupCta;
+
+  /// No description provided for @login_needAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Need an account? Sign up'**
+  String get login_needAccount;
+
+  /// No description provided for @login_haveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Sign in'**
+  String get login_haveAccount;
+
+  /// No description provided for @login_orContinueWith.
+  ///
+  /// In en, this message translates to:
+  /// **'or continue with'**
+  String get login_orContinueWith;
+
+  /// No description provided for @login_signinSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in'**
+  String get login_signinSuccess;
+
+  /// No description provided for @login_signupSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created'**
+  String get login_signupSuccess;
+
+  /// No description provided for @history_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Decision history'**
+  String get history_title;
+
+  /// No description provided for @history_emptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No decisions yet'**
+  String get history_emptyTitle;
+
+  /// No description provided for @history_emptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a decision to see it here.'**
+  String get history_emptySubtitle;
+
+  /// No description provided for @history_newDecision.
+  ///
+  /// In en, this message translates to:
+  /// **'New decision'**
+  String get history_newDecision;
+
+  /// No description provided for @history_options.
+  ///
+  /// In en, this message translates to:
+  /// **'options'**
+  String get history_options;
+
+  /// No description provided for @history_criteria.
+  ///
+  /// In en, this message translates to:
+  /// **'criteria'**
+  String get history_criteria;
+
+  /// No description provided for @history_bestOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Best: {option}'**
+  String history_bestOption(Object option);
+
+  /// No description provided for @history_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get history_delete;
+
+  /// No description provided for @history_errorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load history'**
+  String get history_errorTitle;
+
+  /// No description provided for @history_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get history_retry;
+
+  /// No description provided for @decision_editor_stepOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Add options'**
+  String get decision_editor_stepOptions;
+
+  /// No description provided for @decision_editor_stepCriteria.
+  ///
+  /// In en, this message translates to:
+  /// **'Add criteria & weights'**
+  String get decision_editor_stepCriteria;
+
+  /// No description provided for @decision_editor_stepScores.
+  ///
+  /// In en, this message translates to:
+  /// **'Score each option'**
+  String get decision_editor_stepScores;
+
+  /// No description provided for @decision_editor_stepEvaluate.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get decision_editor_stepEvaluate;
 
   /// No description provided for @settings_language.
   ///
@@ -169,6 +367,696 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign in with Google'**
   String get login_signInWithGoogle;
+
+  /// No description provided for @decision_editor_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Decision editor'**
+  String get decision_editor_title;
+
+  /// No description provided for @decision_editor_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add options, criteria, weights, and scores to get a ranked recommendation.'**
+  String get decision_editor_subtitle;
+
+  /// No description provided for @decision_editor_evaluate.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluate'**
+  String get decision_editor_evaluate;
+
+  /// No description provided for @decision_editor_evaluating.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluating...'**
+  String get decision_editor_evaluating;
+
+  /// No description provided for @decision_editor_save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save decision'**
+  String get decision_editor_save;
+
+  /// No description provided for @decision_editor_saving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get decision_editor_saving;
+
+  /// No description provided for @decision_editor_saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Decision saved'**
+  String get decision_editor_saved;
+
+  /// No description provided for @decision_editor_defaultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled decision'**
+  String get decision_editor_defaultTitle;
+
+  /// No description provided for @decision_editor_evaluatedChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluated'**
+  String get decision_editor_evaluatedChip;
+
+  /// No description provided for @decision_editor_titleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get decision_editor_titleLabel;
+
+  /// No description provided for @decision_editor_titleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What are you deciding?'**
+  String get decision_editor_titleHint;
+
+  /// No description provided for @decision_editor_optionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get decision_editor_optionsTitle;
+
+  /// No description provided for @decision_editor_optionsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'List every option you\'re considering.'**
+  String get decision_editor_optionsDescription;
+
+  /// No description provided for @decision_editor_optionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an option'**
+  String get decision_editor_optionHint;
+
+  /// No description provided for @decision_editor_addOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Add option'**
+  String get decision_editor_addOption;
+
+  /// No description provided for @decision_editor_noOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'No options yet. Add at least two to compare.'**
+  String get decision_editor_noOptions;
+
+  /// No description provided for @decision_editor_criteriaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Criteria & weights'**
+  String get decision_editor_criteriaTitle;
+
+  /// No description provided for @decision_editor_criteriaDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'What matters? Set a relative weight for each criterion.'**
+  String get decision_editor_criteriaDescription;
+
+  /// No description provided for @decision_editor_criterionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a criterion'**
+  String get decision_editor_criterionHint;
+
+  /// No description provided for @decision_editor_weightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get decision_editor_weightLabel;
+
+  /// No description provided for @decision_editor_addCriterion.
+  ///
+  /// In en, this message translates to:
+  /// **'Add criterion'**
+  String get decision_editor_addCriterion;
+
+  /// No description provided for @decision_editor_weightsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Weights are normalized automatically.'**
+  String get decision_editor_weightsNote;
+
+  /// No description provided for @decision_editor_noCriteria.
+  ///
+  /// In en, this message translates to:
+  /// **'No criteria yet. Add what you care about.'**
+  String get decision_editor_noCriteria;
+
+  /// No description provided for @decision_editor_remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get decision_editor_remove;
+
+  /// No description provided for @decision_editor_scoresTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scores matrix'**
+  String get decision_editor_scoresTitle;
+
+  /// No description provided for @decision_editor_scoresDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Score each option for every criterion (0-10 works well).'**
+  String get decision_editor_scoresDescription;
+
+  /// No description provided for @decision_editor_scoresEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one option and one criterion to start scoring.'**
+  String get decision_editor_scoresEmpty;
+
+  /// No description provided for @decision_editor_scoreOptionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Option'**
+  String get decision_editor_scoreOptionHeader;
+
+  /// No description provided for @decision_editor_scorePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'0-10'**
+  String get decision_editor_scorePlaceholder;
+
+  /// No description provided for @decision_editor_scoreRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Score must be between 1 and 10.'**
+  String get decision_editor_scoreRange;
+
+  /// No description provided for @settings_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings_title;
+
+  /// No description provided for @settings_languageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settings_languageLabel;
+
+  /// No description provided for @decision_editor_resultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Result'**
+  String get decision_editor_resultTitle;
+
+  /// No description provided for @decision_editor_resultDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluate to see the weighted ranking.'**
+  String get decision_editor_resultDescription;
+
+  /// No description provided for @decision_editor_bestOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Best option'**
+  String get decision_editor_bestOption;
+
+  /// No description provided for @decision_editor_unknownOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown option'**
+  String get decision_editor_unknownOption;
+
+  /// No description provided for @decision_editor_ranking.
+  ///
+  /// In en, this message translates to:
+  /// **'Ranking'**
+  String get decision_editor_ranking;
+
+  /// No description provided for @decision_editor_descriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get decision_editor_descriptionLabel;
+
+  /// No description provided for @decision_editor_descriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add context or constraints (optional).'**
+  String get decision_editor_descriptionHint;
+
+  /// No description provided for @decision_editor_optionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Option'**
+  String get decision_editor_optionLabel;
+
+  /// No description provided for @decision_editor_criterionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Criterion'**
+  String get decision_editor_criterionLabel;
+
+  /// No description provided for @decision_editor_scoreHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: scores can be any numeric scale, e.g., 0-10.'**
+  String get decision_editor_scoreHint;
+
+  /// No description provided for @decision_editor_scoreDefaultZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty scores count as 0.'**
+  String get decision_editor_scoreDefaultZero;
+
+  /// No description provided for @decision_editor_validationOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least two options.'**
+  String get decision_editor_validationOptions;
+
+  /// No description provided for @decision_editor_validationCriteria.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one criterion.'**
+  String get decision_editor_validationCriteria;
+
+  /// No description provided for @decision_editor_validationScores.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} scores still empty (counted as 0).'**
+  String decision_editor_validationScores(int count);
+
+  /// No description provided for @decision_editor_fixValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete the required fields to continue.'**
+  String get decision_editor_fixValidation;
+
+  /// No description provided for @decision_editor_templatesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Templates'**
+  String get decision_editor_templatesTitle;
+
+  /// No description provided for @decision_editor_templatesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Start from a preset and adjust.'**
+  String get decision_editor_templatesDescription;
+
+  /// No description provided for @decision_editor_templateApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Template applied: {name}'**
+  String decision_editor_templateApplied(Object name);
+
+  /// No description provided for @decision_editor_templateCareer.
+  ///
+  /// In en, this message translates to:
+  /// **'Career move'**
+  String get decision_editor_templateCareer;
+
+  /// No description provided for @decision_editor_templateCareerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare staying, switching, or freelancing.'**
+  String get decision_editor_templateCareerDesc;
+
+  /// No description provided for @decision_editor_templateCareer_optionStay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay in current role'**
+  String get decision_editor_templateCareer_optionStay;
+
+  /// No description provided for @decision_editor_templateCareer_optionNewCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Join a new company'**
+  String get decision_editor_templateCareer_optionNewCompany;
+
+  /// No description provided for @decision_editor_templateCareer_optionFreelance.
+  ///
+  /// In en, this message translates to:
+  /// **'Go freelance / consulting'**
+  String get decision_editor_templateCareer_optionFreelance;
+
+  /// No description provided for @decision_editor_templateCareer_critComp.
+  ///
+  /// In en, this message translates to:
+  /// **'Compensation'**
+  String get decision_editor_templateCareer_critComp;
+
+  /// No description provided for @decision_editor_templateCareer_critGrowth.
+  ///
+  /// In en, this message translates to:
+  /// **'Growth & learning'**
+  String get decision_editor_templateCareer_critGrowth;
+
+  /// No description provided for @decision_editor_templateCareer_critBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Work-life balance'**
+  String get decision_editor_templateCareer_critBalance;
+
+  /// No description provided for @decision_editor_templateCareer_critStability.
+  ///
+  /// In en, this message translates to:
+  /// **'Stability'**
+  String get decision_editor_templateCareer_critStability;
+
+  /// No description provided for @decision_editor_templateProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Product decision'**
+  String get decision_editor_templateProduct;
+
+  /// No description provided for @decision_editor_templateProductDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Build vs buy vs open-source.'**
+  String get decision_editor_templateProductDesc;
+
+  /// No description provided for @decision_editor_templateProduct_optionSaas.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy a SaaS'**
+  String get decision_editor_templateProduct_optionSaas;
+
+  /// No description provided for @decision_editor_templateProduct_optionBuild.
+  ///
+  /// In en, this message translates to:
+  /// **'Build in-house'**
+  String get decision_editor_templateProduct_optionBuild;
+
+  /// No description provided for @decision_editor_templateProduct_optionOpenSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Adopt open-source'**
+  String get decision_editor_templateProduct_optionOpenSource;
+
+  /// No description provided for @decision_editor_templateProduct_critCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Total cost'**
+  String get decision_editor_templateProduct_critCost;
+
+  /// No description provided for @decision_editor_templateProduct_critSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to value'**
+  String get decision_editor_templateProduct_critSpeed;
+
+  /// No description provided for @decision_editor_templateProduct_critScalability.
+  ///
+  /// In en, this message translates to:
+  /// **'Scalability'**
+  String get decision_editor_templateProduct_critScalability;
+
+  /// No description provided for @decision_editor_templateProduct_critSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Support & maintenance'**
+  String get decision_editor_templateProduct_critSupport;
+
+  /// No description provided for @decision_editor_templateTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel plan'**
+  String get decision_editor_templateTravel;
+
+  /// No description provided for @decision_editor_templateTravelDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick the best trip style.'**
+  String get decision_editor_templateTravelDesc;
+
+  /// No description provided for @decision_editor_templateTravel_optionBeach.
+  ///
+  /// In en, this message translates to:
+  /// **'Beach / relax'**
+  String get decision_editor_templateTravel_optionBeach;
+
+  /// No description provided for @decision_editor_templateTravel_optionCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City / culture'**
+  String get decision_editor_templateTravel_optionCity;
+
+  /// No description provided for @decision_editor_templateTravel_optionNature.
+  ///
+  /// In en, this message translates to:
+  /// **'Nature / adventure'**
+  String get decision_editor_templateTravel_optionNature;
+
+  /// No description provided for @decision_editor_templateTravel_critBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget'**
+  String get decision_editor_templateTravel_critBudget;
+
+  /// No description provided for @decision_editor_templateTravel_critActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities & experiences'**
+  String get decision_editor_templateTravel_critActivities;
+
+  /// No description provided for @decision_editor_templateTravel_critWeather.
+  ///
+  /// In en, this message translates to:
+  /// **'Weather preference'**
+  String get decision_editor_templateTravel_critWeather;
+
+  /// No description provided for @decision_editor_templateTravel_critTravelTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel time'**
+  String get decision_editor_templateTravel_critTravelTime;
+
+  /// No description provided for @decision_editor_templateFinance.
+  ///
+  /// In en, this message translates to:
+  /// **'Financial move'**
+  String get decision_editor_templateFinance;
+
+  /// No description provided for @decision_editor_templateFinanceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose where to allocate funds.'**
+  String get decision_editor_templateFinanceDesc;
+
+  /// No description provided for @decision_editor_templateFinance_optionIndex.
+  ///
+  /// In en, this message translates to:
+  /// **'Index funds / ETFs'**
+  String get decision_editor_templateFinance_optionIndex;
+
+  /// No description provided for @decision_editor_templateFinance_optionRealEstate.
+  ///
+  /// In en, this message translates to:
+  /// **'Real estate'**
+  String get decision_editor_templateFinance_optionRealEstate;
+
+  /// No description provided for @decision_editor_templateFinance_optionCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash / savings'**
+  String get decision_editor_templateFinance_optionCash;
+
+  /// No description provided for @decision_editor_templateFinance_critRisk.
+  ///
+  /// In en, this message translates to:
+  /// **'Risk'**
+  String get decision_editor_templateFinance_critRisk;
+
+  /// No description provided for @decision_editor_templateFinance_critReturn.
+  ///
+  /// In en, this message translates to:
+  /// **'Return potential'**
+  String get decision_editor_templateFinance_critReturn;
+
+  /// No description provided for @decision_editor_templateFinance_critLiquidity.
+  ///
+  /// In en, this message translates to:
+  /// **'Liquidity'**
+  String get decision_editor_templateFinance_critLiquidity;
+
+  /// No description provided for @decision_editor_templateFinance_critHorizon.
+  ///
+  /// In en, this message translates to:
+  /// **'Time horizon'**
+  String get decision_editor_templateFinance_critHorizon;
+
+  /// No description provided for @docs_title.
+  ///
+  /// In en, this message translates to:
+  /// **'User Guide'**
+  String get docs_title;
+
+  /// No description provided for @docs_gettingStartedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting Started'**
+  String get docs_gettingStartedTitle;
+
+  /// No description provided for @docs_gettingStartedItem1.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Google (web redirects, mobile in-app).'**
+  String get docs_gettingStartedItem1;
+
+  /// No description provided for @docs_gettingStartedItem2.
+  ///
+  /// In en, this message translates to:
+  /// **'Home shows hero prompt, recent decisions, quick actions.'**
+  String get docs_gettingStartedItem2;
+
+  /// No description provided for @docs_createTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a Decision'**
+  String get docs_createTitle;
+
+  /// No description provided for @docs_createItem1.
+  ///
+  /// In en, this message translates to:
+  /// **'Title & description: title required.'**
+  String get docs_createItem1;
+
+  /// No description provided for @docs_createItem2.
+  ///
+  /// In en, this message translates to:
+  /// **'Options: add at least 2.'**
+  String get docs_createItem2;
+
+  /// No description provided for @docs_createItem3.
+  ///
+  /// In en, this message translates to:
+  /// **'Criteria: add weights (1–10) and at least 1 criterion.'**
+  String get docs_createItem3;
+
+  /// No description provided for @docs_createItem4.
+  ///
+  /// In en, this message translates to:
+  /// **'Scores: fill every option×criterion with scores 1–10.'**
+  String get docs_createItem4;
+
+  /// No description provided for @docs_createItem5.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluate runs remote WSM, auto-saves after confirmation.'**
+  String get docs_createItem5;
+
+  /// No description provided for @docs_createItem6.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsaved edits trigger discard confirmation on back.'**
+  String get docs_createItem6;
+
+  /// No description provided for @docs_templatesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Templates'**
+  String get docs_templatesTitle;
+
+  /// No description provided for @docs_templatesItem1.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Career/Product/Travel/Finance templates to prefill.'**
+  String get docs_templatesItem1;
+
+  /// No description provided for @docs_templatesItem2.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit any prefilled values before scoring.'**
+  String get docs_templatesItem2;
+
+  /// No description provided for @docs_resultsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Results'**
+  String get docs_resultsTitle;
+
+  /// No description provided for @docs_resultsItem1.
+  ///
+  /// In en, this message translates to:
+  /// **'Best option, ranking with scores, meta info shown.'**
+  String get docs_resultsItem1;
+
+  /// No description provided for @docs_resultsItem2.
+  ///
+  /// In en, this message translates to:
+  /// **'Debug data from Edge Function when available.'**
+  String get docs_resultsItem2;
+
+  /// No description provided for @docs_historyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History & Search'**
+  String get docs_historyTitle;
+
+  /// No description provided for @docs_historyItem1.
+  ///
+  /// In en, this message translates to:
+  /// **'View saved decisions; mobile infinite scroll, web paging.'**
+  String get docs_historyItem1;
+
+  /// No description provided for @docs_historyItem2.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by title/description.'**
+  String get docs_historyItem2;
+
+  /// No description provided for @docs_historyItem3.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to open result (evaluated) or edit & re-evaluate.'**
+  String get docs_historyItem3;
+
+  /// No description provided for @docs_historyItem4.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete performs soft delete.'**
+  String get docs_historyItem4;
+
+  /// No description provided for @docs_languageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get docs_languageTitle;
+
+  /// No description provided for @docs_languageItem1.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch English/Bahasa via header icon or Settings.'**
+  String get docs_languageItem1;
+
+  /// No description provided for @docs_authTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication'**
+  String get docs_authTitle;
+
+  /// No description provided for @docs_authItem1.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Sign-In; logout in header with confirmation.'**
+  String get docs_authItem1;
+
+  /// No description provided for @docs_methodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Decision Method'**
+  String get docs_methodTitle;
+
+  /// No description provided for @docs_methodItem1.
+  ///
+  /// In en, this message translates to:
+  /// **'Weighted Sum Model: normalize weights, multiply scores (1–10), sum and rank.'**
+  String get docs_methodItem1;
+
+  /// No description provided for @docs_methodItem2.
+  ///
+  /// In en, this message translates to:
+  /// **'Computed in Supabase Edge Function `evaluate_decision`.'**
+  String get docs_methodItem2;
 }
 
 class _AppLocalizationsDelegate

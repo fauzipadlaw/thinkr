@@ -20,18 +20,26 @@ import 'package:thinkr/features/auth/domain/auth_repository.dart' as _i806;
 import 'package:thinkr/features/auth/presentation/auth_cubit.dart' as _i927;
 import 'package:thinkr/features/auth/presentation/auth_state_notifier.dart'
     as _i131;
+import 'package:thinkr/features/auth/presentation/login_form_cubit.dart'
+    as _i602;
 import 'package:thinkr/features/decision/data/decision_repository_supabase.dart'
     as _i373;
 import 'package:thinkr/features/decision/domain/decision_repository.dart'
     as _i733;
 import 'package:thinkr/features/decision/domain/usecases/evaluate_decision_usecase.dart'
     as _i329;
+import 'package:thinkr/features/decision/domain/usecases/get_decision_history_usecase.dart'
+    as _i87;
 import 'package:thinkr/features/decision/domain/usecases/save_decision_usecase.dart'
     as _i501;
 import 'package:thinkr/features/decision/domain/usecases/soft_delete_decision_usecase.dart'
     as _i862;
 import 'package:thinkr/features/decision/presentation/decision_editor_cubit.dart'
     as _i304;
+import 'package:thinkr/features/decision/presentation/history/decision_history_cubit.dart'
+    as _i22;
+import 'package:thinkr/features/decision/presentation/history/decision_preview_cubit.dart'
+    as _i718;
 import 'package:thinkr/features/settings/presentation/settings_cubit.dart'
     as _i237;
 import 'package:thinkr/thinkr_router.dart' as _i865;
@@ -46,9 +54,6 @@ _i174.GetIt $init(
   final supabaseModule = _$SupabaseModule();
   final routerModule = _$RouterModule();
   gh.lazySingleton<_i454.SupabaseClient>(() => supabaseModule.supabaseClient());
-  gh.lazySingleton<_i329.EvaluateDecisionUseCase>(
-    () => const _i329.EvaluateDecisionUseCase(),
-  );
   gh.lazySingleton<_i237.SettingsCubit>(() => _i237.SettingsCubit());
   gh.lazySingleton<_i806.AuthRepository>(
     () => _i262.SupabaseAuthRepository(
@@ -58,6 +63,9 @@ _i174.GetIt $init(
   );
   gh.lazySingleton<_i927.AuthCubit>(
     () => _i927.AuthCubit(gh<_i806.AuthRepository>()),
+  );
+  gh.lazySingleton<_i602.LoginFormCubit>(
+    () => _i602.LoginFormCubit(gh<_i806.AuthRepository>()),
   );
   gh.lazySingleton<_i131.AuthStateNotifier>(
     () => _i131.AuthStateNotifier(gh<_i806.AuthRepository>()),
@@ -71,17 +79,32 @@ _i174.GetIt $init(
   gh.lazySingleton<_i583.GoRouter>(
     () => routerModule.router(gh<_i131.AuthStateNotifier>()),
   );
+  gh.lazySingleton<_i329.EvaluateDecisionUseCase>(
+    () => _i329.EvaluateDecisionUseCase(gh<_i733.DecisionRepository>()),
+  );
+  gh.lazySingleton<_i87.GetDecisionHistoryUseCase>(
+    () => _i87.GetDecisionHistoryUseCase(gh<_i733.DecisionRepository>()),
+  );
   gh.lazySingleton<_i501.SaveDecisionUseCase>(
     () => _i501.SaveDecisionUseCase(gh<_i733.DecisionRepository>()),
   );
   gh.lazySingleton<_i862.SoftDeleteDecisionUseCase>(
     () => _i862.SoftDeleteDecisionUseCase(gh<_i733.DecisionRepository>()),
   );
+  gh.lazySingleton<_i22.DecisionHistoryCubit>(
+    () => _i22.DecisionHistoryCubit(
+      gh<_i87.GetDecisionHistoryUseCase>(),
+      gh<_i862.SoftDeleteDecisionUseCase>(),
+    ),
+  );
   gh.lazySingleton<_i304.DecisionEditorCubit>(
     () => _i304.DecisionEditorCubit(
       gh<_i329.EvaluateDecisionUseCase>(),
       gh<_i501.SaveDecisionUseCase>(),
     ),
+  );
+  gh.lazySingleton<_i718.DecisionPreviewCubit>(
+    () => _i718.DecisionPreviewCubit(gh<_i87.GetDecisionHistoryUseCase>()),
   );
   return getIt;
 }
