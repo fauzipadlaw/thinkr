@@ -248,6 +248,30 @@ abstract class AppLocalizations {
   /// **'Account created'**
   String get login_signupSuccess;
 
+  /// No description provided for @login_discardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get login_discardTitle;
+
+  /// No description provided for @login_discardMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You have unsent input. Leaving will clear the form.'**
+  String get login_discardMessage;
+
+  /// No description provided for @login_discardConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get login_discardConfirm;
+
+  /// No description provided for @login_discardStay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get login_discardStay;
+
   /// No description provided for @history_title.
   ///
   /// In en, this message translates to:

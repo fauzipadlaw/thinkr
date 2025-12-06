@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoginFormState {
 
- String get email; String get password; String get confirmPassword; bool get isSignup; bool get isSubmitting; String? get errorMessage; String? get successMessage; String? get emailError; String? get passwordError; String? get confirmError;
+ String get email; String get password; String get confirmPassword; bool get isSignup; bool get isSubmitting; bool get isDirty; String? get errorMessage; String? get successMessage; String? get emailError; String? get passwordError; String? get confirmError;
 /// Create a copy of LoginFormState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LoginFormStateCopyWith<LoginFormState> get copyWith => _$LoginFormStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginFormState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.confirmPassword, confirmPassword) || other.confirmPassword == confirmPassword)&&(identical(other.isSignup, isSignup) || other.isSignup == isSignup)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage)&&(identical(other.emailError, emailError) || other.emailError == emailError)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.confirmError, confirmError) || other.confirmError == confirmError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginFormState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.confirmPassword, confirmPassword) || other.confirmPassword == confirmPassword)&&(identical(other.isSignup, isSignup) || other.isSignup == isSignup)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.isDirty, isDirty) || other.isDirty == isDirty)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage)&&(identical(other.emailError, emailError) || other.emailError == emailError)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.confirmError, confirmError) || other.confirmError == confirmError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,password,confirmPassword,isSignup,isSubmitting,errorMessage,successMessage,emailError,passwordError,confirmError);
+int get hashCode => Object.hash(runtimeType,email,password,confirmPassword,isSignup,isSubmitting,isDirty,errorMessage,successMessage,emailError,passwordError,confirmError);
 
 @override
 String toString() {
-  return 'LoginFormState(email: $email, password: $password, confirmPassword: $confirmPassword, isSignup: $isSignup, isSubmitting: $isSubmitting, errorMessage: $errorMessage, successMessage: $successMessage, emailError: $emailError, passwordError: $passwordError, confirmError: $confirmError)';
+  return 'LoginFormState(email: $email, password: $password, confirmPassword: $confirmPassword, isSignup: $isSignup, isSubmitting: $isSubmitting, isDirty: $isDirty, errorMessage: $errorMessage, successMessage: $successMessage, emailError: $emailError, passwordError: $passwordError, confirmError: $confirmError)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LoginFormStateCopyWith<$Res>  {
   factory $LoginFormStateCopyWith(LoginFormState value, $Res Function(LoginFormState) _then) = _$LoginFormStateCopyWithImpl;
 @useResult
 $Res call({
- String email, String password, String confirmPassword, bool isSignup, bool isSubmitting, String? errorMessage, String? successMessage, String? emailError, String? passwordError, String? confirmError
+ String email, String password, String confirmPassword, bool isSignup, bool isSubmitting, bool isDirty, String? errorMessage, String? successMessage, String? emailError, String? passwordError, String? confirmError
 });
 
 
@@ -62,13 +62,14 @@ class _$LoginFormStateCopyWithImpl<$Res>
 
 /// Create a copy of LoginFormState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,Object? confirmPassword = null,Object? isSignup = null,Object? isSubmitting = null,Object? errorMessage = freezed,Object? successMessage = freezed,Object? emailError = freezed,Object? passwordError = freezed,Object? confirmError = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,Object? confirmPassword = null,Object? isSignup = null,Object? isSubmitting = null,Object? isDirty = null,Object? errorMessage = freezed,Object? successMessage = freezed,Object? emailError = freezed,Object? passwordError = freezed,Object? confirmError = freezed,}) {
   return _then(_self.copyWith(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String,confirmPassword: null == confirmPassword ? _self.confirmPassword : confirmPassword // ignore: cast_nullable_to_non_nullable
 as String,isSignup: null == isSignup ? _self.isSignup : isSignup // ignore: cast_nullable_to_non_nullable
 as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
+as bool,isDirty: null == isDirty ? _self.isDirty : isDirty // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,successMessage: freezed == successMessage ? _self.successMessage : successMessage // ignore: cast_nullable_to_non_nullable
 as String?,emailError: freezed == emailError ? _self.emailError : emailError // ignore: cast_nullable_to_non_nullable
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String password,  String confirmPassword,  bool isSignup,  bool isSubmitting,  String? errorMessage,  String? successMessage,  String? emailError,  String? passwordError,  String? confirmError)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String password,  String confirmPassword,  bool isSignup,  bool isSubmitting,  bool isDirty,  String? errorMessage,  String? successMessage,  String? emailError,  String? passwordError,  String? confirmError)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoginFormState() when $default != null:
-return $default(_that.email,_that.password,_that.confirmPassword,_that.isSignup,_that.isSubmitting,_that.errorMessage,_that.successMessage,_that.emailError,_that.passwordError,_that.confirmError);case _:
+return $default(_that.email,_that.password,_that.confirmPassword,_that.isSignup,_that.isSubmitting,_that.isDirty,_that.errorMessage,_that.successMessage,_that.emailError,_that.passwordError,_that.confirmError);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.email,_that.password,_that.confirmPassword,_that.isSignup,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String password,  String confirmPassword,  bool isSignup,  bool isSubmitting,  String? errorMessage,  String? successMessage,  String? emailError,  String? passwordError,  String? confirmError)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String password,  String confirmPassword,  bool isSignup,  bool isSubmitting,  bool isDirty,  String? errorMessage,  String? successMessage,  String? emailError,  String? passwordError,  String? confirmError)  $default,) {final _that = this;
 switch (_that) {
 case _LoginFormState():
-return $default(_that.email,_that.password,_that.confirmPassword,_that.isSignup,_that.isSubmitting,_that.errorMessage,_that.successMessage,_that.emailError,_that.passwordError,_that.confirmError);case _:
+return $default(_that.email,_that.password,_that.confirmPassword,_that.isSignup,_that.isSubmitting,_that.isDirty,_that.errorMessage,_that.successMessage,_that.emailError,_that.passwordError,_that.confirmError);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.email,_that.password,_that.confirmPassword,_that.isSignup,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String password,  String confirmPassword,  bool isSignup,  bool isSubmitting,  String? errorMessage,  String? successMessage,  String? emailError,  String? passwordError,  String? confirmError)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String password,  String confirmPassword,  bool isSignup,  bool isSubmitting,  bool isDirty,  String? errorMessage,  String? successMessage,  String? emailError,  String? passwordError,  String? confirmError)?  $default,) {final _that = this;
 switch (_that) {
 case _LoginFormState() when $default != null:
-return $default(_that.email,_that.password,_that.confirmPassword,_that.isSignup,_that.isSubmitting,_that.errorMessage,_that.successMessage,_that.emailError,_that.passwordError,_that.confirmError);case _:
+return $default(_that.email,_that.password,_that.confirmPassword,_that.isSignup,_that.isSubmitting,_that.isDirty,_that.errorMessage,_that.successMessage,_that.emailError,_that.passwordError,_that.confirmError);case _:
   return null;
 
 }
@@ -215,7 +216,7 @@ return $default(_that.email,_that.password,_that.confirmPassword,_that.isSignup,
 
 
 class _LoginFormState extends LoginFormState {
-  const _LoginFormState({this.email = '', this.password = '', this.confirmPassword = '', this.isSignup = false, this.isSubmitting = false, this.errorMessage, this.successMessage, this.emailError, this.passwordError, this.confirmError}): super._();
+  const _LoginFormState({this.email = '', this.password = '', this.confirmPassword = '', this.isSignup = false, this.isSubmitting = false, this.isDirty = false, this.errorMessage, this.successMessage, this.emailError, this.passwordError, this.confirmError}): super._();
   
 
 @override@JsonKey() final  String email;
@@ -223,6 +224,7 @@ class _LoginFormState extends LoginFormState {
 @override@JsonKey() final  String confirmPassword;
 @override@JsonKey() final  bool isSignup;
 @override@JsonKey() final  bool isSubmitting;
+@override@JsonKey() final  bool isDirty;
 @override final  String? errorMessage;
 @override final  String? successMessage;
 @override final  String? emailError;
@@ -239,16 +241,16 @@ _$LoginFormStateCopyWith<_LoginFormState> get copyWith => __$LoginFormStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginFormState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.confirmPassword, confirmPassword) || other.confirmPassword == confirmPassword)&&(identical(other.isSignup, isSignup) || other.isSignup == isSignup)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage)&&(identical(other.emailError, emailError) || other.emailError == emailError)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.confirmError, confirmError) || other.confirmError == confirmError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginFormState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.confirmPassword, confirmPassword) || other.confirmPassword == confirmPassword)&&(identical(other.isSignup, isSignup) || other.isSignup == isSignup)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.isDirty, isDirty) || other.isDirty == isDirty)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage)&&(identical(other.emailError, emailError) || other.emailError == emailError)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.confirmError, confirmError) || other.confirmError == confirmError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,password,confirmPassword,isSignup,isSubmitting,errorMessage,successMessage,emailError,passwordError,confirmError);
+int get hashCode => Object.hash(runtimeType,email,password,confirmPassword,isSignup,isSubmitting,isDirty,errorMessage,successMessage,emailError,passwordError,confirmError);
 
 @override
 String toString() {
-  return 'LoginFormState(email: $email, password: $password, confirmPassword: $confirmPassword, isSignup: $isSignup, isSubmitting: $isSubmitting, errorMessage: $errorMessage, successMessage: $successMessage, emailError: $emailError, passwordError: $passwordError, confirmError: $confirmError)';
+  return 'LoginFormState(email: $email, password: $password, confirmPassword: $confirmPassword, isSignup: $isSignup, isSubmitting: $isSubmitting, isDirty: $isDirty, errorMessage: $errorMessage, successMessage: $successMessage, emailError: $emailError, passwordError: $passwordError, confirmError: $confirmError)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$LoginFormStateCopyWith<$Res> implements $LoginFormStateCo
   factory _$LoginFormStateCopyWith(_LoginFormState value, $Res Function(_LoginFormState) _then) = __$LoginFormStateCopyWithImpl;
 @override @useResult
 $Res call({
- String email, String password, String confirmPassword, bool isSignup, bool isSubmitting, String? errorMessage, String? successMessage, String? emailError, String? passwordError, String? confirmError
+ String email, String password, String confirmPassword, bool isSignup, bool isSubmitting, bool isDirty, String? errorMessage, String? successMessage, String? emailError, String? passwordError, String? confirmError
 });
 
 
@@ -276,13 +278,14 @@ class __$LoginFormStateCopyWithImpl<$Res>
 
 /// Create a copy of LoginFormState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,Object? confirmPassword = null,Object? isSignup = null,Object? isSubmitting = null,Object? errorMessage = freezed,Object? successMessage = freezed,Object? emailError = freezed,Object? passwordError = freezed,Object? confirmError = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,Object? confirmPassword = null,Object? isSignup = null,Object? isSubmitting = null,Object? isDirty = null,Object? errorMessage = freezed,Object? successMessage = freezed,Object? emailError = freezed,Object? passwordError = freezed,Object? confirmError = freezed,}) {
   return _then(_LoginFormState(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String,confirmPassword: null == confirmPassword ? _self.confirmPassword : confirmPassword // ignore: cast_nullable_to_non_nullable
 as String,isSignup: null == isSignup ? _self.isSignup : isSignup // ignore: cast_nullable_to_non_nullable
 as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
+as bool,isDirty: null == isDirty ? _self.isDirty : isDirty // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,successMessage: freezed == successMessage ? _self.successMessage : successMessage // ignore: cast_nullable_to_non_nullable
 as String?,emailError: freezed == emailError ? _self.emailError : emailError // ignore: cast_nullable_to_non_nullable

@@ -10,6 +10,7 @@ abstract class LoginFormState with _$LoginFormState {
     @Default('') String confirmPassword,
     @Default(false) bool isSignup,
     @Default(false) bool isSubmitting,
+    @Default(false) bool isDirty,
     String? errorMessage,
     String? successMessage,
     String? emailError,
