@@ -1,0 +1,167 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+
+import '../domain/auth_repository.dart';
+import 'login_form_state.dart';
+
+@lazySingleton
+abstract class LoginFormCubit extends StateStreamableSource<LoginFormState> {
+  @factoryMethod
+  factory LoginFormCubit(AuthRepository authRepository) = _LoginFormCubitImpl;
+
+  void toggleMode();
+  void updateEmail(String email);
+  void updatePassword(String password);
+  void updateConfirmPassword(String confirm);
+  Future<void> submit();
+  Future<void> signInWithGoogle();
+}
+
+class _LoginFormCubitImpl extends Cubit<LoginFormState>
+    implements LoginFormCubit {
+  final AuthRepository _authRepository;
+
+  _LoginFormCubitImpl(this._authRepository) : super(LoginFormState.initial);
+
+  @override
+  void toggleMode() {
+    emit(
+      state.copyWith(
+        isSignup: !state.isSignup,
+        confirmPassword: '',
+        confirmError: null,
+        successMessage: null,
+        errorMessage: null,
+      ),
+    );
+  }
+
+  @override
+  void updateEmail(String email) {
+    emit(
+      state.copyWith(
+        email: email,
+        emailError: _validateEmail(email),
+        errorMessage: null,
+        successMessage: null,
+      ),
+    );
+  }
+
+  @override
+  void updatePassword(String password) {
+    emit(
+      state.copyWith(
+        password: password,
+        passwordError: _validatePassword(password),
+        confirmError: state.isSignup
+            ? _validateConfirm(state.confirmPassword, password)
+            : null,
+        errorMessage: null,
+        successMessage: null,
+      ),
+    );
+  }
+
+  @override
+  void updateConfirmPassword(String confirm) {
+    emit(
+      state.copyWith(
+        confirmPassword: confirm,
+        confirmError: state.isSignup
+            ? _validateConfirm(confirm, state.password)
+            : null,
+        errorMessage: null,
+        successMessage: null,
+      ),
+    );
+  }
+
+  @override
+  Future<void> submit() async {
+    final emailError = _validateEmail(state.email);
+    final passwordError = _validatePassword(state.password);
+    final confirmError = state.isSignup
+        ? _validateConfirm(state.confirmPassword, state.password)
+        : null;
+
+    if (emailError != null || passwordError != null || confirmError != null) {
+      emit(
+        state.copyWith(
+          emailError: emailError,
+          passwordError: passwordError,
+          confirmError: confirmError,
+          errorMessage: null,
+          successMessage: null,
+        ),
+      );
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        isSubmitting: true,
+        errorMessage: null,
+        successMessage: null,
+      ),
+    );
+
+    try {
+      if (state.isSignup) {
+        await _authRepository.signUpWithEmail(
+          email: state.email.trim(),
+          password: state.password,
+        );
+        emit(
+          state.copyWith(
+            isSubmitting: false,
+            successMessage: 'login_signupSuccess',
+          ),
+        );
+      } else {
+        await _authRepository.signInWithEmail(
+          email: state.email.trim(),
+          password: state.password,
+        );
+        emit(
+          state.copyWith(
+            isSubmitting: false,
+            successMessage: 'login_signinSuccess',
+          ),
+        );
+      }
+    } catch (e) {
+      emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<void> signInWithGoogle() async {
+    emit(state.copyWith(isSubmitting: true, errorMessage: null));
+    try {
+      await _authRepository.signInWithGoogle();
+      emit(state.copyWith(isSubmitting: false));
+    } catch (e) {
+      emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
+    }
+  }
+
+  String? _validateEmail(String email) {
+    final trimmed = email.trim();
+    final regex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (trimmed.isEmpty) return 'login_emailRequired';
+    if (!regex.hasMatch(trimmed)) return 'login_emailInvalid';
+    return null;
+  }
+
+  String? _validatePassword(String password) {
+    if (password.isEmpty) return 'login_passwordRequired';
+    if (password.length < 6) return 'login_passwordTooShort';
+    return null;
+  }
+
+  String? _validateConfirm(String confirm, String password) {
+    if (confirm != password) return 'login_passwordMismatch';
+    return null;
+  }
+}

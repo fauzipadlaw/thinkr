@@ -5,12 +5,14 @@ import 'dart:async';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
+import 'core/env/environment.dart';
 import 'sl_initializer.config.dart';
 
 @InjectableInit(
   initializerName: r'$init',
   asExtension: false,
   includeMicroPackages: false,
+  ignoreUnregisteredTypes: [EnvConfig],
 )
 abstract final class SLInitializer {
   static Completer<void> _initCompleter = Completer<void>();

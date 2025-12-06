@@ -9,6 +9,8 @@ typedef CriterionId = String;
 /// Key format: "$optionId|$criterionId"
 typedef ScoreKey = String;
 
+enum DecisionMethod { weightedSum, ahp, fuzzyWeightedSum }
+
 @freezed
 abstract class DecisionOption with _$DecisionOption {
   const factory DecisionOption({
@@ -33,6 +35,7 @@ abstract class DecisionResult with _$DecisionResult {
     required OptionId bestOptionId,
     required Map<OptionId, double> scores,
     required List<OptionId> ranking,
+    Map<String, dynamic>? debug,
   }) = _DecisionResult;
 }
 
@@ -42,6 +45,7 @@ abstract class Decision with _$Decision {
     DecisionId? id,
     required String title,
     String? description,
+    @Default(DecisionMethod.weightedSum) DecisionMethod method,
     @Default([]) List<DecisionOption> options,
     @Default([]) List<DecisionCriterion> criteria,
     @Default(<ScoreKey, double>{}) Map<ScoreKey, double> scores,
@@ -51,5 +55,8 @@ abstract class Decision with _$Decision {
     DateTime? deletedAt,
   }) = _Decision;
 
-  static const Decision empty = Decision(title: '');
+  static const Decision empty = Decision(
+    title: '',
+    method: DecisionMethod.weightedSum,
+  );
 }

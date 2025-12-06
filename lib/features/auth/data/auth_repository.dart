@@ -27,10 +27,7 @@ class SupabaseAuthRepository implements AuthRepository {
 
   AuthUser? _mapUser(User? user) {
     if (user == null) return null;
-    return AuthUser(
-      id: user.id,
-      email: user.email,
-    );
+    return AuthUser(id: user.id, email: user.email);
   }
 
   @override
@@ -39,6 +36,16 @@ class SupabaseAuthRepository implements AuthRepository {
   @override
   Future<AuthUser?> get currentUser async {
     return _mapUser(_client.auth.currentUser);
+  }
+
+  void _validateEmailPassword(String email, String password) {
+    final emailPattern = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (email.isEmpty || !emailPattern.hasMatch(email)) {
+      throw ArgumentError('Please enter a valid email address.');
+    }
+    if (password.isEmpty || password.length < 6) {
+      throw ArgumentError('Password must be at least 6 characters.');
+    }
   }
 
   @override
@@ -56,14 +63,30 @@ class SupabaseAuthRepository implements AuthRepository {
       );
     } else {
       // Mobile / desktop: default OAuth flow, using deep links
-      await _client.auth.signInWithOAuth(
-        OAuthProvider.google,
-      );
+      await _client.auth.signInWithOAuth(OAuthProvider.google);
     }
   }
 
   @override
   Future<void> signOut() async {
     await _client.auth.signOut();
+  }
+
+  @override
+  Future<void> signUpWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    _validateEmailPassword(email, password);
+    await _client.auth.signUp(email: email, password: password);
+  }
+
+  @override
+  Future<void> signInWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    _validateEmailPassword(email, password);
+    await _client.auth.signInWithPassword(email: email, password: password);
   }
 }

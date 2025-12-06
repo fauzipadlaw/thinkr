@@ -12,6 +12,8 @@ abstract class AuthCubit extends StateStreamableSource<AuthState> {
 
   Future<void> initialize();
   Future<void> signIn();
+  Future<void> signInWithEmail(String email, String password);
+  Future<void> signUpWithEmail(String email, String password);
   Future<void> signOut();
 }
 
@@ -47,6 +49,16 @@ class _AuthCubitImpl extends Cubit<AuthState> implements AuthCubit {
   @override
   Future<void> signIn() async {
     await _authRepository.signInWithGoogle();
+  }
+
+  @override
+  Future<void> signInWithEmail(String email, String password) {
+    return _authRepository.signInWithEmail(email: email, password: password);
+  }
+
+  @override
+  Future<void> signUpWithEmail(String email, String password) {
+    return _authRepository.signUpWithEmail(email: email, password: password);
   }
 
   @override

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thinkr/core/localization/app_locale.dart';
+import 'package:thinkr/features/splash/presentation/splash_page.dart';
 
 import 'features/settings/presentation/settings_cubit.dart';
 import 'features/settings/presentation/settings_state.dart';
@@ -28,6 +29,9 @@ class ThinkrApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
+          builder: (context, child) {
+            return SplashWrapper(child: child);
+          },
         );
       },
     );

@@ -22,6 +22,21 @@ class SupabaseDecisionRepository implements DecisionRepository {
   }
 
   @override
+  Future<DecisionResult> evaluate(Decision decision) async {
+    final response = await _client.functions.invoke(
+      'evaluate_decision',
+      body: _decisionToPayload(decision),
+    );
+
+    final data = response.data;
+    if (data is! Map<String, dynamic>) {
+      throw StateError('Unexpected evaluation response: ${response.data}');
+    }
+
+    return _decisionResultFromJson(data);
+  }
+
+  @override
   Future<Decision> saveDecision(Decision decision) async {
     final authUser = await _requireUser();
     final now = DateTime.now().toUtc();
@@ -62,15 +77,30 @@ class SupabaseDecisionRepository implements DecisionRepository {
   }
 
   @override
-  Future<List<Decision>> getHistory() async {
+  Future<List<Decision>> getHistory({
+    int limit = 20,
+    int offset = 0,
+    String? query,
+  }) async {
     final authUser = await _requireUser();
 
-    final rows = await _client
+    var builder = _client
         .from('decisions')
         .select()
         .eq('user_id', authUser.id)
-        .isFilter('deleted_at', null)
-        .order('created_at', ascending: false);
+        .isFilter('deleted_at', null);
+
+    final search = query?.trim();
+    if (search != null && search.isNotEmpty) {
+      final pattern = '%${search.replaceAll('%', '\\%')}%';
+      builder = builder.or(
+        'title.ilike.$pattern,description.ilike.$pattern',
+      );
+    }
+
+    final rows = await builder
+        .order('created_at', ascending: false)
+        .range(offset, offset + limit - 1);
 
     return rows.map<Decision>((row) => _fromRow(row)).toList();
   }
@@ -126,6 +156,7 @@ class SupabaseDecisionRepository implements DecisionRepository {
       'user_id': userId,
       'title': decision.title,
       'description': decision.description,
+      'method': decision.method.name,
       'options': decision.options
           .map(
             (o) => {'id': o.id, 'label': o.label, 'description': o.description},
@@ -141,6 +172,7 @@ class SupabaseDecisionRepository implements DecisionRepository {
               'best_option_id': decision.result!.bestOptionId,
               'scores': decision.result!.scores,
               'ranking': decision.result!.ranking,
+              'debug': decision.result!.debug,
             },
       if (decision.createdAt != null)
         'created_at': decision.createdAt!.toIso8601String(),
@@ -193,6 +225,7 @@ class SupabaseDecisionRepository implements DecisionRepository {
         bestOptionId: resultRaw['best_option_id'] as String,
         scores: resultScores,
         ranking: rankingRaw.cast<String>().toList(),
+        debug: resultRaw['debug'] as Map<String, dynamic>?,
       );
     }
 
@@ -200,6 +233,7 @@ class SupabaseDecisionRepository implements DecisionRepository {
       id: row['id'] as String?,
       title: row['title'] as String,
       description: row['description'] as String?,
+      method: _parseMethod(row['method'] as String?),
       options: options,
       criteria: criteria,
       scores: scores,
@@ -214,5 +248,57 @@ class SupabaseDecisionRepository implements DecisionRepository {
           ? DateTime.tryParse(row['deleted_at'] as String)
           : null,
     );
+  }
+
+  Map<String, dynamic> _decisionToPayload(Decision decision) {
+    return {
+      'method': decision.method.name,
+      'title': decision.title,
+      'description': decision.description,
+      'options': decision.options
+          .map(
+            (o) => {'id': o.id, 'label': o.label, 'description': o.description},
+          )
+          .toList(),
+      'criteria': decision.criteria
+          .map((c) => {'id': c.id, 'label': c.label, 'weight': c.weight})
+          .toList(),
+      'scores': decision.scores,
+    };
+  }
+
+  DecisionResult _decisionResultFromJson(Map<String, dynamic> json) {
+    final bestOptionId =
+        (json['bestOptionId'] ?? json['best_option_id']) as String?;
+    final scoresRaw =
+        (json['scores'] as Map<String, dynamic>? ?? <String, dynamic>{});
+    final rankingRaw = (json['ranking'] as List<dynamic>? ?? const []);
+
+    if (bestOptionId == null) {
+      throw StateError('Evaluation response missing best option id.');
+    }
+
+    final scores = scoresRaw.map<OptionId, double>(
+      (key, value) => MapEntry(key, (value as num).toDouble()),
+    );
+
+    return DecisionResult(
+      bestOptionId: bestOptionId,
+      scores: scores,
+      ranking: rankingRaw.cast<String>().toList(),
+      debug: json['debug'] as Map<String, dynamic>?,
+    );
+  }
+
+  DecisionMethod _parseMethod(String? raw) {
+    switch (raw) {
+      case 'ahp':
+        return DecisionMethod.ahp;
+      case 'fuzzyWeightedSum':
+        return DecisionMethod.fuzzyWeightedSum;
+      case 'weightedSum':
+      default:
+        return DecisionMethod.weightedSum;
+    }
   }
 }

@@ -17,18 +17,21 @@ Future<void> bootstrap(AppEnvironment env) async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy(); // for web
 
-  await SLInitializer.init(getIt);
-
   final envConfig = EnvConfig.fromDotEnv(env);
+
+  if (!getIt.isRegistered<EnvConfig>()) {
+    getIt.registerSingleton<EnvConfig>(envConfig);
+  } else {
+    getIt.unregister<EnvConfig>();
+    getIt.registerSingleton<EnvConfig>(envConfig);
+  }
+
+  await SLInitializer.init(getIt);
 
   await Supabase.initialize(
     url: envConfig.supabaseUrl,
     anonKey: envConfig.supabaseAnonKey,
   );
-
-  if (!getIt.isRegistered<EnvConfig>()) {
-    getIt.registerSingleton<EnvConfig>(EnvConfig.fromDotEnv(env));
-  }
 
   final router = getIt<GoRouter>();
 
