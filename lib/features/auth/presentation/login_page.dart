@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
 import 'package:thinkr/l10n/app_localizations.dart';
+import 'package:thinkr/core/widgets/top_snackbar.dart';
 import 'package:thinkr/core/theme/app_colors.dart';
 
 import 'login_form_cubit.dart';
@@ -35,17 +36,13 @@ class _LoginPageState extends State<LoginPage> {
         listener: (context, state) {
           if (state.errorMessage != null) {
             final msg = _localizeError(state.errorMessage!, loc);
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(msg)));
+            showTopSnackBar(context, msg, isError: true);
           } else if (state.successMessage != null) {
             final key = state.successMessage!;
             final msg = key == 'login_signupSuccess'
                 ? loc.login_signupSuccess
                 : loc.login_signinSuccess;
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(msg)));
+            showTopSnackBar(context, msg);
           }
         },
         child: Scaffold(

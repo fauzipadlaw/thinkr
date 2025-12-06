@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
+import 'package:thinkr/core/widgets/top_snackbar.dart';
 import 'package:thinkr/features/decision/domain/entities/decision.dart';
 import 'package:thinkr/features/decision/domain/usecases/evaluate_decision_usecase.dart';
 import 'package:thinkr/features/decision/domain/usecases/save_decision_usecase.dart';
@@ -126,9 +127,7 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
   bool _isValidScore(double value) => value >= 1 && value <= 10;
 
   void _showScoreError(AppLocalizations loc) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(loc.decision_editor_scoreRange)),
-    );
+    showTopSnackBar(context, loc.decision_editor_scoreRange, isError: true);
   }
 
   void _handleScoreChange({
@@ -152,8 +151,10 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
 
   Future<void> _evaluate(BuildContext context, Decision decision) async {
     if (decision.options.isEmpty || decision.criteria.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.loc.decision_editor_scoresEmpty)),
+      showTopSnackBar(
+        context,
+        context.loc.decision_editor_scoresEmpty,
+        isError: true,
       );
       return;
     }
@@ -377,9 +378,7 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
               (curr.errorMessage?.isNotEmpty ?? false),
           listener: (context, state) {
             if (state.errorMessage != null) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+              showTopSnackBar(context, state.errorMessage!, isError: true);
             }
           },
         ),
@@ -387,9 +386,7 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
           listenWhen: (prev, curr) =>
               prev.isSaving && !curr.isSaving && curr.errorMessage == null,
           listener: (context, state) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(loc.decision_editor_saved)));
+            showTopSnackBar(context, loc.decision_editor_saved);
           },
         ),
       ],
@@ -741,12 +738,9 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
                 onPressed: () {
                   final decision = _DecisionTemplates.materialize(template);
                   context.read<DecisionEditorCubit>().applyTemplate(decision);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        loc.decision_editor_templateApplied(template.name),
-                      ),
-                    ),
+                  showTopSnackBar(
+                    context,
+                    loc.decision_editor_templateApplied(template.name),
                   );
                 },
               ),
