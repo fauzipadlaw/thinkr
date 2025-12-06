@@ -85,6 +85,18 @@ class AppLocalizationsId extends AppLocalizations {
   String get login_signupSuccess => 'Akun berhasil dibuat';
 
   @override
+  String get login_continueAsGuest => 'Lanjut sebagai tamu';
+
+  @override
+  String get login_guestSuccess => 'Masuk sebagai tamu';
+
+  @override
+  String get login_captchaRequired => 'Selesaikan captcha untuk melanjutkan.';
+
+  @override
+  String get login_errorGeneric => 'Terjadi kesalahan. Coba lagi.';
+
+  @override
   String get login_discardTitle => 'Buang perubahan?';
 
   @override

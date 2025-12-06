@@ -12,8 +12,16 @@ abstract class AuthCubit extends StateStreamableSource<AuthState> {
 
   Future<void> initialize();
   Future<void> signIn();
-  Future<void> signInWithEmail(String email, String password);
-  Future<void> signUpWithEmail(String email, String password);
+  Future<void> signInWithEmail(
+    String email,
+    String password, {
+    String? captchaToken,
+  });
+  Future<void> signUpWithEmail(
+    String email,
+    String password, {
+    String? captchaToken,
+  });
   Future<void> signOut();
 }
 
@@ -52,13 +60,29 @@ class _AuthCubitImpl extends Cubit<AuthState> implements AuthCubit {
   }
 
   @override
-  Future<void> signInWithEmail(String email, String password) {
-    return _authRepository.signInWithEmail(email: email, password: password);
+  Future<void> signInWithEmail(
+    String email,
+    String password, {
+    String? captchaToken,
+  }) {
+    return _authRepository.signInWithEmail(
+      email: email,
+      password: password,
+      captchaToken: captchaToken,
+    );
   }
 
   @override
-  Future<void> signUpWithEmail(String email, String password) {
-    return _authRepository.signUpWithEmail(email: email, password: password);
+  Future<void> signUpWithEmail(
+    String email,
+    String password, {
+    String? captchaToken,
+  }) {
+    return _authRepository.signUpWithEmail(
+      email: email,
+      password: password,
+      captchaToken: captchaToken,
+    );
   }
 
   @override

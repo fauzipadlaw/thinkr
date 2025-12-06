@@ -73,20 +73,35 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<void> signInAnonymously({String? captchaToken}) async {
+    await _client.auth.signInAnonymously(captchaToken: captchaToken);
+  }
+
+  @override
   Future<void> signUpWithEmail({
     required String email,
     required String password,
+    String? captchaToken,
   }) async {
     _validateEmailPassword(email, password);
-    await _client.auth.signUp(email: email, password: password);
+    await _client.auth.signUp(
+      email: email,
+      password: password,
+      captchaToken: captchaToken,
+    );
   }
 
   @override
   Future<void> signInWithEmail({
     required String email,
     required String password,
+    String? captchaToken,
   }) async {
     _validateEmailPassword(email, password);
-    await _client.auth.signInWithPassword(email: email, password: password);
+    await _client.auth.signInWithPassword(
+      email: email,
+      password: password,
+      captchaToken: captchaToken,
+    );
   }
 }

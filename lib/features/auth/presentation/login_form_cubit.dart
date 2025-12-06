@@ -13,8 +13,13 @@ abstract class LoginFormCubit extends StateStreamableSource<LoginFormState> {
   void updateEmail(String email);
   void updatePassword(String password);
   void updateConfirmPassword(String confirm);
-  Future<void> submit();
+  Future<bool> submit({String? captchaToken});
   Future<void> signInWithGoogle();
+  Future<bool> signInAnonymously({String? captchaToken});
+  Future<bool> shouldRunCaptcha({
+    required bool requiresCaptcha,
+    String? errorMessage,
+  });
 }
 
 class _LoginFormCubitImpl extends Cubit<LoginFormState>
@@ -86,7 +91,7 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
   }
 
   @override
-  Future<void> submit() async {
+  Future<bool> submit({String? captchaToken}) async {
     final emailError = _validateEmail(state.email);
     final passwordError = _validatePassword(state.password);
     final confirmError = state.isSignup
@@ -103,7 +108,7 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
           successMessage: null,
         ),
       );
-      return;
+      return false;
     }
 
     emit(
@@ -119,6 +124,7 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
         await _authRepository.signUpWithEmail(
           email: state.email.trim(),
           password: state.password,
+          captchaToken: captchaToken,
         );
         emit(
           state.copyWith(
@@ -131,6 +137,7 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
         await _authRepository.signInWithEmail(
           email: state.email.trim(),
           password: state.password,
+          captchaToken: captchaToken,
         );
         emit(
           state.copyWith(
@@ -140,8 +147,10 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
           ),
         );
       }
+      return true;
     } catch (e) {
       emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
+      return false;
     }
   }
 
@@ -154,6 +163,43 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
     } catch (e) {
       emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
     }
+  }
+
+  @override
+  Future<bool> signInAnonymously({String? captchaToken}) async {
+    emit(state.copyWith(isSubmitting: true, errorMessage: null));
+    try {
+      await _authRepository.signInAnonymously(captchaToken: captchaToken);
+      emit(
+        state.copyWith(
+          isSubmitting: false,
+          successMessage: 'login_guestSuccess',
+          isDirty: false,
+        ),
+      );
+      return true;
+    } catch (e) {
+      emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> shouldRunCaptcha({
+    required bool requiresCaptcha,
+    String? errorMessage,
+  }) async {
+    if (!requiresCaptcha || !_isCaptchaError(errorMessage)) return false;
+    final user = await _authRepository.currentUser;
+    return user == null;
+  }
+
+  bool _isCaptchaError(String? message) {
+    if (message == null) return false;
+    final lower = message.toLowerCase();
+    return lower.contains('captcha required') ||
+        lower.contains('captcha verification') ||
+        lower.contains('captcha_token');
   }
 
   bool _isDirty(String email, String password, String confirm) =>

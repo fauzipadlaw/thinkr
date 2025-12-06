@@ -85,6 +85,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_signupSuccess => 'Account created';
 
   @override
+  String get login_continueAsGuest => 'Continue as guest';
+
+  @override
+  String get login_guestSuccess => 'Signed in as guest';
+
+  @override
+  String get login_captchaRequired =>
+      'Please complete the captcha to continue.';
+
+  @override
+  String get login_errorGeneric => 'Something went wrong. Please try again.';
+
+  @override
   String get login_discardTitle => 'Discard changes?';
 
   @override
