@@ -179,6 +179,18 @@ class AppLocalizationsId extends AppLocalizations {
       'Tambah opsi, kriteria, bobot, dan skor untuk mendapat rekomendasi peringkat.';
 
   @override
+  String get decision_editor_methodLabel => 'Metode keputusan';
+
+  @override
+  String get decision_editor_methodWeighted => 'Weighted Sum';
+
+  @override
+  String get decision_editor_methodAhp => 'AHP';
+
+  @override
+  String get decision_editor_methodFuzzy => 'Fuzzy Weighted';
+
+  @override
   String get decision_editor_evaluate => 'Evaluasi';
 
   @override
@@ -563,4 +575,8 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get docs_methodItem2 =>
       'Dihitung di Supabase Edge Function `evaluate_decision`.';
+
+  @override
+  String get docs_methodItem3 =>
+      'AHP & Fuzzy: sudah diterima di Edge Function; versi ini memakai bobot/skor yang ada (pairwise/fuzzy penuh menyusul).';
 }

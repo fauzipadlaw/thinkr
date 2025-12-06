@@ -60,6 +60,10 @@
   "login_signInWithGoogle": "Sign in with Google",
   "decision_editor_title": "Decision editor",
   "decision_editor_subtitle": "Add options, criteria, weights, and scores to get a ranked recommendation.",
+  "decision_editor_methodLabel": "Decision method",
+  "decision_editor_methodWeighted": "Weighted Sum",
+  "decision_editor_methodAhp": "AHP",
+  "decision_editor_methodFuzzy": "Fuzzy Weighted",
   "decision_editor_evaluate": "Evaluate",
   "decision_editor_evaluating": "Evaluating...",
   "decision_editor_save": "Save decision",
@@ -173,6 +177,7 @@
   "docs_methodTitle": "Decision Method",
   "docs_methodItem1": "Weighted Sum Model: normalize weights, multiply scores (1–10), sum and rank.",
   "docs_methodItem2": "Computed in Supabase Edge Function `evaluate_decision`.",
+  "docs_methodItem3": "AHP & Fuzzy: accepted by the Edge Function; current build aggregates with provided weights/scores (pairwise/fuzzy inputs coming later).",
   "@decision_editor_validationScores": {
     "placeholders": {
       "count": {

@@ -54,7 +54,7 @@ abstract class RouterModule {
           builder: (context, state) {
             final decision = state.extra as Decision?;
             if (decision == null) {
-              return const DecisionEditorPage();
+              return const HomePage();
             }
             return DecisionResultPage(decision: decision);
           },

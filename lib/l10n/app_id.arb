@@ -55,6 +55,10 @@
   "login_signInWithGoogle": "Masuk dengan Google",
   "decision_editor_title": "Editor keputusan",
   "decision_editor_subtitle": "Tambah opsi, kriteria, bobot, dan skor untuk mendapat rekomendasi peringkat.",
+  "decision_editor_methodLabel": "Metode keputusan",
+  "decision_editor_methodWeighted": "Weighted Sum",
+  "decision_editor_methodAhp": "AHP",
+  "decision_editor_methodFuzzy": "Fuzzy Weighted",
   "decision_editor_evaluate": "Evaluasi",
   "decision_editor_evaluating": "Memproses...",
   "decision_editor_save": "Simpan keputusan",
@@ -168,6 +172,7 @@
   "docs_methodTitle": "Metode Keputusan",
   "docs_methodItem1": "Weighted Sum Model: normalisasi bobot, kalikan skor (1–10), jumlahkan dan urutkan.",
   "docs_methodItem2": "Dihitung di Supabase Edge Function `evaluate_decision`.",
+  "docs_methodItem3": "AHP & Fuzzy: sudah diterima di Edge Function; versi ini memakai bobot/skor yang ada (pairwise/fuzzy penuh menyusul).",
   "@decision_editor_validationScores": {
     "placeholders": {
       "count": {

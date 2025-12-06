@@ -6,8 +6,9 @@ Below is a user-facing guide to using Thinkr. Expand each section to explore the
 <summary>Getting Started</summary>
 
 1. **Sign in**  
-   - Tap “Continue with Google”.  
-   - On web, you’ll be redirected to Google; on mobile the app opens the Google sheet—complete auth and return.
+   - Choose a method: Google, email/password, or **Continue as guest**.  
+   - Captcha may appear only for risky sign-ins; if it doesn’t, you won’t be prompted.  
+   - On web, Google redirects to the browser; on mobile it opens the Google sheet—complete auth and return.
 
 2. **Home layout**  
    - Top bar: app logo, language switch (header language icon), logout.  
@@ -22,7 +23,8 @@ Below is a user-facing guide to using Thinkr. Expand each section to explore the
 1. **Open editor**  
    - From Home, tap “New decision”.
 
-2. **Step 1: Title & description**  
+2. **Step 1: Method, title & description**  
+   - Pick a method: **Weighted Sum**, **AHP**, or **Fuzzy Weighted** (WSM is default; AHP/Fuzzy currently aggregate using the provided weights/scores).  
    - Enter a clear title (required) and optional description.  
    - Cannot proceed without a title.
 
@@ -42,7 +44,7 @@ Below is a user-facing guide to using Thinkr. Expand each section to explore the
 6. **Evaluate**  
    - On the last step, tap “Evaluate”.  
    - A confirmation dialog appears before running evaluation.  
-   - Evaluation is remote (Supabase Edge Function); after success you’re routed to the result page.  
+   - Evaluation is remote (Supabase Edge Function for WSM/AHP/Fuzzy); after success you’re routed to the result page.  
    - The decision is saved automatically with its result.
 
 7. **Unsaved changes safeguard**  
