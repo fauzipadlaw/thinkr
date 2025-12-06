@@ -85,6 +85,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_signupSuccess => 'Account created';
 
   @override
+  String get login_discardTitle => 'Discard changes?';
+
+  @override
+  String get login_discardMessage =>
+      'You have unsent input. Leaving will clear the form.';
+
+  @override
+  String get login_discardConfirm => 'Discard';
+
+  @override
+  String get login_discardStay => 'Stay';
+
+  @override
   String get history_title => 'Decision history';
 
   @override

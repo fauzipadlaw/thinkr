@@ -85,6 +85,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get login_signupSuccess => 'Akun berhasil dibuat';
 
   @override
+  String get login_discardTitle => 'Buang perubahan?';
+
+  @override
+  String get login_discardMessage =>
+      'Ada isian yang belum dikirim. Keluar akan menghapusnya.';
+
+  @override
+  String get login_discardConfirm => 'Buang';
+
+  @override
+  String get login_discardStay => 'Batal';
+
+  @override
   String get history_title => 'Riwayat keputusan';
 
   @override

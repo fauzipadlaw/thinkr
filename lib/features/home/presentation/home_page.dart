@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
 import 'package:thinkr/core/theme/app_colors.dart';
+import 'package:thinkr/core/widgets/top_snackbar.dart';
 
 import 'package:thinkr/features/auth/presentation/auth_cubit.dart';
 import 'package:thinkr/features/decision/domain/entities/decision.dart';
@@ -112,60 +113,102 @@ class _HistoryPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = context.loc;
-    return BlocBuilder<DecisionPreviewCubit, DecisionPreviewState>(
-      builder: (context, state) {
-        if (state.isLoading) {
-          return const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12),
-            child: LinearProgressIndicator(minHeight: 3),
-          );
-        }
-
+    return BlocListener<DecisionPreviewCubit, DecisionPreviewState>(
+      listenWhen: (prev, curr) =>
+          prev.errorMessage != curr.errorMessage &&
+          (curr.errorMessage?.isNotEmpty ?? false),
+      listener: (context, state) {
         if (state.errorMessage != null) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                loc.history_errorTitle,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall?.copyWith(color: Colors.white),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    state.errorMessage!,
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
-                  ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () =>
-                        context.read<DecisionPreviewCubit>().refresh(),
-                    child: Text(loc.history_retry),
-                  ),
-                ],
-              ),
-            ],
-          );
+          showTopSnackBar(context, state.errorMessage!, isError: true);
         }
+      },
+      child: BlocBuilder<DecisionPreviewCubit, DecisionPreviewState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: LinearProgressIndicator(minHeight: 3),
+            );
+          }
 
-        if (state.decisions.isEmpty) {
+          if (state.errorMessage != null) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  loc.history_errorTitle,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(color: Colors.white),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text(
+                      state.errorMessage!,
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () =>
+                          context.read<DecisionPreviewCubit>().refresh(),
+                      child: Text(loc.history_retry),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }
+
+          if (state.decisions.isEmpty) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  loc.history_emptyTitle,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(color: Colors.white),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  loc.history_emptySubtitle,
+                  style: const TextStyle(color: Colors.white70),
+                ),
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: _GhostButton(
+                    label: loc.home_viewAllHistory,
+                    icon: Icons.arrow_forward,
+                    onTap: () => context.go('/app/history'),
+                  ),
+                ),
+              ],
+            );
+          }
+
+          final items = state.decisions.take(3).toList();
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                loc.history_emptyTitle,
+                loc.home_recentDecisions,
                 style: Theme.of(
                   context,
                 ).textTheme.titleSmall?.copyWith(color: Colors.white),
               ),
-              const SizedBox(height: 8),
-              Text(
-                loc.history_emptySubtitle,
-                style: TextStyle(color: Colors.white70),
+              const SizedBox(height: 10),
+              ...items.map(
+                (d) => Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _HistoryChip(
+                    decision: d,
+                    badge:
+                        '${d.options.length} ${loc.history_options} • ${d.criteria.length} ${loc.history_criteria}',
+                  ),
+                ),
               ),
-              const SizedBox(height: 12),
               Align(
                 alignment: Alignment.centerLeft,
                 child: _GhostButton(
@@ -176,40 +219,8 @@ class _HistoryPreview extends StatelessWidget {
               ),
             ],
           );
-        }
-
-        final items = state.decisions.take(3).toList();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              loc.home_recentDecisions,
-              style: Theme.of(
-                context,
-              ).textTheme.titleSmall?.copyWith(color: Colors.white),
-            ),
-            const SizedBox(height: 10),
-            ...items.map(
-              (d) => Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: _HistoryChip(
-                  decision: d,
-                  badge:
-                      '${d.options.length} ${loc.history_options} • ${d.criteria.length} ${loc.history_criteria}',
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: _GhostButton(
-                label: loc.home_viewAllHistory,
-                icon: Icons.arrow_forward,
-                onTap: () => context.go('/app/history'),
-              ),
-            ),
-          ],
-        );
-      },
+        },
+      ),
     );
   }
 }

@@ -9,7 +9,7 @@ abstract class LoginFormCubit extends StateStreamableSource<LoginFormState> {
   @factoryMethod
   factory LoginFormCubit(AuthRepository authRepository) = _LoginFormCubitImpl;
 
-  void toggleMode();
+  void toggleMode({bool force});
   void updateEmail(String email);
   void updatePassword(String password);
   void updateConfirmPassword(String confirm);
@@ -24,14 +24,19 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
   _LoginFormCubitImpl(this._authRepository) : super(LoginFormState.initial);
 
   @override
-  void toggleMode() {
+  void toggleMode({bool force = false}) {
     emit(
       state.copyWith(
         isSignup: !state.isSignup,
+        email: force ? '' : state.email,
+        password: force ? '' : state.password,
         confirmPassword: '',
         confirmError: null,
         successMessage: null,
         errorMessage: null,
+        emailError: force ? null : state.emailError,
+        passwordError: force ? null : state.passwordError,
+        isDirty: force ? false : state.isDirty,
       ),
     );
   }
@@ -41,6 +46,7 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
     emit(
       state.copyWith(
         email: email,
+        isDirty: _isDirty(email, state.password, state.confirmPassword),
         emailError: _validateEmail(email),
         errorMessage: null,
         successMessage: null,
@@ -53,6 +59,7 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
     emit(
       state.copyWith(
         password: password,
+        isDirty: _isDirty(state.email, password, state.confirmPassword),
         passwordError: _validatePassword(password),
         confirmError: state.isSignup
             ? _validateConfirm(state.confirmPassword, password)
@@ -68,6 +75,7 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
     emit(
       state.copyWith(
         confirmPassword: confirm,
+        isDirty: _isDirty(state.email, state.password, confirm),
         confirmError: state.isSignup
             ? _validateConfirm(confirm, state.password)
             : null,
@@ -116,6 +124,7 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
           state.copyWith(
             isSubmitting: false,
             successMessage: 'login_signupSuccess',
+            isDirty: false,
           ),
         );
       } else {
@@ -127,6 +136,7 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
           state.copyWith(
             isSubmitting: false,
             successMessage: 'login_signinSuccess',
+            isDirty: false,
           ),
         );
       }
@@ -145,6 +155,9 @@ class _LoginFormCubitImpl extends Cubit<LoginFormState>
       emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
     }
   }
+
+  bool _isDirty(String email, String password, String confirm) =>
+      email.trim().isNotEmpty || password.isNotEmpty || confirm.isNotEmpty;
 
   String? _validateEmail(String email) {
     final trimmed = email.trim();
