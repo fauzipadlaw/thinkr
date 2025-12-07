@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:thinkr/core/extensions/context_extension.dart';
-import 'package:thinkr/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:thinkr/core/extensions/context_extension.dart';
+import 'package:thinkr/core/routes/app_routes.dart';
+import 'package:thinkr/l10n/app_localizations.dart';
 
 class DocumentationPage extends StatelessWidget {
   const DocumentationPage({super.key});
@@ -21,7 +22,7 @@ class DocumentationPage extends StatelessWidget {
             if (navigator.canPop()) {
               navigator.pop();
             } else {
-              GoRouter.of(context).go('/app/home');
+              GoRouter.of(context).go(AppRoutes.home);
             }
           },
         ),

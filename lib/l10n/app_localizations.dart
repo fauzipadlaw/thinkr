@@ -440,17 +440,113 @@ abstract class AppLocalizations {
   /// **'Weighted Sum'**
   String get decision_editor_methodWeighted;
 
+  /// No description provided for @decision_editor_methodWeightedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Best for quick scoring: uses your weights and 1–10 scores to rank options.'**
+  String get decision_editor_methodWeightedDesc;
+
   /// No description provided for @decision_editor_methodAhp.
   ///
   /// In en, this message translates to:
   /// **'AHP'**
   String get decision_editor_methodAhp;
 
+  /// No description provided for @decision_editor_methodAhpDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'AHP supports pairwise weights; without comparisons we use your weights. Consistency is reported when pairwise data is provided.'**
+  String get decision_editor_methodAhpDesc;
+
   /// No description provided for @decision_editor_methodFuzzy.
   ///
   /// In en, this message translates to:
   /// **'Fuzzy Weighted'**
   String get decision_editor_methodFuzzy;
+
+  /// No description provided for @decision_editor_methodFuzzyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Handles uncertainty by spreading each score; still uses your 1–10 inputs and weights.'**
+  String get decision_editor_methodFuzzyDesc;
+
+  /// No description provided for @decision_editor_discardMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You have unsaved changes. Leave the editor? Your input will be lost.'**
+  String get decision_editor_discardMessage;
+
+  /// No description provided for @decision_editor_discardConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave editor'**
+  String get decision_editor_discardConfirm;
+
+  /// No description provided for @decision_editor_discardStay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get decision_editor_discardStay;
+
+  /// No description provided for @decision_editor_ahpPairwiseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pairwise importance'**
+  String get decision_editor_ahpPairwiseTitle;
+
+  /// No description provided for @decision_editor_ahpPairwiseDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the simplified AHP scale to compare each pair of criteria.'**
+  String get decision_editor_ahpPairwiseDesc;
+
+  /// No description provided for @decision_editor_ahpScaleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'AHP 3-point'**
+  String get decision_editor_ahpScaleLabel;
+
+  /// No description provided for @decision_editor_ahpScaleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Equal / Moderate / Strong — pick who is more important in each pair.'**
+  String get decision_editor_ahpScaleNote;
+
+  /// No description provided for @decision_editor_ahpEqual.
+  ///
+  /// In en, this message translates to:
+  /// **'Equal importance'**
+  String get decision_editor_ahpEqual;
+
+  /// No description provided for @decision_editor_ahpModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'{stronger} moderately > {weaker}'**
+  String decision_editor_ahpModerate(Object stronger, Object weaker);
+
+  /// No description provided for @decision_editor_ahpStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'{stronger} strongly > {weaker}'**
+  String decision_editor_ahpStrong(Object stronger, Object weaker);
+
+  /// No description provided for @decision_editor_ahpEqualShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Equal'**
+  String get decision_editor_ahpEqualShort;
+
+  /// No description provided for @decision_editor_ahpModerateShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get decision_editor_ahpModerateShort;
+
+  /// No description provided for @decision_editor_ahpStrongShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get decision_editor_ahpStrongShort;
 
   /// No description provided for @decision_editor_evaluate.
   ///
@@ -1135,6 +1231,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AHP & Fuzzy: accepted by the Edge Function; current build aggregates with provided weights/scores (pairwise/fuzzy inputs coming later).'**
   String get docs_methodItem3;
+
+  /// No description provided for @history_viewResult.
+  ///
+  /// In en, this message translates to:
+  /// **'View result'**
+  String get history_viewResult;
+
+  /// No description provided for @result_reliabilityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reliability:'**
+  String get result_reliabilityLabel;
+
+  /// No description provided for @result_reliabilityHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get result_reliabilityHigh;
+
+  /// No description provided for @result_reliabilityMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get result_reliabilityMedium;
+
+  /// No description provided for @result_reliabilityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get result_reliabilityLow;
+
+  /// No description provided for @result_reliabilityVeryLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Very Low'**
+  String get result_reliabilityVeryLow;
+
+  /// No description provided for @result_reliabilityNA.
+  ///
+  /// In en, this message translates to:
+  /// **'N/A'**
+  String get result_reliabilityNA;
+
+  /// No description provided for @result_ahpConsistencyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'AHP CR:'**
+  String get result_ahpConsistencyLabel;
+
+  /// No description provided for @result_stabilityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stability'**
+  String get result_stabilityLabel;
+
+  /// No description provided for @result_overlapLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuzzy overlap'**
+  String get result_overlapLabel;
+
+  /// No description provided for @result_notesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to read this'**
+  String get result_notesTitle;
+
+  /// No description provided for @result_notesReliability.
+  ///
+  /// In en, this message translates to:
+  /// **'Reliability mixes score margin, weight stability, and (for fuzzy) overlap; higher is more trustworthy.'**
+  String get result_notesReliability;
+
+  /// No description provided for @result_notesStability.
+  ///
+  /// In en, this message translates to:
+  /// **'Stability simulates small weight tweaks; if the best option stays #1, the result is stable.'**
+  String get result_notesStability;
+
+  /// No description provided for @result_notesOverlap.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuzzy overlap shows how much the top fuzzy scores overlap; lower overlap = clearer winner.'**
+  String get result_notesOverlap;
+
+  /// No description provided for @result_notesAhpCr.
+  ///
+  /// In en, this message translates to:
+  /// **'AHP CR checks consistency of your pairwise comparisons; aim for CR < 0.1.'**
+  String get result_notesAhpCr;
+
+  /// No description provided for @result_noRanking.
+  ///
+  /// In en, this message translates to:
+  /// **'No ranking available yet.'**
+  String get result_noRanking;
+
+  /// No description provided for @result_debugData.
+  ///
+  /// In en, this message translates to:
+  /// **'Debug data'**
+  String get result_debugData;
 }
 
 class _AppLocalizationsDelegate

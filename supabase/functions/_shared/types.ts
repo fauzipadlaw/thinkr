@@ -12,6 +12,9 @@ export interface DecisionCriterion {
   weight: number;
 }
 
+// Optional AHP pairwise matrix for criteria (n x n), diagonal 1, reciprocal symmetry.
+export type AhpMatrix = number[][];
+
 export type ScoreKey = string; // optionId|criterionId
 
 export interface DecisionPayload {
@@ -21,12 +24,15 @@ export interface DecisionPayload {
   options: DecisionOption[];
   criteria: DecisionCriterion[];
   scores: Record<ScoreKey, number>;
+  ahpMatrix?: AhpMatrix;
+  fuzzySpread?: number;
 }
 
 export interface DecisionResult {
   bestOptionId: string;
   scores: Record<string, number>;
   ranking: string[];
+  errorRate: number;
   debug?: Record<string, unknown>;
 }
 
@@ -34,5 +40,6 @@ export interface EvaluateDecisionResponse {
   bestOptionId: string;
   scores: Record<string, number>;
   ranking: string[];
+  errorRate: number;
   debug?: Record<string, unknown>;
 }

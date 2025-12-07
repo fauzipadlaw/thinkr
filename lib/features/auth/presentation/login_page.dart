@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hcaptcha_flutter/hcaptcha_flutter.dart';
 import 'package:thinkr/core/env/environment.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
+import 'package:thinkr/core/routes/app_routes.dart';
 import 'package:thinkr/l10n/app_localizations.dart';
 import 'package:thinkr/core/widgets/top_snackbar.dart';
 import 'package:thinkr/core/theme/app_colors.dart';
@@ -98,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                             );
                             if (canLeave) {
                               if (!context.mounted) return;
-                              context.push('/docs');
+                              context.push(AppRoutes.docsPublic);
                             }
                           },
                         ),

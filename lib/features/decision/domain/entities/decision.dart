@@ -35,6 +35,7 @@ abstract class DecisionResult with _$DecisionResult {
     required OptionId bestOptionId,
     required Map<OptionId, double> scores,
     required List<OptionId> ranking,
+    @Default(0.0) double errorRate,
     Map<String, dynamic>? debug,
   }) = _DecisionResult;
 }
@@ -49,6 +50,8 @@ abstract class Decision with _$Decision {
     @Default([]) List<DecisionOption> options,
     @Default([]) List<DecisionCriterion> criteria,
     @Default(<ScoreKey, double>{}) Map<ScoreKey, double> scores,
+    List<List<double>>? ahpMatrix,
+    double? fuzzySpread,
     DecisionResult? result,
     DateTime? createdAt,
     DateTime? updatedAt,

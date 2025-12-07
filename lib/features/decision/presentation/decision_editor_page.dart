@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
+import 'package:thinkr/core/routes/app_routes.dart';
 import 'package:thinkr/core/widgets/top_snackbar.dart';
 import 'package:thinkr/features/decision/domain/entities/decision.dart';
 import 'package:thinkr/features/decision/domain/usecases/evaluate_decision_usecase.dart';
 import 'package:thinkr/features/decision/domain/usecases/save_decision_usecase.dart';
+import 'package:thinkr/features/decision/presentation/decision_result_page.dart';
 import 'package:thinkr/l10n/app_localizations.dart';
 
 import 'decision_editor_cubit.dart';
@@ -37,6 +39,73 @@ class DecisionEditorPage extends StatelessWidget {
   }
 }
 
+class _MethodInfo extends StatelessWidget {
+  final DecisionMethod method;
+
+  const _MethodInfo({required this.method});
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = context.loc;
+    final theme = Theme.of(context);
+    String title;
+    String body;
+
+    switch (method) {
+      case DecisionMethod.weightedSum:
+        title = loc.decision_editor_methodWeighted;
+        body = loc.decision_editor_methodWeightedDesc;
+        break;
+      case DecisionMethod.ahp:
+        title = loc.decision_editor_methodAhp;
+        body = loc.decision_editor_methodAhpDesc;
+        break;
+      case DecisionMethod.fuzzyWeightedSum:
+        title = loc.decision_editor_methodFuzzy;
+        body = loc.decision_editor_methodFuzzyDesc;
+        break;
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.info_outline,
+                size: 18,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                title,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            body,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _DecisionEditorView extends StatefulWidget {
   const _DecisionEditorView();
 
@@ -45,7 +114,6 @@ class _DecisionEditorView extends StatefulWidget {
 }
 
 class _DecisionEditorViewState extends State<_DecisionEditorView> {
-  int _currentStep = 0;
   final _titleFocus = FocusNode();
   final _descriptionFocus = FocusNode();
   final _optionDraftFocus = FocusNode();
@@ -53,13 +121,8 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
   final Map<String, FocusNode> _optionFocus = {};
   final Map<String, FocusNode> _criterionFocus = {};
   final Map<String, FocusNode> _scoreFocus = {};
+  final _scrollController = ScrollController();
 
-  // ignore: unused_field
-  final Map<String, String> _optionText = {};
-  // ignore: unused_field
-  final Map<String, String> _criterionText = {};
-  // ignore: unused_field
-  final Map<String, String> _scoreText = {};
   String? _titleText;
   String? _descriptionText;
   String? _optionDraftText;
@@ -79,17 +142,15 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(loc.decision_editor_title),
-        content: Text(
-          'You have unsaved changes. Leave the editor? Your input will be lost.',
-        ),
+        content: Text(loc.decision_editor_discardMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(MaterialLocalizations.of(dialogContext).cancelButtonLabel),
+            child: Text(loc.decision_editor_discardStay),
           ),
           FilledButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(MaterialLocalizations.of(dialogContext).okButtonLabel),
+            child: Text(loc.decision_editor_discardConfirm),
           ),
         ],
       ),
@@ -114,6 +175,7 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
     for (final n in _scoreFocus.values) {
       n.dispose();
     }
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -124,29 +186,27 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
     return current ?? incoming;
   }
 
-  bool _isValidScore(double value) => value >= 1 && value <= 10;
-
-  void _showScoreError(AppLocalizations loc) {
-    showTopSnackBar(context, loc.decision_editor_scoreRange, isError: true);
-  }
-
   void _handleScoreChange({
     required String raw,
     required OptionId optionId,
     required CriterionId criterionId,
     required AppLocalizations loc,
   }) {
-    final parsed = double.tryParse(raw);
-    if (parsed == null) return;
-    if (!_isValidScore(parsed)) {
-      _showScoreError(loc);
-      return;
-    }
-    context.read<DecisionEditorCubit>().setScore(
-          optionId: optionId,
-          criterionId: criterionId,
-          score: parsed,
-        );
+    context.read<DecisionEditorCubit>().setScoreFromInput(
+      optionId: optionId,
+      criterionId: criterionId,
+      raw: raw,
+      invalidMessage: loc.decision_editor_scoreRange,
+    );
+  }
+
+  void _scrollToStepper() {
+    if (!_scrollController.hasClients) return;
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOutCubic,
+    );
   }
 
   Future<void> _evaluate(BuildContext context, Decision decision) async {
@@ -200,21 +260,43 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
     if (!context.mounted) return;
     final updated = cubit.state.decision;
     if (updated?.result != null) {
-      await context.push('/app/decisions/result', extra: updated);
+      await context.push(
+        AppRoutes.decisionsResult,
+        extra: DecisionResultArgs(decision: updated!, fromEditor: true),
+      );
     }
   }
 
-  Widget _buildStepper(
+  bool _isAhpComplete(Decision decision) {
+    final matrix = decision.ahpMatrix;
+    final n = decision.criteria.length;
+    if (matrix == null || matrix.length != n) return false;
+    for (var i = 0; i < n; i++) {
+      if (matrix[i].length != n) return false;
+    }
+    for (var i = 0; i < n; i++) {
+      for (var j = 0; j < n; j++) {
+        if (i == j) continue;
+        if ((matrix[i][j] - 1).abs() > 0.001) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  List<_EditorStep> _buildSteps(
     AppLocalizations loc,
     Decision decision,
     DecisionEditorState state,
     int missingScores,
   ) {
-    final theme = Theme.of(context);
     final titleComplete = decision.title.trim().isNotEmpty;
     final optionsComplete = decision.options.length >= 2;
     final criteriaComplete = decision.criteria.isNotEmpty;
     final scoresComplete = state.canEvaluate && missingScores == 0;
+    final ahpComplete =
+        decision.method == DecisionMethod.ahp && _isAhpComplete(decision);
     if (!_titleFocus.hasFocus && _titleController.text != decision.title) {
       _titleController.text = decision.title;
     }
@@ -223,7 +305,7 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
         _descriptionController.text != descriptionText) {
       _descriptionController.text = descriptionText;
     }
-    final steps = [
+    return [
       _EditorStep(
         title: loc.decision_editor_titleLabel,
         subtitle: loc.decision_editor_titleHint,
@@ -242,6 +324,22 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
         builder: () => _buildCriteriaCard(loc, decision, state),
         isComplete: criteriaComplete,
       ),
+      if (decision.method == DecisionMethod.ahp)
+        _EditorStep(
+          title: loc.decision_editor_ahpPairwiseTitle,
+          subtitle: loc.decision_editor_ahpPairwiseDesc,
+          builder: () => decision.criteria.length < 2
+              ? _sectionCard(
+                  title: loc.decision_editor_ahpPairwiseTitle,
+                  description: loc.decision_editor_ahpPairwiseDesc,
+                  child: Text(
+                    loc.decision_editor_validationCriteria,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                )
+              : _buildAhpPairwiseSection(loc, decision),
+          isComplete: decision.criteria.length >= 2 && ahpComplete,
+        ),
       _EditorStep(
         title: loc.decision_editor_scoresTitle,
         subtitle: loc.decision_editor_scoresDescription,
@@ -249,11 +347,16 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
         isComplete: scoresComplete,
       ),
     ];
+  }
 
-    _currentStep = _currentStep.clamp(0, steps.length - 1);
-    final current = steps[_currentStep];
-    final currentComplete = current.isComplete;
-    final allComplete = steps.every((s) => s.isComplete);
+  Widget _buildStepper(
+    List<_EditorStep> steps,
+    Decision decision,
+    DecisionEditorState state,
+  ) {
+    final theme = Theme.of(context);
+    final currentStep = state.currentStep.clamp(0, steps.length - 1).toInt();
+    final current = steps[currentStep];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -264,7 +367,7 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
             children: [
               ...List.generate(steps.length, (index) {
                 final step = steps[index];
-                final isActive = index == _currentStep;
+                final isActive = index == currentStep;
                 final allPrevComplete = steps
                     .take(index)
                     .every((s) => s.isComplete);
@@ -277,8 +380,11 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
                   padding: const EdgeInsets.only(right: 8),
                   child: ChoiceChip(
                     selected: isActive,
-                    onSelected: (allPrevComplete || index <= _currentStep)
-                        ? (_) => setState(() => _currentStep = index)
+                    onSelected: (allPrevComplete || index <= currentStep)
+                        ? (_) => context.read<DecisionEditorCubit>().setStep(
+                            index,
+                            steps.length,
+                          )
                         : null,
                     avatar: CircleAvatar(
                       radius: 10,
@@ -315,7 +421,7 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 250),
           child: Container(
-            key: ValueKey(_currentStep),
+            key: ValueKey(currentStep),
             decoration: BoxDecoration(
               color: theme.colorScheme.surface.withValues(alpha: 0.94),
               borderRadius: BorderRadius.circular(14),
@@ -332,37 +438,26 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
             child: current.builder(),
           ),
         ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            OutlinedButton.icon(
-              onPressed: _currentStep > 0
-                  ? () => setState(() => _currentStep -= 1)
-                  : null,
-              icon: const Icon(Icons.chevron_left),
-              label: Text(MaterialLocalizations.of(context).backButtonTooltip),
-            ),
-            const Spacer(),
-            FilledButton.icon(
-              onPressed: _currentStep < steps.length - 1
-                  ? (currentComplete
-                        ? () => setState(() => _currentStep += 1)
-                        : null)
-                  : (allComplete ? () => _evaluate(context, decision) : null),
-              icon: Icon(
-                _currentStep < steps.length - 1
-                    ? Icons.chevron_right
-                    : Icons.auto_graph,
-              ),
-              label: Text(
-                _currentStep < steps.length - 1
-                    ? loc.decision_editor_stepEvaluate
-                    : loc.decision_editor_evaluate,
-              ),
-            ),
-          ],
-        ),
       ],
+    );
+  }
+
+  _StepControls _stepControls(
+    List<_EditorStep> steps,
+    DecisionEditorState state,
+  ) {
+    final currentStep = state.currentStep.clamp(0, steps.length - 1).toInt();
+    final allPrevComplete = steps.take(currentStep).every((s) => s.isComplete);
+    final currentComplete = steps[currentStep].isComplete && allPrevComplete;
+    final allComplete = steps.every((s) => s.isComplete);
+    final isLast = currentStep == steps.length - 1;
+    final canBack = currentStep > 0;
+    final canNext = isLast ? allComplete && state.canEvaluate : currentComplete;
+    return _StepControls(
+      currentStep: currentStep,
+      canBack: canBack,
+      canNext: canNext,
+      isLast: isLast,
     );
   }
 
@@ -393,6 +488,8 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
       child: BlocBuilder<DecisionEditorCubit, DecisionEditorState>(
         builder: (context, state) {
           final decision = state.decision ?? Decision.empty;
+          final steps = _buildSteps(loc, decision, state, state.missingScores);
+          final controls = _stepControls(steps, state);
 
           _titleText = _cacheSingle(_titleText, decision.title, _titleFocus);
           _descriptionText = _cacheSingle(
@@ -459,7 +556,7 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
                     if (canPop) {
                       navigator.pop();
                     } else {
-                      router.go('/app/home');
+                      router.go(AppRoutes.home);
                     }
                   },
                 ),
@@ -527,12 +624,16 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
                       children: [
                         Expanded(
                           child: SingleChildScrollView(
+                            controller: _scrollController,
                             padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
                             child: Center(
                               child: ConstrainedBox(
-                                constraints: const BoxConstraints(maxWidth: 1100),
+                                constraints: const BoxConstraints(
+                                  maxWidth: 1100,
+                                ),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     const SizedBox(height: 4),
                                     _CompactHero(
@@ -554,12 +655,7 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
                                     const SizedBox(height: 12),
                                     _buildTemplates(loc),
                                     const SizedBox(height: 16),
-                                    _buildStepper(
-                                      loc,
-                                      decision,
-                                      state,
-                                      missingScores,
-                                    ),
+                                    _buildStepper(steps, decision, state),
                                   ],
                                 ),
                               ),
@@ -571,6 +667,33 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
                           isSaving: state.isSaving,
                           statusMessage: statusMessage,
                           completionPercent: completionPercent,
+                          onBack: controls.canBack
+                              ? () {
+                                  context.read<DecisionEditorCubit>().setStep(
+                                        controls.currentStep - 1,
+                                        steps.length,
+                                      );
+                                  _scrollToStepper();
+                                }
+                              : null,
+                          onNext: controls.canNext
+                              ? () {
+                                  if (controls.isLast) {
+                                    _evaluate(context, decision);
+                                  } else {
+                                    context.read<DecisionEditorCubit>().setStep(
+                                      controls.currentStep + 1,
+                                      steps.length,
+                                    );
+                                    _scrollToStepper();
+                                  }
+                                }
+                              : null,
+                          backEnabled: controls.canBack,
+                          nextEnabled: controls.canNext,
+                          nextLabel: controls.isLast
+                              ? loc.decision_editor_evaluate
+                              : loc.decision_editor_stepEvaluate,
                         ),
                       ],
                     ),
@@ -817,6 +940,8 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
             );
           }).toList(),
         ),
+        const SizedBox(height: 8),
+        _MethodInfo(method: decision.method),
       ],
     );
   }
@@ -1504,6 +1629,187 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
     );
   }
 
+  Widget _buildAhpPairwiseSection(AppLocalizations loc, Decision decision) {
+    final theme = Theme.of(context);
+    final matrix =
+        decision.ahpMatrix ??
+        List.generate(
+          decision.criteria.length,
+          (i) => List<double>.generate(
+            decision.criteria.length,
+            (j) => i == j ? 1.0 : 1.0,
+          ),
+        );
+
+    final pairCards = <Widget>[];
+    for (var i = 0; i < decision.criteria.length; i++) {
+      for (var j = i + 1; j < decision.criteria.length; j++) {
+        final first = decision.criteria[i];
+        final second = decision.criteria[j];
+        final current = matrix[i][j];
+
+        pairCards.add(
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(vertical: 6),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: theme.colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.35,
+              ),
+              border: Border.all(color: theme.colorScheme.outlineVariant),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${first.label} vs ${second.label}',
+                        style: theme.textTheme.titleSmall,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Chip(
+                      label: Text(loc.decision_editor_ahpScaleLabel),
+                      side: BorderSide(color: theme.colorScheme.outlineVariant),
+                      backgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _ahpChoices(
+                  context: context,
+                  first: first,
+                  second: second,
+                  current: current,
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+
+    return _sectionCard(
+      title: loc.decision_editor_ahpPairwiseTitle,
+      description: loc.decision_editor_ahpPairwiseDesc,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            loc.decision_editor_ahpScaleNote,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 8),
+          ...pairCards,
+        ],
+      ),
+    );
+  }
+
+  Widget _ahpChoices({
+    required BuildContext context,
+    required DecisionCriterion first,
+    required DecisionCriterion second,
+    required double current,
+  }) {
+    final loc = context.loc;
+    final theme = Theme.of(context);
+
+    final options = [
+      (1.0, loc.decision_editor_ahpEqualShort, first.label, second.label),
+      (3.0, loc.decision_editor_ahpModerateShort, first.label, second.label),
+      (5.0, loc.decision_editor_ahpStrongShort, first.label, second.label),
+      (1 / 3, loc.decision_editor_ahpModerateShort, second.label, first.label),
+      (1 / 5, loc.decision_editor_ahpStrongShort, second.label, first.label),
+    ];
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isNarrow = constraints.maxWidth < 520;
+        final itemWidth = isNarrow
+            ? constraints.maxWidth
+            : (constraints.maxWidth - 12) / 2; // two columns with gap
+
+        return Wrap(
+          spacing: 12,
+          runSpacing: 10,
+          children: options.map((opt) {
+            final value = opt.$1;
+            final strength = opt.$2;
+            final stronger = opt.$3;
+            final weaker = opt.$4;
+            final selected = (current - value).abs() < 0.0001;
+            final baseColor = selected
+                ? theme.colorScheme.primary.withValues(alpha: 0.12)
+                : theme.colorScheme.surface;
+
+            return SizedBox(
+              width: itemWidth,
+              child: Material(
+                color: baseColor,
+                borderRadius: BorderRadius.circular(12),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () {
+                    context.read<DecisionEditorCubit>().setAhpComparison(
+                      first: first.id,
+                      second: second.id,
+                      value: value,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          strength,
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: selected
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(stronger, style: theme.textTheme.bodySmall),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.arrow_forward, size: 16),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                weaker,
+                                style: theme.textTheme.bodySmall,
+                                overflow: TextOverflow.visible,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
   Widget _sectionCard({
     required String title,
     String? description,
@@ -1553,46 +1859,27 @@ class _ActionBar extends StatelessWidget {
   final bool isSaving;
   final String statusMessage;
   final int completionPercent;
+  final VoidCallback? onBack;
+  final VoidCallback? onNext;
+  final bool backEnabled;
+  final bool nextEnabled;
+  final String nextLabel;
 
   const _ActionBar({
     required this.isEvaluating,
     required this.isSaving,
     required this.statusMessage,
     required this.completionPercent,
+    required this.onBack,
+    required this.onNext,
+    required this.backEnabled,
+    required this.nextEnabled,
+    required this.nextLabel,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final statusSection = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          statusMessage,
-          style: theme.textTheme.titleSmall,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(height: 4),
-        Row(
-          children: [
-            SizedBox(
-              width: 120,
-              child: LinearProgressIndicator(
-                value: completionPercent / 100,
-                minHeight: 6,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              '$completionPercent%',
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
 
     return Container(
       decoration: BoxDecoration(
@@ -1611,17 +1898,57 @@ class _ActionBar extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1100),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: statusSection,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Row(
+              children: [
+                OutlinedButton.icon(
+                  onPressed: backEnabled ? onBack : null,
+                  icon: const Icon(Icons.chevron_left),
+                  label: Text(
+                    MaterialLocalizations.of(context).backButtonTooltip,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: SizedBox(
+                    height: 12,
+                    child: LinearProgressIndicator(
+                      value: completionPercent / 100,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                FilledButton.icon(
+                  onPressed: nextEnabled ? onNext : null,
+                  icon: Icon(
+                    nextLabel == context.loc.decision_editor_evaluate
+                        ? Icons.auto_graph
+                        : Icons.chevron_right,
+                  ),
+                  label: Text(nextLabel),
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
   }
+}
+
+class _StepControls {
+  final int currentStep;
+  final bool canBack;
+  final bool canNext;
+  final bool isLast;
+
+  const _StepControls({
+    required this.currentStep,
+    required this.canBack,
+    required this.canNext,
+    required this.isLast,
+  });
 }
 
 class _CompactHero extends StatefulWidget {

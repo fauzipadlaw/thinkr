@@ -1,10 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-enum AppEnvironment {
-  development,
-  staging,
-  production,
-}
+enum AppEnvironment { development, staging, production }
 
 class EnvConfig {
   final AppEnvironment environment;
@@ -12,6 +8,8 @@ class EnvConfig {
   final String supabaseAnonKey;
   final String supabaseRedirectUrl;
   final String supabaseCaptchaSiteKey;
+  final String googleWebClientId;
+  final String googleIosClientId;
 
   const EnvConfig({
     required this.environment,
@@ -19,6 +17,8 @@ class EnvConfig {
     required this.supabaseAnonKey,
     required this.supabaseRedirectUrl,
     required this.supabaseCaptchaSiteKey,
+    required this.googleWebClientId,
+    required this.googleIosClientId,
   });
 
   factory EnvConfig.fromDotEnv(AppEnvironment env) {
@@ -27,8 +27,12 @@ class EnvConfig {
       supabaseUrl: dotenv.get('SUPABASE_URL', fallback: ''),
       supabaseAnonKey: dotenv.get('SUPABASE_ANON_KEY', fallback: ''),
       supabaseRedirectUrl: dotenv.get('SUPABASE_REDIRECT_URL', fallback: ''),
-      supabaseCaptchaSiteKey:
-          dotenv.get('SUPABASE_CAPTCHA_SITE_KEY', fallback: ''),
+      supabaseCaptchaSiteKey: dotenv.get(
+        'SUPABASE_CAPTCHA_SITE_KEY',
+        fallback: '',
+      ),
+      googleWebClientId: dotenv.get('GOOGLE_WEB_CLIENT_ID', fallback: ''),
+      googleIosClientId: dotenv.get('GOOGLE_IOS_CLIENT_ID', fallback: ''),
     );
   }
 

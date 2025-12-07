@@ -8,6 +8,7 @@ import 'package:thinkr/features/decision/presentation/decision_result_page.dart'
 import 'package:thinkr/features/home/presentation/home_page.dart';
 import 'package:thinkr/features/settings/presentation/settings_page.dart';
 import 'package:thinkr/features/documentation/presentation/documentation_page.dart';
+import 'package:thinkr/core/routes/app_routes.dart';
 
 import 'features/auth/presentation/auth_state_notifier.dart';
 
@@ -16,51 +17,60 @@ abstract class RouterModule {
   @lazySingleton
   GoRouter router(AuthStateNotifier authStateNotifier) {
     return GoRouter(
-      initialLocation: '/',
+      initialLocation: AppRoutes.root,
       refreshListenable: authStateNotifier,
       routes: [
         GoRoute(
-          path: '/',
+          path: AppRoutes.root,
           redirect: (context, state) =>
-              authStateNotifier.isLoggedIn ? '/app/home' : '/login',
+              authStateNotifier.isLoggedIn ? AppRoutes.home : AppRoutes.login,
         ),
         GoRoute(
-          path: '/docs',
+          path: AppRoutes.docsPublic,
           builder: (context, state) => const DocumentationPage(),
         ),
-        GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
         GoRoute(
-          path: '/app/home',
+          path: AppRoutes.login,
+          builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.home,
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(
-          path: '/app/decisions/new',
+          path: AppRoutes.decisionsNew,
           builder: (context, state) => const DecisionEditorPage(),
         ),
         GoRoute(
-          path: '/app/history',
+          path: AppRoutes.history,
           builder: (context, state) => const DecisionHistoryPage(),
         ),
         GoRoute(
-          path: '/app/settings',
+          path: AppRoutes.settings,
           builder: (context, state) => const SettingsPage(),
         ),
         GoRoute(
-          path: '/app/docs',
+          path: AppRoutes.docs,
           builder: (context, state) => const DocumentationPage(),
         ),
         GoRoute(
-          path: '/app/decisions/result',
+          path: AppRoutes.decisionsResult,
           builder: (context, state) {
-            final decision = state.extra as Decision?;
-            if (decision == null) {
-              return const HomePage();
+            final extra = state.extra;
+            if (extra is DecisionResultArgs) {
+              return DecisionResultPage(
+                decision: extra.decision,
+                fromEditor: extra.fromEditor,
+              );
             }
-            return DecisionResultPage(decision: decision);
+            if (extra is Decision) {
+              return DecisionResultPage(decision: extra, fromEditor: false);
+            }
+            return const HomePage();
           },
         ),
         GoRoute(
-          path: '/app/decisions/edit',
+          path: AppRoutes.decisionsEdit,
           builder: (context, state) {
             final decision = state.extra as Decision?;
             if (decision == null) {
@@ -72,15 +82,15 @@ abstract class RouterModule {
       ],
       redirect: (context, state) {
         final loggedIn = authStateNotifier.isLoggedIn;
-        final loggingIn = state.matchedLocation == '/login';
-        final viewingDocs = state.matchedLocation == '/docs';
+        final loggingIn = state.matchedLocation == AppRoutes.login;
+        final viewingDocs = state.matchedLocation == AppRoutes.docsPublic;
 
         if (!loggedIn && !loggingIn && !viewingDocs) {
-          return '/login';
+          return AppRoutes.login;
         }
 
         if (loggedIn && loggingIn) {
-          return '/app/home';
+          return AppRoutes.home;
         }
 
         return null;

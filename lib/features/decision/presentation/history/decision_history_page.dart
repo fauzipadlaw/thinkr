@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
+import 'package:thinkr/core/routes/app_routes.dart';
 import 'package:thinkr/core/widgets/top_snackbar.dart';
 import 'package:thinkr/features/decision/domain/entities/decision.dart';
+import 'package:thinkr/features/decision/presentation/decision_result_page.dart';
 
 import 'decision_history_cubit.dart';
 import 'decision_history_state.dart';
@@ -46,7 +48,7 @@ class _DecisionHistoryPageState extends State<DecisionHistoryPage> {
               if (context.canPop()) {
                 context.pop();
               } else {
-                context.go('/app/home');
+                context.go(AppRoutes.home);
               }
             },
           ),
@@ -83,7 +85,7 @@ class _DecisionHistoryPageState extends State<DecisionHistoryPage> {
                 title: loc.history_emptyTitle,
                 message: loc.history_emptySubtitle,
                 actionLabel: loc.history_newDecision,
-                onAction: () => context.go('/app/decisions/new'),
+                onAction: () => context.go(AppRoutes.decisionsNew),
               );
             }
 
@@ -91,8 +93,9 @@ class _DecisionHistoryPageState extends State<DecisionHistoryPage> {
 
             Widget buildList(bool web) {
               final baseCount = state.decisions.length + 1; // search row
-              final itemCount =
-                  web ? baseCount : baseCount + (state.hasMore ? 1 : 0);
+              final itemCount = web
+                  ? baseCount
+                  : baseCount + (state.hasMore ? 1 : 0);
 
               final listView = ListView.builder(
                 padding: const EdgeInsets.all(16),
@@ -132,8 +135,9 @@ class _DecisionHistoryPageState extends State<DecisionHistoryPage> {
                   return _DecisionCard(
                     decision: decision,
                     isDeleting: state.isDeleting,
-                    onDelete: () =>
-                        context.read<DecisionHistoryCubit>().delete(decision.id!),
+                    onDelete: () => context.read<DecisionHistoryCubit>().delete(
+                      decision.id!,
+                    ),
                   );
                 },
               );
@@ -232,9 +236,12 @@ class _DecisionCard extends StatelessWidget {
     final result = decision.result;
     void openResultOrEdit() {
       if (decision.result != null) {
-        context.push('/app/decisions/result', extra: decision);
+        context.push(
+          AppRoutes.decisionsResult,
+          extra: DecisionResultArgs(decision: decision, fromEditor: false),
+        );
       } else {
-        context.push('/app/decisions/edit', extra: decision);
+        context.push(AppRoutes.decisionsEdit, extra: decision);
       }
     }
 
@@ -325,11 +332,11 @@ class _DecisionCard extends StatelessWidget {
                   OutlinedButton.icon(
                     onPressed: openResultOrEdit,
                     icon: const Icon(Icons.open_in_new),
-                    label: const Text('View result'),
+                    label: Text(loc.history_viewResult),
                   ),
                   FilledButton.icon(
                     onPressed: () =>
-                        context.push('/app/decisions/edit', extra: decision),
+                        context.push(AppRoutes.decisionsEdit, extra: decision),
                     icon: const Icon(Icons.edit),
                     label: const Text('Edit'),
                   ),

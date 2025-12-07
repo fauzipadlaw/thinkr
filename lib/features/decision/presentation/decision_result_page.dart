@@ -1,101 +1,154 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
+import 'package:thinkr/core/routes/app_routes.dart';
 import 'package:thinkr/features/decision/domain/entities/decision.dart';
 import 'package:thinkr/core/theme/app_colors.dart';
+import 'package:thinkr/l10n/app_localizations.dart';
 import 'decision_result_cubit.dart';
 import 'decision_result_state.dart';
 
+class DecisionResultArgs {
+  final Decision decision;
+  final bool fromEditor;
+
+  const DecisionResultArgs({
+    required this.decision,
+    this.fromEditor = false,
+  });
+}
+
 class DecisionResultPage extends StatelessWidget {
   final Decision decision;
+  final bool fromEditor;
 
-  const DecisionResultPage({super.key, required this.decision});
+  const DecisionResultPage({
+    super.key,
+    required this.decision,
+    this.fromEditor = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => DecisionResultCubit(decision),
-      child: const _DecisionResultView(),
+      child: _DecisionResultView(fromEditor: fromEditor),
     );
   }
 }
 
 class _DecisionResultView extends StatelessWidget {
-  const _DecisionResultView();
+  final bool fromEditor;
+
+  const _DecisionResultView({required this.fromEditor});
 
   @override
   Widget build(BuildContext context) {
-    final loc = context.loc;
-    final theme = Theme.of(context);
-
     return BlocBuilder<DecisionResultCubit, DecisionResultState>(
       builder: (context, state) {
         final result = state.decision.result;
+        final loc = context.loc;
+        final theme = Theme.of(context);
 
         if (result == null) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.of(context).pop(),
+          return PopScope(
+            canPop: !fromEditor,
+            onPopInvoked: (didPop) {
+              if (didPop) return;
+              if (fromEditor) GoRouter.of(context).go(AppRoutes.home);
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    if (fromEditor) {
+                      GoRouter.of(context).go(AppRoutes.home);
+                    } else {
+                      Navigator.of(context).maybePop();
+                    }
+                  },
+                ),
+                title: Text(loc.decision_editor_title),
               ),
-              title: Text(loc.decision_editor_title),
-            ),
-            body: Center(
-              child: Text(
-                loc.decision_editor_subtitle,
-                style: theme.textTheme.titleMedium,
+              body: Center(
+                child: Text(
+                  loc.decision_editor_subtitle,
+                  style: theme.textTheme.titleMedium,
+                ),
               ),
             ),
           );
         }
 
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            title: Text(loc.decision_editor_evaluatedChip),
-          ),
-          body: Stack(
-            children: [
-              Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.bgDeep, AppColors.bgResult],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+        return PopScope(
+          canPop: !fromEditor,
+          onPopInvoked: (didPop) {
+            if (didPop) return;
+            if (fromEditor) GoRouter.of(context).go(AppRoutes.home);
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  if (fromEditor) {
+                    GoRouter.of(context).go(AppRoutes.home);
+                  } else {
+                    Navigator.of(context).maybePop();
+                  }
+                },
               ),
+              title: Text(loc.decision_editor_evaluatedChip),
             ),
-              ),
-              SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 900),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _BestOptionCard(
-                          title: state.decision.title,
-                          description: state.decision.description,
-                          best: state.best,
-                          method: state.decision.method,
-                        ),
-                        const SizedBox(height: 16),
-                        _MetaChips(decision: state.decision),
-                        const SizedBox(height: 16),
+            body: Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppColors.bgDeep, AppColors.bgResult],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                ),
+                SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 900),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _BestOptionCard(
+                            title: state.decision.title,
+                            description: state.decision.description,
+                            best: state.best,
+                            method: state.decision.method,
+                            errorRate: state.errorRate,
+                            ahpConsistency: state.ahpConsistency,
+                            stability: state.stability,
+                            overlapReliability: state.fuzzyOverlapReliability,
+                            marginReliability: state.marginReliability,
+                            combinedReliability: state.combinedReliability,
+                          ),
+                          const SizedBox(height: 16),
+                          _MetaChips(decision: state.decision),
+                          const SizedBox(height: 16),
                         _RankingList(ranking: state.ranking),
+                        const SizedBox(height: 16),
+                        _ResultNotes(),
                         const SizedBox(height: 16),
                         if (result.debug != null && result.debug!.isNotEmpty)
                           _DebugCard(debug: result.debug!),
                       ],
                     ),
                   ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -108,22 +161,34 @@ class _BestOptionCard extends StatelessWidget {
   final String? description;
   final RankingEntry? best;
   final DecisionMethod method;
+  final double errorRate;
+  final double? ahpConsistency;
+  final double? stability;
+  final double? overlapReliability;
+  final double? marginReliability;
+  final double? combinedReliability;
 
   const _BestOptionCard({
     required this.title,
     required this.description,
     required this.best,
     required this.method,
+    required this.errorRate,
+    this.ahpConsistency,
+    this.stability,
+    this.overlapReliability,
+    this.marginReliability,
+    this.combinedReliability,
   });
 
-  String _methodLabel(DecisionMethod method) {
+  String _methodLabel(DecisionMethod method, AppLocalizations loc) {
     switch (method) {
       case DecisionMethod.weightedSum:
-        return 'Weighted Sum';
+        return loc.decision_editor_methodWeighted;
       case DecisionMethod.ahp:
-        return 'AHP';
+        return loc.decision_editor_methodAhp;
       case DecisionMethod.fuzzyWeightedSum:
-        return 'Fuzzy Weighted Sum';
+        return loc.decision_editor_methodFuzzy;
     }
   }
 
@@ -131,6 +196,27 @@ class _BestOptionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final loc = context.loc;
+    final reliability =
+        (combinedReliability ?? (1 - errorRate)).clamp(0, 1);
+    String reliabilityLabel = loc.result_reliabilityNA;
+    Color reliabilityColor = theme.colorScheme.onSurfaceVariant;
+
+    if (combinedReliability == null && errorRate == 0) {
+      reliabilityLabel = loc.result_reliabilityNA;
+      reliabilityColor = theme.colorScheme.onSurfaceVariant;
+    } else if (reliability < 0.05) {
+      reliabilityLabel = loc.result_reliabilityVeryLow;
+      reliabilityColor = Colors.red;
+    } else if (reliability < 0.15) {
+      reliabilityLabel = loc.result_reliabilityLow;
+      reliabilityColor = Colors.deepOrange;
+    } else if (reliability < 0.30) {
+      reliabilityLabel = loc.result_reliabilityMedium;
+      reliabilityColor = Colors.amber;
+    } else {
+      reliabilityLabel = loc.result_reliabilityHigh;
+      reliabilityColor = Colors.green;
+    }
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -179,8 +265,59 @@ class _BestOptionCard extends StatelessWidget {
             children: [
               Chip(
                 avatar: const Icon(Icons.auto_graph, size: 18),
-                label: Text(_methodLabel(method)),
+                label: Text(_methodLabel(method, loc)),
               ),
+              Chip(
+                backgroundColor: reliabilityColor.withValues(alpha: 0.16),
+                avatar: Icon(Icons.shield, size: 18, color: reliabilityColor),
+                label: Text(
+                  '${loc.result_reliabilityLabel} $reliabilityLabel (${(reliability * 100).toStringAsFixed(0)}%)',
+                  style: TextStyle(color: reliabilityColor),
+                ),
+              ),
+              if (stability != null)
+                Chip(
+                  avatar: const Icon(Icons.sync, size: 18),
+                  label: Text(
+                    '${loc.result_stabilityLabel} ${(stability! * 100).toStringAsFixed(0)}%',
+                  ),
+                ),
+              if (overlapReliability != null)
+                Chip(
+                  avatar: const Icon(Icons.blur_on, size: 18),
+                  label: Text(
+                    '${loc.result_overlapLabel} ${(overlapReliability! * 100).toStringAsFixed(0)}%',
+                  ),
+                ),
+              if (method == DecisionMethod.ahp && ahpConsistency != null)
+                Chip(
+                  backgroundColor:
+                      (ahpConsistency! < 0.1
+                              ? Colors.green
+                              : ahpConsistency! < 0.2
+                              ? Colors.orange
+                              : Colors.red)
+                          .withValues(alpha: 0.14),
+                  avatar: Icon(
+                    Icons.scale,
+                    size: 18,
+                    color: ahpConsistency! < 0.1
+                        ? Colors.green
+                        : ahpConsistency! < 0.2
+                        ? Colors.orange
+                        : Colors.red,
+                  ),
+                  label: Text(
+                    '${loc.result_ahpConsistencyLabel} ${ahpConsistency!.toStringAsFixed(3)}',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: ahpConsistency! < 0.1
+                          ? Colors.green
+                          : ahpConsistency! < 0.2
+                          ? Colors.orange
+                          : Colors.red,
+                    ),
+                  ),
+                ),
               if (best != null)
                 Chip(
                   backgroundColor: Colors.green.withValues(alpha: 0.12),
@@ -250,6 +387,59 @@ class _BestOptionCard extends StatelessWidget {
   }
 }
 
+class _ResultNotes extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final loc = context.loc;
+    final theme = Theme.of(context);
+
+    final items = [
+      loc.result_notesReliability,
+      loc.result_notesStability,
+      loc.result_notesOverlap,
+      loc.result_notesAhpCr,
+    ];
+
+    return Card(
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              loc.result_notesTitle,
+              style: theme.textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            ...items.map(
+              (text) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('• '),
+                    Expanded(
+                      child: Text(
+                        text,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _RankingList extends StatelessWidget {
   final List<RankingEntry> ranking;
 
@@ -258,6 +448,7 @@ class _RankingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = context.loc;
 
     if (ranking.isEmpty) {
       return Container(
@@ -267,10 +458,7 @@ class _RankingList extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: theme.colorScheme.outlineVariant),
         ),
-        child: Text(
-          'No ranking available yet.',
-          style: theme.textTheme.bodyMedium,
-        ),
+        child: Text(loc.result_noRanking, style: theme.textTheme.bodyMedium),
       );
     }
 
@@ -288,7 +476,10 @@ class _RankingList extends StatelessWidget {
             children: [
               const Icon(Icons.bar_chart, size: 20),
               const SizedBox(width: 6),
-              Text('Ranking', style: theme.textTheme.titleMedium),
+              Text(
+                loc.decision_editor_ranking,
+                style: theme.textTheme.titleMedium,
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -402,7 +593,10 @@ class _DebugCard extends StatelessWidget {
             children: [
               const Icon(Icons.bug_report_outlined, size: 20),
               const SizedBox(width: 6),
-              Text('Debug data', style: theme.textTheme.titleMedium),
+              Text(
+                context.loc.result_debugData,
+                style: theme.textTheme.titleMedium,
+              ),
             ],
           ),
           const SizedBox(height: 8),

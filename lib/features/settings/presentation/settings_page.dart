@@ -5,6 +5,7 @@ import 'package:thinkr/features/settings/presentation/settings_cubit.dart';
 import 'package:thinkr/features/settings/presentation/settings_state.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
+import 'package:thinkr/core/routes/app_routes.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -21,7 +22,7 @@ class SettingsPage extends StatelessWidget {
             if (navigator.canPop()) {
               navigator.pop();
             } else {
-              GoRouter.of(context).go('/app/home');
+              GoRouter.of(context).go(AppRoutes.home);
             }
           },
         ),

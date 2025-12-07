@@ -186,10 +186,68 @@ class AppLocalizationsEn extends AppLocalizations {
   String get decision_editor_methodWeighted => 'Weighted Sum';
 
   @override
+  String get decision_editor_methodWeightedDesc =>
+      'Best for quick scoring: uses your weights and 1–10 scores to rank options.';
+
+  @override
   String get decision_editor_methodAhp => 'AHP';
 
   @override
+  String get decision_editor_methodAhpDesc =>
+      'AHP supports pairwise weights; without comparisons we use your weights. Consistency is reported when pairwise data is provided.';
+
+  @override
   String get decision_editor_methodFuzzy => 'Fuzzy Weighted';
+
+  @override
+  String get decision_editor_methodFuzzyDesc =>
+      'Handles uncertainty by spreading each score; still uses your 1–10 inputs and weights.';
+
+  @override
+  String get decision_editor_discardMessage =>
+      'You have unsaved changes. Leave the editor? Your input will be lost.';
+
+  @override
+  String get decision_editor_discardConfirm => 'Leave editor';
+
+  @override
+  String get decision_editor_discardStay => 'Stay';
+
+  @override
+  String get decision_editor_ahpPairwiseTitle => 'Pairwise importance';
+
+  @override
+  String get decision_editor_ahpPairwiseDesc =>
+      'Use the simplified AHP scale to compare each pair of criteria.';
+
+  @override
+  String get decision_editor_ahpScaleLabel => 'AHP 3-point';
+
+  @override
+  String get decision_editor_ahpScaleNote =>
+      'Equal / Moderate / Strong — pick who is more important in each pair.';
+
+  @override
+  String get decision_editor_ahpEqual => 'Equal importance';
+
+  @override
+  String decision_editor_ahpModerate(Object stronger, Object weaker) {
+    return '$stronger moderately > $weaker';
+  }
+
+  @override
+  String decision_editor_ahpStrong(Object stronger, Object weaker) {
+    return '$stronger strongly > $weaker';
+  }
+
+  @override
+  String get decision_editor_ahpEqualShort => 'Equal';
+
+  @override
+  String get decision_editor_ahpModerateShort => 'Moderate';
+
+  @override
+  String get decision_editor_ahpStrongShort => 'Strong';
 
   @override
   String get decision_editor_evaluate => 'Evaluate';
@@ -576,4 +634,59 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get docs_methodItem3 =>
       'AHP & Fuzzy: accepted by the Edge Function; current build aggregates with provided weights/scores (pairwise/fuzzy inputs coming later).';
+
+  @override
+  String get history_viewResult => 'View result';
+
+  @override
+  String get result_reliabilityLabel => 'Reliability:';
+
+  @override
+  String get result_reliabilityHigh => 'High';
+
+  @override
+  String get result_reliabilityMedium => 'Moderate';
+
+  @override
+  String get result_reliabilityLow => 'Low';
+
+  @override
+  String get result_reliabilityVeryLow => 'Very Low';
+
+  @override
+  String get result_reliabilityNA => 'N/A';
+
+  @override
+  String get result_ahpConsistencyLabel => 'AHP CR:';
+
+  @override
+  String get result_stabilityLabel => 'Stability';
+
+  @override
+  String get result_overlapLabel => 'Fuzzy overlap';
+
+  @override
+  String get result_notesTitle => 'How to read this';
+
+  @override
+  String get result_notesReliability =>
+      'Reliability mixes score margin, weight stability, and (for fuzzy) overlap; higher is more trustworthy.';
+
+  @override
+  String get result_notesStability =>
+      'Stability simulates small weight tweaks; if the best option stays #1, the result is stable.';
+
+  @override
+  String get result_notesOverlap =>
+      'Fuzzy overlap shows how much the top fuzzy scores overlap; lower overlap = clearer winner.';
+
+  @override
+  String get result_notesAhpCr =>
+      'AHP CR checks consistency of your pairwise comparisons; aim for CR < 0.1.';
+
+  @override
+  String get result_noRanking => 'No ranking available yet.';
+
+  @override
+  String get result_debugData => 'Debug data';
 }

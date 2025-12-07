@@ -540,7 +540,7 @@ as double,
 /// @nodoc
 mixin _$DecisionResult {
 
- OptionId get bestOptionId; Map<OptionId, double> get scores; List<OptionId> get ranking; Map<String, dynamic>? get debug;
+ OptionId get bestOptionId; Map<OptionId, double> get scores; List<OptionId> get ranking; double get errorRate; Map<String, dynamic>? get debug;
 /// Create a copy of DecisionResult
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -551,16 +551,16 @@ $DecisionResultCopyWith<DecisionResult> get copyWith => _$DecisionResultCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DecisionResult&&(identical(other.bestOptionId, bestOptionId) || other.bestOptionId == bestOptionId)&&const DeepCollectionEquality().equals(other.scores, scores)&&const DeepCollectionEquality().equals(other.ranking, ranking)&&const DeepCollectionEquality().equals(other.debug, debug));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DecisionResult&&(identical(other.bestOptionId, bestOptionId) || other.bestOptionId == bestOptionId)&&const DeepCollectionEquality().equals(other.scores, scores)&&const DeepCollectionEquality().equals(other.ranking, ranking)&&(identical(other.errorRate, errorRate) || other.errorRate == errorRate)&&const DeepCollectionEquality().equals(other.debug, debug));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,bestOptionId,const DeepCollectionEquality().hash(scores),const DeepCollectionEquality().hash(ranking),const DeepCollectionEquality().hash(debug));
+int get hashCode => Object.hash(runtimeType,bestOptionId,const DeepCollectionEquality().hash(scores),const DeepCollectionEquality().hash(ranking),errorRate,const DeepCollectionEquality().hash(debug));
 
 @override
 String toString() {
-  return 'DecisionResult(bestOptionId: $bestOptionId, scores: $scores, ranking: $ranking, debug: $debug)';
+  return 'DecisionResult(bestOptionId: $bestOptionId, scores: $scores, ranking: $ranking, errorRate: $errorRate, debug: $debug)';
 }
 
 
@@ -571,7 +571,7 @@ abstract mixin class $DecisionResultCopyWith<$Res>  {
   factory $DecisionResultCopyWith(DecisionResult value, $Res Function(DecisionResult) _then) = _$DecisionResultCopyWithImpl;
 @useResult
 $Res call({
- OptionId bestOptionId, Map<OptionId, double> scores, List<OptionId> ranking, Map<String, dynamic>? debug
+ OptionId bestOptionId, Map<OptionId, double> scores, List<OptionId> ranking, double errorRate, Map<String, dynamic>? debug
 });
 
 
@@ -588,12 +588,13 @@ class _$DecisionResultCopyWithImpl<$Res>
 
 /// Create a copy of DecisionResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? bestOptionId = null,Object? scores = null,Object? ranking = null,Object? debug = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? bestOptionId = null,Object? scores = null,Object? ranking = null,Object? errorRate = null,Object? debug = freezed,}) {
   return _then(_self.copyWith(
 bestOptionId: null == bestOptionId ? _self.bestOptionId : bestOptionId // ignore: cast_nullable_to_non_nullable
 as OptionId,scores: null == scores ? _self.scores : scores // ignore: cast_nullable_to_non_nullable
 as Map<OptionId, double>,ranking: null == ranking ? _self.ranking : ranking // ignore: cast_nullable_to_non_nullable
-as List<OptionId>,debug: freezed == debug ? _self.debug : debug // ignore: cast_nullable_to_non_nullable
+as List<OptionId>,errorRate: null == errorRate ? _self.errorRate : errorRate // ignore: cast_nullable_to_non_nullable
+as double,debug: freezed == debug ? _self.debug : debug // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,
   ));
 }
@@ -679,10 +680,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( OptionId bestOptionId,  Map<OptionId, double> scores,  List<OptionId> ranking,  Map<String, dynamic>? debug)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( OptionId bestOptionId,  Map<OptionId, double> scores,  List<OptionId> ranking,  double errorRate,  Map<String, dynamic>? debug)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DecisionResult() when $default != null:
-return $default(_that.bestOptionId,_that.scores,_that.ranking,_that.debug);case _:
+return $default(_that.bestOptionId,_that.scores,_that.ranking,_that.errorRate,_that.debug);case _:
   return orElse();
 
 }
@@ -700,10 +701,10 @@ return $default(_that.bestOptionId,_that.scores,_that.ranking,_that.debug);case 
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( OptionId bestOptionId,  Map<OptionId, double> scores,  List<OptionId> ranking,  Map<String, dynamic>? debug)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( OptionId bestOptionId,  Map<OptionId, double> scores,  List<OptionId> ranking,  double errorRate,  Map<String, dynamic>? debug)  $default,) {final _that = this;
 switch (_that) {
 case _DecisionResult():
-return $default(_that.bestOptionId,_that.scores,_that.ranking,_that.debug);case _:
+return $default(_that.bestOptionId,_that.scores,_that.ranking,_that.errorRate,_that.debug);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -720,10 +721,10 @@ return $default(_that.bestOptionId,_that.scores,_that.ranking,_that.debug);case 
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( OptionId bestOptionId,  Map<OptionId, double> scores,  List<OptionId> ranking,  Map<String, dynamic>? debug)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( OptionId bestOptionId,  Map<OptionId, double> scores,  List<OptionId> ranking,  double errorRate,  Map<String, dynamic>? debug)?  $default,) {final _that = this;
 switch (_that) {
 case _DecisionResult() when $default != null:
-return $default(_that.bestOptionId,_that.scores,_that.ranking,_that.debug);case _:
+return $default(_that.bestOptionId,_that.scores,_that.ranking,_that.errorRate,_that.debug);case _:
   return null;
 
 }
@@ -735,7 +736,7 @@ return $default(_that.bestOptionId,_that.scores,_that.ranking,_that.debug);case 
 
 
 class _DecisionResult implements DecisionResult {
-  const _DecisionResult({required this.bestOptionId, required final  Map<OptionId, double> scores, required final  List<OptionId> ranking, final  Map<String, dynamic>? debug}): _scores = scores,_ranking = ranking,_debug = debug;
+  const _DecisionResult({required this.bestOptionId, required final  Map<OptionId, double> scores, required final  List<OptionId> ranking, this.errorRate = 0.0, final  Map<String, dynamic>? debug}): _scores = scores,_ranking = ranking,_debug = debug;
   
 
 @override final  OptionId bestOptionId;
@@ -753,6 +754,7 @@ class _DecisionResult implements DecisionResult {
   return EqualUnmodifiableListView(_ranking);
 }
 
+@override@JsonKey() final  double errorRate;
  final  Map<String, dynamic>? _debug;
 @override Map<String, dynamic>? get debug {
   final value = _debug;
@@ -773,16 +775,16 @@ _$DecisionResultCopyWith<_DecisionResult> get copyWith => __$DecisionResultCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DecisionResult&&(identical(other.bestOptionId, bestOptionId) || other.bestOptionId == bestOptionId)&&const DeepCollectionEquality().equals(other._scores, _scores)&&const DeepCollectionEquality().equals(other._ranking, _ranking)&&const DeepCollectionEquality().equals(other._debug, _debug));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DecisionResult&&(identical(other.bestOptionId, bestOptionId) || other.bestOptionId == bestOptionId)&&const DeepCollectionEquality().equals(other._scores, _scores)&&const DeepCollectionEquality().equals(other._ranking, _ranking)&&(identical(other.errorRate, errorRate) || other.errorRate == errorRate)&&const DeepCollectionEquality().equals(other._debug, _debug));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,bestOptionId,const DeepCollectionEquality().hash(_scores),const DeepCollectionEquality().hash(_ranking),const DeepCollectionEquality().hash(_debug));
+int get hashCode => Object.hash(runtimeType,bestOptionId,const DeepCollectionEquality().hash(_scores),const DeepCollectionEquality().hash(_ranking),errorRate,const DeepCollectionEquality().hash(_debug));
 
 @override
 String toString() {
-  return 'DecisionResult(bestOptionId: $bestOptionId, scores: $scores, ranking: $ranking, debug: $debug)';
+  return 'DecisionResult(bestOptionId: $bestOptionId, scores: $scores, ranking: $ranking, errorRate: $errorRate, debug: $debug)';
 }
 
 
@@ -793,7 +795,7 @@ abstract mixin class _$DecisionResultCopyWith<$Res> implements $DecisionResultCo
   factory _$DecisionResultCopyWith(_DecisionResult value, $Res Function(_DecisionResult) _then) = __$DecisionResultCopyWithImpl;
 @override @useResult
 $Res call({
- OptionId bestOptionId, Map<OptionId, double> scores, List<OptionId> ranking, Map<String, dynamic>? debug
+ OptionId bestOptionId, Map<OptionId, double> scores, List<OptionId> ranking, double errorRate, Map<String, dynamic>? debug
 });
 
 
@@ -810,12 +812,13 @@ class __$DecisionResultCopyWithImpl<$Res>
 
 /// Create a copy of DecisionResult
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? bestOptionId = null,Object? scores = null,Object? ranking = null,Object? debug = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? bestOptionId = null,Object? scores = null,Object? ranking = null,Object? errorRate = null,Object? debug = freezed,}) {
   return _then(_DecisionResult(
 bestOptionId: null == bestOptionId ? _self.bestOptionId : bestOptionId // ignore: cast_nullable_to_non_nullable
 as OptionId,scores: null == scores ? _self._scores : scores // ignore: cast_nullable_to_non_nullable
 as Map<OptionId, double>,ranking: null == ranking ? _self._ranking : ranking // ignore: cast_nullable_to_non_nullable
-as List<OptionId>,debug: freezed == debug ? _self._debug : debug // ignore: cast_nullable_to_non_nullable
+as List<OptionId>,errorRate: null == errorRate ? _self.errorRate : errorRate // ignore: cast_nullable_to_non_nullable
+as double,debug: freezed == debug ? _self._debug : debug // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,
   ));
 }
@@ -826,7 +829,7 @@ as Map<String, dynamic>?,
 /// @nodoc
 mixin _$Decision {
 
- DecisionId? get id; String get title; String? get description; DecisionMethod get method; List<DecisionOption> get options; List<DecisionCriterion> get criteria; Map<ScoreKey, double> get scores; DecisionResult? get result; DateTime? get createdAt; DateTime? get updatedAt; DateTime? get deletedAt;
+ DecisionId? get id; String get title; String? get description; DecisionMethod get method; List<DecisionOption> get options; List<DecisionCriterion> get criteria; Map<ScoreKey, double> get scores; List<List<double>>? get ahpMatrix; double? get fuzzySpread; DecisionResult? get result; DateTime? get createdAt; DateTime? get updatedAt; DateTime? get deletedAt;
 /// Create a copy of Decision
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -837,16 +840,16 @@ $DecisionCopyWith<Decision> get copyWith => _$DecisionCopyWithImpl<Decision>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Decision&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.method, method) || other.method == method)&&const DeepCollectionEquality().equals(other.options, options)&&const DeepCollectionEquality().equals(other.criteria, criteria)&&const DeepCollectionEquality().equals(other.scores, scores)&&(identical(other.result, result) || other.result == result)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Decision&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.method, method) || other.method == method)&&const DeepCollectionEquality().equals(other.options, options)&&const DeepCollectionEquality().equals(other.criteria, criteria)&&const DeepCollectionEquality().equals(other.scores, scores)&&const DeepCollectionEquality().equals(other.ahpMatrix, ahpMatrix)&&(identical(other.fuzzySpread, fuzzySpread) || other.fuzzySpread == fuzzySpread)&&(identical(other.result, result) || other.result == result)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,description,method,const DeepCollectionEquality().hash(options),const DeepCollectionEquality().hash(criteria),const DeepCollectionEquality().hash(scores),result,createdAt,updatedAt,deletedAt);
+int get hashCode => Object.hash(runtimeType,id,title,description,method,const DeepCollectionEquality().hash(options),const DeepCollectionEquality().hash(criteria),const DeepCollectionEquality().hash(scores),const DeepCollectionEquality().hash(ahpMatrix),fuzzySpread,result,createdAt,updatedAt,deletedAt);
 
 @override
 String toString() {
-  return 'Decision(id: $id, title: $title, description: $description, method: $method, options: $options, criteria: $criteria, scores: $scores, result: $result, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
+  return 'Decision(id: $id, title: $title, description: $description, method: $method, options: $options, criteria: $criteria, scores: $scores, ahpMatrix: $ahpMatrix, fuzzySpread: $fuzzySpread, result: $result, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
 }
 
 
@@ -857,7 +860,7 @@ abstract mixin class $DecisionCopyWith<$Res>  {
   factory $DecisionCopyWith(Decision value, $Res Function(Decision) _then) = _$DecisionCopyWithImpl;
 @useResult
 $Res call({
- DecisionId? id, String title, String? description, DecisionMethod method, List<DecisionOption> options, List<DecisionCriterion> criteria, Map<ScoreKey, double> scores, DecisionResult? result, DateTime? createdAt, DateTime? updatedAt, DateTime? deletedAt
+ DecisionId? id, String title, String? description, DecisionMethod method, List<DecisionOption> options, List<DecisionCriterion> criteria, Map<ScoreKey, double> scores, List<List<double>>? ahpMatrix, double? fuzzySpread, DecisionResult? result, DateTime? createdAt, DateTime? updatedAt, DateTime? deletedAt
 });
 
 
@@ -874,7 +877,7 @@ class _$DecisionCopyWithImpl<$Res>
 
 /// Create a copy of Decision
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? title = null,Object? description = freezed,Object? method = null,Object? options = null,Object? criteria = null,Object? scores = null,Object? result = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? deletedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? title = null,Object? description = freezed,Object? method = null,Object? options = null,Object? criteria = null,Object? scores = null,Object? ahpMatrix = freezed,Object? fuzzySpread = freezed,Object? result = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? deletedAt = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as DecisionId?,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -883,7 +886,9 @@ as String?,method: null == method ? _self.method : method // ignore: cast_nullab
 as DecisionMethod,options: null == options ? _self.options : options // ignore: cast_nullable_to_non_nullable
 as List<DecisionOption>,criteria: null == criteria ? _self.criteria : criteria // ignore: cast_nullable_to_non_nullable
 as List<DecisionCriterion>,scores: null == scores ? _self.scores : scores // ignore: cast_nullable_to_non_nullable
-as Map<ScoreKey, double>,result: freezed == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
+as Map<ScoreKey, double>,ahpMatrix: freezed == ahpMatrix ? _self.ahpMatrix : ahpMatrix // ignore: cast_nullable_to_non_nullable
+as List<List<double>>?,fuzzySpread: freezed == fuzzySpread ? _self.fuzzySpread : fuzzySpread // ignore: cast_nullable_to_non_nullable
+as double?,result: freezed == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
 as DecisionResult?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore: cast_nullable_to_non_nullable
@@ -984,10 +989,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DecisionId? id,  String title,  String? description,  DecisionMethod method,  List<DecisionOption> options,  List<DecisionCriterion> criteria,  Map<ScoreKey, double> scores,  DecisionResult? result,  DateTime? createdAt,  DateTime? updatedAt,  DateTime? deletedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DecisionId? id,  String title,  String? description,  DecisionMethod method,  List<DecisionOption> options,  List<DecisionCriterion> criteria,  Map<ScoreKey, double> scores,  List<List<double>>? ahpMatrix,  double? fuzzySpread,  DecisionResult? result,  DateTime? createdAt,  DateTime? updatedAt,  DateTime? deletedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Decision() when $default != null:
-return $default(_that.id,_that.title,_that.description,_that.method,_that.options,_that.criteria,_that.scores,_that.result,_that.createdAt,_that.updatedAt,_that.deletedAt);case _:
+return $default(_that.id,_that.title,_that.description,_that.method,_that.options,_that.criteria,_that.scores,_that.ahpMatrix,_that.fuzzySpread,_that.result,_that.createdAt,_that.updatedAt,_that.deletedAt);case _:
   return orElse();
 
 }
@@ -1005,10 +1010,10 @@ return $default(_that.id,_that.title,_that.description,_that.method,_that.option
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DecisionId? id,  String title,  String? description,  DecisionMethod method,  List<DecisionOption> options,  List<DecisionCriterion> criteria,  Map<ScoreKey, double> scores,  DecisionResult? result,  DateTime? createdAt,  DateTime? updatedAt,  DateTime? deletedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DecisionId? id,  String title,  String? description,  DecisionMethod method,  List<DecisionOption> options,  List<DecisionCriterion> criteria,  Map<ScoreKey, double> scores,  List<List<double>>? ahpMatrix,  double? fuzzySpread,  DecisionResult? result,  DateTime? createdAt,  DateTime? updatedAt,  DateTime? deletedAt)  $default,) {final _that = this;
 switch (_that) {
 case _Decision():
-return $default(_that.id,_that.title,_that.description,_that.method,_that.options,_that.criteria,_that.scores,_that.result,_that.createdAt,_that.updatedAt,_that.deletedAt);case _:
+return $default(_that.id,_that.title,_that.description,_that.method,_that.options,_that.criteria,_that.scores,_that.ahpMatrix,_that.fuzzySpread,_that.result,_that.createdAt,_that.updatedAt,_that.deletedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1025,10 +1030,10 @@ return $default(_that.id,_that.title,_that.description,_that.method,_that.option
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DecisionId? id,  String title,  String? description,  DecisionMethod method,  List<DecisionOption> options,  List<DecisionCriterion> criteria,  Map<ScoreKey, double> scores,  DecisionResult? result,  DateTime? createdAt,  DateTime? updatedAt,  DateTime? deletedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DecisionId? id,  String title,  String? description,  DecisionMethod method,  List<DecisionOption> options,  List<DecisionCriterion> criteria,  Map<ScoreKey, double> scores,  List<List<double>>? ahpMatrix,  double? fuzzySpread,  DecisionResult? result,  DateTime? createdAt,  DateTime? updatedAt,  DateTime? deletedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Decision() when $default != null:
-return $default(_that.id,_that.title,_that.description,_that.method,_that.options,_that.criteria,_that.scores,_that.result,_that.createdAt,_that.updatedAt,_that.deletedAt);case _:
+return $default(_that.id,_that.title,_that.description,_that.method,_that.options,_that.criteria,_that.scores,_that.ahpMatrix,_that.fuzzySpread,_that.result,_that.createdAt,_that.updatedAt,_that.deletedAt);case _:
   return null;
 
 }
@@ -1040,7 +1045,7 @@ return $default(_that.id,_that.title,_that.description,_that.method,_that.option
 
 
 class _Decision implements Decision {
-  const _Decision({this.id, required this.title, this.description, this.method = DecisionMethod.weightedSum, final  List<DecisionOption> options = const [], final  List<DecisionCriterion> criteria = const [], final  Map<ScoreKey, double> scores = const <ScoreKey, double>{}, this.result, this.createdAt, this.updatedAt, this.deletedAt}): _options = options,_criteria = criteria,_scores = scores;
+  const _Decision({this.id, required this.title, this.description, this.method = DecisionMethod.weightedSum, final  List<DecisionOption> options = const [], final  List<DecisionCriterion> criteria = const [], final  Map<ScoreKey, double> scores = const <ScoreKey, double>{}, final  List<List<double>>? ahpMatrix, this.fuzzySpread, this.result, this.createdAt, this.updatedAt, this.deletedAt}): _options = options,_criteria = criteria,_scores = scores,_ahpMatrix = ahpMatrix;
   
 
 @override final  DecisionId? id;
@@ -1068,6 +1073,16 @@ class _Decision implements Decision {
   return EqualUnmodifiableMapView(_scores);
 }
 
+ final  List<List<double>>? _ahpMatrix;
+@override List<List<double>>? get ahpMatrix {
+  final value = _ahpMatrix;
+  if (value == null) return null;
+  if (_ahpMatrix is EqualUnmodifiableListView) return _ahpMatrix;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+@override final  double? fuzzySpread;
 @override final  DecisionResult? result;
 @override final  DateTime? createdAt;
 @override final  DateTime? updatedAt;
@@ -1083,16 +1098,16 @@ _$DecisionCopyWith<_Decision> get copyWith => __$DecisionCopyWithImpl<_Decision>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Decision&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.method, method) || other.method == method)&&const DeepCollectionEquality().equals(other._options, _options)&&const DeepCollectionEquality().equals(other._criteria, _criteria)&&const DeepCollectionEquality().equals(other._scores, _scores)&&(identical(other.result, result) || other.result == result)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Decision&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.method, method) || other.method == method)&&const DeepCollectionEquality().equals(other._options, _options)&&const DeepCollectionEquality().equals(other._criteria, _criteria)&&const DeepCollectionEquality().equals(other._scores, _scores)&&const DeepCollectionEquality().equals(other._ahpMatrix, _ahpMatrix)&&(identical(other.fuzzySpread, fuzzySpread) || other.fuzzySpread == fuzzySpread)&&(identical(other.result, result) || other.result == result)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,description,method,const DeepCollectionEquality().hash(_options),const DeepCollectionEquality().hash(_criteria),const DeepCollectionEquality().hash(_scores),result,createdAt,updatedAt,deletedAt);
+int get hashCode => Object.hash(runtimeType,id,title,description,method,const DeepCollectionEquality().hash(_options),const DeepCollectionEquality().hash(_criteria),const DeepCollectionEquality().hash(_scores),const DeepCollectionEquality().hash(_ahpMatrix),fuzzySpread,result,createdAt,updatedAt,deletedAt);
 
 @override
 String toString() {
-  return 'Decision(id: $id, title: $title, description: $description, method: $method, options: $options, criteria: $criteria, scores: $scores, result: $result, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
+  return 'Decision(id: $id, title: $title, description: $description, method: $method, options: $options, criteria: $criteria, scores: $scores, ahpMatrix: $ahpMatrix, fuzzySpread: $fuzzySpread, result: $result, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
 }
 
 
@@ -1103,7 +1118,7 @@ abstract mixin class _$DecisionCopyWith<$Res> implements $DecisionCopyWith<$Res>
   factory _$DecisionCopyWith(_Decision value, $Res Function(_Decision) _then) = __$DecisionCopyWithImpl;
 @override @useResult
 $Res call({
- DecisionId? id, String title, String? description, DecisionMethod method, List<DecisionOption> options, List<DecisionCriterion> criteria, Map<ScoreKey, double> scores, DecisionResult? result, DateTime? createdAt, DateTime? updatedAt, DateTime? deletedAt
+ DecisionId? id, String title, String? description, DecisionMethod method, List<DecisionOption> options, List<DecisionCriterion> criteria, Map<ScoreKey, double> scores, List<List<double>>? ahpMatrix, double? fuzzySpread, DecisionResult? result, DateTime? createdAt, DateTime? updatedAt, DateTime? deletedAt
 });
 
 
@@ -1120,7 +1135,7 @@ class __$DecisionCopyWithImpl<$Res>
 
 /// Create a copy of Decision
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? title = null,Object? description = freezed,Object? method = null,Object? options = null,Object? criteria = null,Object? scores = null,Object? result = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? deletedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? title = null,Object? description = freezed,Object? method = null,Object? options = null,Object? criteria = null,Object? scores = null,Object? ahpMatrix = freezed,Object? fuzzySpread = freezed,Object? result = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,Object? deletedAt = freezed,}) {
   return _then(_Decision(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as DecisionId?,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -1129,7 +1144,9 @@ as String?,method: null == method ? _self.method : method // ignore: cast_nullab
 as DecisionMethod,options: null == options ? _self._options : options // ignore: cast_nullable_to_non_nullable
 as List<DecisionOption>,criteria: null == criteria ? _self._criteria : criteria // ignore: cast_nullable_to_non_nullable
 as List<DecisionCriterion>,scores: null == scores ? _self._scores : scores // ignore: cast_nullable_to_non_nullable
-as Map<ScoreKey, double>,result: freezed == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
+as Map<ScoreKey, double>,ahpMatrix: freezed == ahpMatrix ? _self._ahpMatrix : ahpMatrix // ignore: cast_nullable_to_non_nullable
+as List<List<double>>?,fuzzySpread: freezed == fuzzySpread ? _self.fuzzySpread : fuzzySpread // ignore: cast_nullable_to_non_nullable
+as double?,result: freezed == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
 as DecisionResult?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore: cast_nullable_to_non_nullable
