@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
+import 'package:thinkr/core/routes/app_routes.dart';
 import 'package:thinkr/core/theme/app_colors.dart';
 import 'package:thinkr/core/widgets/top_snackbar.dart';
 
 import 'package:thinkr/features/auth/presentation/auth_cubit.dart';
 import 'package:thinkr/features/decision/domain/entities/decision.dart';
+import 'package:thinkr/features/decision/presentation/decision_result_page.dart';
 import 'package:thinkr/features/decision/presentation/history/decision_preview_cubit.dart';
 import 'package:thinkr/l10n/app_localizations.dart';
 
@@ -29,20 +31,23 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.all(24),
                   child: Row(
                     children: [
-                  _Logo(loc: loc),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () => context.go('/docs'),
-                    icon: const Icon(Icons.menu_book_rounded, color: Colors.white),
-                    tooltip: 'Docs',
-                  ),
-                  IconButton(
-                    onPressed: () => context.go('/app/settings'),
-                    icon: const Icon(Icons.language, color: Colors.white),
-                    tooltip: loc.settings_title,
-                  ),
-                  IconButton(
-                    onPressed: () async {
+                      _Logo(loc: loc),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () => context.go(AppRoutes.docsPublic),
+                        icon: const Icon(
+                          Icons.menu_book_rounded,
+                          color: Colors.white,
+                        ),
+                        tooltip: 'Docs',
+                      ),
+                      IconButton(
+                        onPressed: () => context.go(AppRoutes.settings),
+                        icon: const Icon(Icons.language, color: Colors.white),
+                        tooltip: loc.settings_title,
+                      ),
+                      IconButton(
+                        onPressed: () async {
                           final confirmed = await showDialog<bool>(
                             context: context,
                             builder: (dialogContext) => AlertDialog(
@@ -55,8 +60,9 @@ class HomePage extends StatelessWidget {
                                   onPressed: () =>
                                       Navigator.of(dialogContext).pop(false),
                                   child: Text(
-                                    MaterialLocalizations.of(dialogContext)
-                                        .cancelButtonLabel,
+                                    MaterialLocalizations.of(
+                                      dialogContext,
+                                    ).cancelButtonLabel,
                                   ),
                                 ),
                                 FilledButton(
@@ -146,7 +152,9 @@ class _HistoryPreview extends StatelessWidget {
                   children: [
                     Text(
                       state.errorMessage!,
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.7),
+                      ),
                     ),
                     const Spacer(),
                     TextButton(
@@ -181,7 +189,7 @@ class _HistoryPreview extends StatelessWidget {
                   child: _GhostButton(
                     label: loc.home_viewAllHistory,
                     icon: Icons.arrow_forward,
-                    onTap: () => context.go('/app/history'),
+                    onTap: () => context.go(AppRoutes.history),
                   ),
                 ),
               ],
@@ -214,7 +222,7 @@ class _HistoryPreview extends StatelessWidget {
                 child: _GhostButton(
                   label: loc.home_viewAllHistory,
                   icon: Icons.arrow_forward,
-                  onTap: () => context.go('/app/history'),
+                  onTap: () => context.go(AppRoutes.history),
                 ),
               ),
             ],
@@ -236,9 +244,12 @@ class _HistoryChip extends StatelessWidget {
     final theme = Theme.of(context);
     void goToDestination() {
       if (decision.result != null) {
-        context.push('/app/decisions/result', extra: decision);
+        context.push(
+          AppRoutes.decisionsResult,
+          extra: DecisionResultArgs(decision: decision, fromEditor: false),
+        );
       } else {
-        context.push('/app/decisions/edit', extra: decision);
+        context.push(AppRoutes.decisionsEdit, extra: decision);
       }
     }
 
@@ -349,11 +360,11 @@ class _Logo extends StatelessWidget {
           height: 38,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-              gradient: const LinearGradient(
-                colors: [AppColors.brandPrimary, AppColors.brandAccent],
-              ),
-              boxShadow: [
-                BoxShadow(
+            gradient: const LinearGradient(
+              colors: [AppColors.brandPrimary, AppColors.brandAccent],
+            ),
+            boxShadow: [
+              BoxShadow(
                 color: AppColors.brandPrimary.withValues(alpha: 0.4),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
@@ -427,7 +438,7 @@ class _HeroCard extends StatelessWidget {
                   _PrimaryButton(
                     label: loc.home_newDecision,
                     icon: Icons.add,
-                    onTap: () => context.go('/app/decisions/new'),
+                    onTap: () => context.go(AppRoutes.decisionsNew),
                   ),
                   SizedBox(width: isWide ? 16 : 0, height: isWide ? 0 : 12),
                 ],

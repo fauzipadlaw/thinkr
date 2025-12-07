@@ -22,6 +22,7 @@ abstract class DecisionEditorState with _$DecisionEditorState {
     @Default(false) bool hasCriteria,
     @Default(false) bool canEvaluate,
     @Default(0) int completionPercent,
+    @Default(0) int currentStep,
 
     // Draft inputs managed by the cubit
     @Default('') String optionDraft,

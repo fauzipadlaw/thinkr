@@ -45,6 +45,10 @@ fvm flutter run -t lib/main_development.dart
   - Result: best option id, per-option scores, sorted ranking.  
   - Computed remotely via `evaluate_decision` Edge Function.
 - **AHP (simplified)** and **Fuzzy Weighted Sum (placeholder)** are accepted by the Edge function and currently aggregate using provided weights/scores (ready for future pairwise/fuzzy data without breaking clients).
+- **Error rate**  
+  - Margin between best and runner-up: `margin = (bestScore - secondScore) / max(bestScore, 1e-6)`  
+  - Confidence = `clamp(margin, 0..1)`  
+  - **Error rate = 1 - confidence** (lower is better; UI shows reliability = 1 - error rate)
 
 ## Documentation
 - User guide with expandable sections: `docs/USAGE.md`

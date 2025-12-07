@@ -57,8 +57,36 @@
   "decision_editor_subtitle": "Tambah opsi, kriteria, bobot, dan skor untuk mendapat rekomendasi peringkat.",
   "decision_editor_methodLabel": "Metode keputusan",
   "decision_editor_methodWeighted": "Weighted Sum",
+  "decision_editor_methodWeightedDesc": "Cocok untuk penilaian cepat: gunakan bobot dan skor 1–10 untuk memberi peringkat.",
   "decision_editor_methodAhp": "AHP",
+  "decision_editor_methodAhpDesc": "AHP mendukung bobot pairwise; tanpa perbandingan kami pakai bobot kamu. Konsistensi akan ditampilkan jika ada data pairwise.",
   "decision_editor_methodFuzzy": "Fuzzy Weighted",
+  "decision_editor_methodFuzzyDesc": "Menangani ketidakpastian dengan menyebar setiap skor; tetap memakai input 1–10 dan bobot kamu.",
+  "decision_editor_discardMessage": "Perubahan belum disimpan. Keluar dari editor? Isian kamu akan hilang.",
+  "decision_editor_discardConfirm": "Keluar editor",
+  "decision_editor_discardStay": "Tetap di sini",
+  "decision_editor_ahpPairwiseTitle": "Perbandingan berpasangan",
+  "decision_editor_ahpPairwiseDesc": "Gunakan skala AHP sederhana untuk membandingkan setiap pasangan kriteria.",
+  "decision_editor_ahpScaleLabel": "AHP 3 poin",
+  "decision_editor_ahpScaleNote": "Setara / Moderat / Kuat — pilih mana yang lebih penting di setiap pasangan.",
+  "decision_editor_ahpEqual": "Sama penting",
+  "decision_editor_ahpModerate": "{stronger} lebih penting (moderat) dari {weaker}",
+  "@decision_editor_ahpModerate": {
+    "placeholders": {
+      "stronger": {},
+      "weaker": {}
+    }
+  },
+  "decision_editor_ahpStrong": "{stronger} jauh lebih penting dari {weaker}",
+  "@decision_editor_ahpStrong": {
+    "placeholders": {
+      "stronger": {},
+      "weaker": {}
+    }
+  },
+  "decision_editor_ahpEqualShort": "Setara",
+  "decision_editor_ahpModerateShort": "Moderat",
+  "decision_editor_ahpStrongShort": "Kuat",
   "decision_editor_evaluate": "Evaluasi",
   "decision_editor_evaluating": "Memproses...",
   "decision_editor_save": "Simpan keputusan",
@@ -173,6 +201,23 @@
   "docs_methodItem1": "Weighted Sum Model: normalisasi bobot, kalikan skor (1–10), jumlahkan dan urutkan.",
   "docs_methodItem2": "Dihitung di Supabase Edge Function `evaluate_decision`.",
   "docs_methodItem3": "AHP & Fuzzy: sudah diterima di Edge Function; versi ini memakai bobot/skor yang ada (pairwise/fuzzy penuh menyusul).",
+  "history_viewResult": "Lihat hasil",
+  "result_reliabilityLabel": "Reliabilitas:",
+  "result_reliabilityHigh": "Tinggi",
+  "result_reliabilityMedium": "Sedang",
+  "result_reliabilityLow": "Rendah",
+  "result_reliabilityVeryLow": "Sangat Rendah",
+  "result_reliabilityNA": "N/A",
+  "result_ahpConsistencyLabel": "AHP CR:",
+  "result_stabilityLabel": "Stabilitas",
+  "result_overlapLabel": "Overlap fuzzy",
+  "result_notesTitle": "Cara membaca hasil",
+  "result_notesReliability": "Reliabilitas menggabungkan selisih skor, stabilitas bobot, dan (untuk fuzzy) overlap; makin tinggi makin terpercaya.",
+  "result_notesStability": "Stabilitas mensimulasikan sedikit perubahan bobot; jika opsi terbaik tetap #1, hasil stabil.",
+  "result_notesOverlap": "Overlap fuzzy menunjukkan seberapa tumpang tindih skor fuzzy teratas; overlap rendah = pemenang lebih jelas.",
+  "result_notesAhpCr": "AHP CR memeriksa konsistensi perbandingan berpasangan; usahakan CR < 0.1.",
+  "result_noRanking": "Belum ada peringkat.",
+  "result_debugData": "Data debug",
   "@decision_editor_validationScores": {
     "placeholders": {
       "count": {

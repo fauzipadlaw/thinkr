@@ -185,10 +185,68 @@ class AppLocalizationsId extends AppLocalizations {
   String get decision_editor_methodWeighted => 'Weighted Sum';
 
   @override
+  String get decision_editor_methodWeightedDesc =>
+      'Cocok untuk penilaian cepat: gunakan bobot dan skor 1–10 untuk memberi peringkat.';
+
+  @override
   String get decision_editor_methodAhp => 'AHP';
 
   @override
+  String get decision_editor_methodAhpDesc =>
+      'AHP mendukung bobot pairwise; tanpa perbandingan kami pakai bobot kamu. Konsistensi akan ditampilkan jika ada data pairwise.';
+
+  @override
   String get decision_editor_methodFuzzy => 'Fuzzy Weighted';
+
+  @override
+  String get decision_editor_methodFuzzyDesc =>
+      'Menangani ketidakpastian dengan menyebar setiap skor; tetap memakai input 1–10 dan bobot kamu.';
+
+  @override
+  String get decision_editor_discardMessage =>
+      'Perubahan belum disimpan. Keluar dari editor? Isian kamu akan hilang.';
+
+  @override
+  String get decision_editor_discardConfirm => 'Keluar editor';
+
+  @override
+  String get decision_editor_discardStay => 'Tetap di sini';
+
+  @override
+  String get decision_editor_ahpPairwiseTitle => 'Perbandingan berpasangan';
+
+  @override
+  String get decision_editor_ahpPairwiseDesc =>
+      'Gunakan skala AHP sederhana untuk membandingkan setiap pasangan kriteria.';
+
+  @override
+  String get decision_editor_ahpScaleLabel => 'AHP 3 poin';
+
+  @override
+  String get decision_editor_ahpScaleNote =>
+      'Setara / Moderat / Kuat — pilih mana yang lebih penting di setiap pasangan.';
+
+  @override
+  String get decision_editor_ahpEqual => 'Sama penting';
+
+  @override
+  String decision_editor_ahpModerate(Object stronger, Object weaker) {
+    return '$stronger lebih penting (moderat) dari $weaker';
+  }
+
+  @override
+  String decision_editor_ahpStrong(Object stronger, Object weaker) {
+    return '$stronger jauh lebih penting dari $weaker';
+  }
+
+  @override
+  String get decision_editor_ahpEqualShort => 'Setara';
+
+  @override
+  String get decision_editor_ahpModerateShort => 'Moderat';
+
+  @override
+  String get decision_editor_ahpStrongShort => 'Kuat';
 
   @override
   String get decision_editor_evaluate => 'Evaluasi';
@@ -579,4 +637,59 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get docs_methodItem3 =>
       'AHP & Fuzzy: sudah diterima di Edge Function; versi ini memakai bobot/skor yang ada (pairwise/fuzzy penuh menyusul).';
+
+  @override
+  String get history_viewResult => 'Lihat hasil';
+
+  @override
+  String get result_reliabilityLabel => 'Reliabilitas:';
+
+  @override
+  String get result_reliabilityHigh => 'Tinggi';
+
+  @override
+  String get result_reliabilityMedium => 'Sedang';
+
+  @override
+  String get result_reliabilityLow => 'Rendah';
+
+  @override
+  String get result_reliabilityVeryLow => 'Sangat Rendah';
+
+  @override
+  String get result_reliabilityNA => 'N/A';
+
+  @override
+  String get result_ahpConsistencyLabel => 'AHP CR:';
+
+  @override
+  String get result_stabilityLabel => 'Stabilitas';
+
+  @override
+  String get result_overlapLabel => 'Overlap fuzzy';
+
+  @override
+  String get result_notesTitle => 'Cara membaca hasil';
+
+  @override
+  String get result_notesReliability =>
+      'Reliabilitas menggabungkan selisih skor, stabilitas bobot, dan (untuk fuzzy) overlap; makin tinggi makin terpercaya.';
+
+  @override
+  String get result_notesStability =>
+      'Stabilitas mensimulasikan sedikit perubahan bobot; jika opsi terbaik tetap #1, hasil stabil.';
+
+  @override
+  String get result_notesOverlap =>
+      'Overlap fuzzy menunjukkan seberapa tumpang tindih skor fuzzy teratas; overlap rendah = pemenang lebih jelas.';
+
+  @override
+  String get result_notesAhpCr =>
+      'AHP CR memeriksa konsistensi perbandingan berpasangan; usahakan CR < 0.1.';
+
+  @override
+  String get result_noRanking => 'Belum ada peringkat.';
+
+  @override
+  String get result_debugData => 'Data debug';
 }

@@ -166,12 +166,15 @@ class SupabaseDecisionRepository implements DecisionRepository {
           .map((c) => {'id': c.id, 'label': c.label, 'weight': c.weight})
           .toList(),
       'scores': decision.scores,
+      'ahp_matrix': decision.ahpMatrix,
+      'fuzzy_spread': decision.fuzzySpread,
       'result': decision.result == null
           ? null
           : {
               'best_option_id': decision.result!.bestOptionId,
               'scores': decision.result!.scores,
               'ranking': decision.result!.ranking,
+              'error_rate': decision.result!.errorRate,
               'debug': decision.result!.debug,
             },
       if (decision.createdAt != null)
@@ -220,11 +223,14 @@ class SupabaseDecisionRepository implements DecisionRepository {
         (key, value) => MapEntry(key, (value as num).toDouble()),
       );
       final rankingRaw = resultRaw['ranking'] as List<dynamic>? ?? const [];
+      final errorRateRaw =
+          (resultRaw['error_rate'] ?? resultRaw['errorRate'] ?? 0.0) as num;
 
       result = DecisionResult(
         bestOptionId: resultRaw['best_option_id'] as String,
         scores: resultScores,
         ranking: rankingRaw.cast<String>().toList(),
+        errorRate: errorRateRaw.toDouble(),
         debug: resultRaw['debug'] as Map<String, dynamic>?,
       );
     }
@@ -238,6 +244,10 @@ class SupabaseDecisionRepository implements DecisionRepository {
       criteria: criteria,
       scores: scores,
       result: result,
+      ahpMatrix: (row['ahp_matrix'] as List<dynamic>?)
+          ?.map((r) => (r as List<dynamic>).map((e) => (e as num).toDouble()).toList())
+          .toList(),
+      fuzzySpread: (row['fuzzy_spread'] as num?)?.toDouble(),
       createdAt: row['created_at'] != null
           ? DateTime.tryParse(row['created_at'] as String)
           : null,
@@ -264,6 +274,8 @@ class SupabaseDecisionRepository implements DecisionRepository {
           .map((c) => {'id': c.id, 'label': c.label, 'weight': c.weight})
           .toList(),
       'scores': decision.scores,
+      if (decision.ahpMatrix != null) 'ahpMatrix': decision.ahpMatrix,
+      if (decision.fuzzySpread != null) 'fuzzySpread': decision.fuzzySpread,
     };
   }
 
@@ -273,6 +285,7 @@ class SupabaseDecisionRepository implements DecisionRepository {
     final scoresRaw =
         (json['scores'] as Map<String, dynamic>? ?? <String, dynamic>{});
     final rankingRaw = (json['ranking'] as List<dynamic>? ?? const []);
+    final errorRateRaw = json['errorRate'] ?? json['error_rate'] ?? 0.0;
 
     if (bestOptionId == null) {
       throw StateError('Evaluation response missing best option id.');
@@ -286,6 +299,7 @@ class SupabaseDecisionRepository implements DecisionRepository {
       bestOptionId: bestOptionId,
       scores: scores,
       ranking: rankingRaw.cast<String>().toList(),
+      errorRate: (errorRateRaw as num).toDouble(),
       debug: json['debug'] as Map<String, dynamic>?,
     );
   }
