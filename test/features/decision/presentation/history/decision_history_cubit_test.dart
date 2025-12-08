@@ -45,10 +45,15 @@ void main() {
     });
 
     test('load should set loading state', () async {
-      cubit.load();
+      // Listen to the stream to capture the loading state
+      final states = <DecisionHistoryState>[];
+      final subscription = cubit.stream.listen(states.add);
 
-      await Future.delayed(Duration.zero);
-      expect(cubit.state.isLoading, isTrue);
+      await cubit.load();
+      await subscription.cancel();
+
+      // Check that at some point isLoading was true
+      expect(states.any((state) => state.isLoading), isTrue);
     });
 
     test('load should handle errors', () async {
