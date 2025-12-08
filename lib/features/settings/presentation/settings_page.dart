@@ -49,9 +49,8 @@ class SettingsPage extends StatelessWidget {
                         locale == AppLocale.en ? 'English' : 'Bahasa Indonesia',
                       ),
                       selected: isSelected,
-                      onSelected: (_) => context
-                          .read<SettingsCubit>()
-                          .changeLanguage(locale),
+                      onSelected: (_) =>
+                          context.read<SettingsCubit>().changeLanguage(locale),
                     );
                   }).toList(),
                 ),

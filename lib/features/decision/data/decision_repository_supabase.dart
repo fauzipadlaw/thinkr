@@ -93,9 +93,7 @@ class SupabaseDecisionRepository implements DecisionRepository {
     final search = query?.trim();
     if (search != null && search.isNotEmpty) {
       final pattern = '%${search.replaceAll('%', '\\%')}%';
-      builder = builder.or(
-        'title.ilike.$pattern,description.ilike.$pattern',
-      );
+      builder = builder.or('title.ilike.$pattern,description.ilike.$pattern');
     }
 
     final rows = await builder
@@ -245,7 +243,10 @@ class SupabaseDecisionRepository implements DecisionRepository {
       scores: scores,
       result: result,
       ahpMatrix: (row['ahp_matrix'] as List<dynamic>?)
-          ?.map((r) => (r as List<dynamic>).map((e) => (e as num).toDouble()).toList())
+          ?.map(
+            (r) =>
+                (r as List<dynamic>).map((e) => (e as num).toDouble()).toList(),
+          )
           .toList(),
       fuzzySpread: (row['fuzzy_spread'] as num?)?.toDouble(),
       createdAt: row['created_at'] != null

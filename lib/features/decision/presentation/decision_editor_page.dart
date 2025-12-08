@@ -670,9 +670,9 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
                           onBack: controls.canBack
                               ? () {
                                   context.read<DecisionEditorCubit>().setStep(
-                                        controls.currentStep - 1,
-                                        steps.length,
-                                      );
+                                    controls.currentStep - 1,
+                                    steps.length,
+                                  );
                                   _scrollToStepper();
                                 }
                               : null,
