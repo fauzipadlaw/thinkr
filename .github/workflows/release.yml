@@ -118,7 +118,7 @@ jobs:
         run: flutter build apk --release -t lib/main_production.dart
 
       - name: Build Web
-        run: flutter build web --release -t lib/main_production.dart
+        run: flutter build web --release -t lib/main_production.dart --base-href /thinkr/
 
       - name: Build iOS (without code signing)
         run: |
