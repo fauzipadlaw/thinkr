@@ -1,21 +1,15 @@
-# .coderabbit.yml
-# See https://coderabbit.ai/docs/configuration for all available options.
-
-# The language for the review comments.
-language: "en"
-
-# The model to use for the review.
-# Options: gpt-4o, gpt-4-turbo, gpt-3.5-turbo
-model: "gpt-4o"
-
-# Path filters to include or exclude files from the review.
-# This helps focus the reviews on your core application logic.
-path_filters:
-  # Exclude generated files, lock files, and configuration
-  - "!**/pubspec.lock"
-  - "!**/.env*"
-  - "!**/*.g.dart"
-  - "!lib/l10n/app_localizations*.dart"
-  - "!**/docs/**"
-  - "!**/.github/workflows/**"
-  - "!script/**"
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: false
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: true
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+chat:
+  auto_reply: true
