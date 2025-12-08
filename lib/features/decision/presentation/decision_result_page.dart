@@ -51,7 +51,7 @@ class _DecisionResultView extends StatelessWidget {
         if (result == null) {
           return PopScope(
             canPop: !fromEditor,
-            onPopInvoked: (didPop) {
+            onPopInvokedWithResult: (didPop, result) {
               if (didPop) return;
               if (fromEditor) GoRouter.of(context).go(AppRoutes.home);
             },
