@@ -59,7 +59,10 @@ dependencies:
   freezed_annotation: ^3.1.0
 
   flutter_dotenv: ^6.0.0
-  hcaptcha_flutter: ^0.0.1+1
+  hcaptcha_flutter:
+    git:
+      url: https://github.com/fauzipadlaw/hcaptcha_flutter
+      ref: 9c1b24febe2f7c156128a2c09672e73987eecb00
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

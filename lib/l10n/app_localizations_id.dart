@@ -110,6 +110,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get login_discardStay => 'Batal';
 
   @override
+  String get login_captchaTitle => 'Verifikasi bahwa Anda manusia';
+
+  @override
+  String get login_cancel => 'Batal';
+
+  @override
   String get history_title => 'Riwayat keputusan';
 
   @override

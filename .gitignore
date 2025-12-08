@@ -56,3 +56,4 @@ app.*.map.json
 .gemini/
 GEMINI.md
 GEMINI-*.md
+CHANGELOG_BODY.md

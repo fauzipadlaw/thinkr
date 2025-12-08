@@ -111,6 +111,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_discardStay => 'Stay';
 
   @override
+  String get login_captchaTitle => 'Verify you\'re human';
+
+  @override
+  String get login_cancel => 'Cancel';
+
+  @override
   String get history_title => 'Decision history';
 
   @override

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hcaptcha_flutter/hcaptcha_flutter.dart';
+
 import 'package:thinkr/core/env/environment.dart';
 import 'package:thinkr/core/extensions/context_extension.dart';
 import 'package:thinkr/core/routes/app_routes.dart';
@@ -55,8 +56,8 @@ class _LoginPageState extends State<LoginPage> {
             final msg = key == 'login_signupSuccess'
                 ? loc.login_signupSuccess
                 : key == 'login_guestSuccess'
-                    ? loc.login_guestSuccess
-                    : loc.login_signinSuccess;
+                ? loc.login_guestSuccess
+                : loc.login_signinSuccess;
             showTopSnackBar(context, msg);
           }
         },
@@ -128,7 +129,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
                                       loc.appName,
@@ -143,9 +145,8 @@ class _LoginPageState extends State<LoginPage> {
                                       state.isSignup
                                           ? loc.login_subtitleSignup
                                           : loc.login_subtitleSignin,
-                                      style: theme.textTheme.bodyMedium?.copyWith(
-                                        color: Colors.white70,
-                                      ),
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(color: Colors.white70),
                                     ),
                                     const SizedBox(height: 20),
                                     Column(
@@ -188,7 +189,8 @@ class _LoginPageState extends State<LoginPage> {
                                           decoration: _fieldDecoration(
                                             label: loc.login_password,
                                             icon: Icons.lock_outline,
-                                            errorText: state.passwordError == null
+                                            errorText:
+                                                state.passwordError == null
                                                 ? null
                                                 : _localizeError(
                                                     state.passwordError!,
@@ -244,28 +246,30 @@ class _LoginPageState extends State<LoginPage> {
                                           child: ElevatedButton(
                                             onPressed: state.isSubmitting
                                                 ? null
-                                                  : () async {
-                                                    final success =
-                                                        await cubit.submit();
+                                                : () async {
+                                                    final success = await cubit
+                                                        .submit();
                                                     if (!context.mounted ||
                                                         success) {
                                                       return;
                                                     }
 
-                                                    final needsCaptcha =
-                                                        await cubit.shouldRunCaptcha(
-                                                      requiresCaptcha: _requiresCaptcha,
-                                                      errorMessage:
-                                                          cubit.state.errorMessage,
-                                                    );
+                                                    final needsCaptcha = await cubit
+                                                        .shouldRunCaptcha(
+                                                          requiresCaptcha:
+                                                              _requiresCaptcha,
+                                                          errorMessage: cubit
+                                                              .state
+                                                              .errorMessage,
+                                                        );
                                                     if (!needsCaptcha ||
                                                         !context.mounted) {
                                                       return;
                                                     }
                                                     final token =
                                                         await _solveCaptcha(
-                                                      context,
-                                                    );
+                                                          context,
+                                                        );
                                                     if (token == null ||
                                                         !context.mounted) {
                                                       return;
@@ -275,11 +279,13 @@ class _LoginPageState extends State<LoginPage> {
                                                     );
                                                   },
                                             style: ElevatedButton.styleFrom(
-                                              padding: const EdgeInsets.symmetric(
-                                                vertical: 14,
-                                                horizontal: 18,
-                                              ),
-                                              backgroundColor: Colors.blueAccent,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 14,
+                                                    horizontal: 18,
+                                                  ),
+                                              backgroundColor:
+                                                  Colors.blueAccent,
                                               foregroundColor: Colors.white,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -303,7 +309,8 @@ class _LoginPageState extends State<LoginPage> {
                                                         ? loc.login_signupCta
                                                         : loc.login_signinCta,
                                                     style: const TextStyle(
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ),
                                                   ),
                                           ),
@@ -313,10 +320,10 @@ class _LoginPageState extends State<LoginPage> {
                                           onPressed: state.isSubmitting
                                               ? null
                                               : () => _handleToggle(
-                                                    context,
-                                                    cubit,
-                                                    state,
-                                                  ),
+                                                  context,
+                                                  cubit,
+                                                  state,
+                                                ),
                                           child: Text(
                                             state.isSignup
                                                 ? loc.login_haveAccount
@@ -334,7 +341,9 @@ class _LoginPageState extends State<LoginPage> {
                                         Expanded(
                                           child: Container(
                                             height: 1,
-                                            color: Colors.white.withValues(alpha: 0.2),
+                                            color: Colors.white.withValues(
+                                              alpha: 0.2,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(width: 8),
@@ -348,7 +357,9 @@ class _LoginPageState extends State<LoginPage> {
                                         Expanded(
                                           child: Container(
                                             height: 1,
-                                            color: Colors.white.withValues(alpha: 0.2),
+                                            color: Colors.white.withValues(
+                                              alpha: 0.2,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -365,72 +376,83 @@ class _LoginPageState extends State<LoginPage> {
                                       style: OutlinedButton.styleFrom(
                                         foregroundColor: Colors.white,
                                         side: BorderSide(
-                                          color: Colors.white.withValues(alpha: 0.3),
+                                          color: Colors.white.withValues(
+                                            alpha: 0.3,
+                                          ),
                                         ),
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 12,
                                           horizontal: 16,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius: BorderRadius.circular(
+                                            14,
+                                          ),
                                         ),
+                                      ),
+                                      label: Text(loc.login_signInWithGoogle),
                                     ),
-                                    label: Text(loc.login_signInWithGoogle),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  OutlinedButton.icon(
-                                    onPressed: state.isSubmitting
-                                        ? null
-                                        : () async {
-                                            final success =
-                                                await cubit.signInAnonymously();
-                                            if (!context.mounted || success) {
-                                              return;
-                                            }
+                                    const SizedBox(height: 10),
+                                    OutlinedButton.icon(
+                                      onPressed: state.isSubmitting
+                                          ? null
+                                          : () async {
+                                              final success = await cubit
+                                                  .signInAnonymously();
+                                              if (!context.mounted || success) {
+                                                return;
+                                              }
 
-                                            final needsCaptcha =
-                                                await cubit.shouldRunCaptcha(
-                                              requiresCaptcha: _requiresCaptcha,
-                                              errorMessage:
-                                                  cubit.state.errorMessage,
-                                            );
-                                            if (!needsCaptcha ||
-                                                !context.mounted) {
-                                              return;
-                                            }
-                                            final token =
-                                                await _solveCaptcha(context);
-                                            if (token == null ||
-                                                !context.mounted) {
-                                              return;
-                                            }
-                                            await cubit.signInAnonymously(
-                                              captchaToken: token,
-                                            );
-                                          },
-                                    icon: const Icon(
-                                      Icons.person_outline,
-                                      color: Colors.white,
+                                              final needsCaptcha = await cubit
+                                                  .shouldRunCaptcha(
+                                                    requiresCaptcha:
+                                                        _requiresCaptcha,
+                                                    errorMessage: cubit
+                                                        .state
+                                                        .errorMessage,
+                                                  );
+                                              if (!needsCaptcha ||
+                                                  !context.mounted) {
+                                                return;
+                                              }
+                                              final token = await _solveCaptcha(
+                                                context,
+                                              );
+                                              if (token == null ||
+                                                  !context.mounted) {
+                                                return;
+                                              }
+                                              await cubit.signInAnonymously(
+                                                captchaToken: token,
+                                              );
+                                            },
+                                      icon: const Icon(
+                                        Icons.person_outline,
+                                        color: Colors.white,
+                                      ),
+                                      style: OutlinedButton.styleFrom(
+                                        foregroundColor: Colors.white,
+                                        side: BorderSide(
+                                          color: Colors.white.withValues(
+                                            alpha: 0.3,
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                          horizontal: 16,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            14,
+                                          ),
+                                        ),
+                                      ),
+                                      label: Text(loc.login_continueAsGuest),
                                     ),
-                                    style: OutlinedButton.styleFrom(
-                                      foregroundColor: Colors.white,
-                                      side: BorderSide(
-                                        color: Colors.white.withValues(alpha: 0.3),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 12,
-                                        horizontal: 16,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                    ),
-                                    label: Text(loc.login_continueAsGuest),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
                           ),
                         ),
                       ),
@@ -526,16 +548,14 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       if (!completer.isCompleted) completer.complete(null);
       if (context.mounted) {
-        showTopSnackBar(
-          context,
-          context.loc.login_errorGeneric,
-          isError: true,
-        );
+        showTopSnackBar(context, context.loc.login_errorGeneric, isError: true);
       }
     }
 
-    final token =
-        await completer.future.timeout(const Duration(seconds: 60), onTimeout: () => null);
+    final token = await completer.future.timeout(
+      const Duration(seconds: 60),
+      onTimeout: () => null,
+    );
     return token;
   }
 
@@ -545,7 +565,8 @@ class _LoginPageState extends State<LoginPage> {
   ) async {
     if (!state.isDirty || state.isSubmitting) return Future.value(true);
     final loc = context.loc;
-    final result = await showDialog<bool>(
+    final result =
+        await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
             title: Text(loc.login_discardTitle),

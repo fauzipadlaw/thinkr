@@ -33,6 +33,8 @@
   "login_discardMessage": "Ada isian yang belum dikirim. Keluar akan menghapusnya.",
   "login_discardConfirm": "Buang",
   "login_discardStay": "Batal",
+  "login_captchaTitle": "Verifikasi bahwa Anda manusia",
+  "login_cancel": "Batal",
   "history_title": "Riwayat keputusan",
   "history_emptyTitle": "Belum ada keputusan",
   "history_emptySubtitle": "Buat keputusan untuk melihat di sini.",

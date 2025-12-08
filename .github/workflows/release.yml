@@ -19,10 +19,14 @@ jobs:
           # Required for the version bump commit to be pushed correctly.
           fetch-depth: 0
 
+      - name: Read Flutter version from .fvmrc
+        id: fvm
+        run: echo "flutter_version=$(jq -r '.flutter' .fvmrc)" >> $GITHUB_OUTPUT
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          flutter-version: ${{ steps.fvm.outputs.flutter_version }}
           cache: true
 
       - name: Cache Pub dependencies
@@ -33,14 +37,74 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pub-
 
+      - name: Cache Dart tool
+        uses: actions/cache@v4
+        with:
+          path: .dart_tool
+          key: ${{ runner.os }}-dart-tool-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-dart-tool-
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.android/build-cache
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+            ~/.cocoapods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
       - name: Get pub dependencies
         run: flutter pub get
 
+      - name: Prepare production env
+        run: |
+          set -euo pipefail
+          bash script/generate-envs.sh
+
+          : "${SUPABASE_URL:?SUPABASE_URL is required}"
+          : "${SUPABASE_ANON_KEY:?SUPABASE_ANON_KEY is required}"
+          : "${SUPABASE_REDIRECT_URL:?SUPABASE_REDIRECT_URL is required}"
+          : "${SUPABASE_CAPTCHA_SITE_KEY:?SUPABASE_CAPTCHA_SITE_KEY is required}"
+          : "${GOOGLE_WEB_CLIENT_ID:?GOOGLE_WEB_CLIENT_ID is required}"
+          : "${GOOGLE_IOS_CLIENT_ID:?GOOGLE_IOS_CLIENT_ID is required}"
+
+          cat > .env.production <<EOF
+          SUPABASE_URL=${SUPABASE_URL}
+          SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+          SUPABASE_REDIRECT_URL=${SUPABASE_REDIRECT_URL}
+          SUPABASE_CAPTCHA_SITE_KEY=${SUPABASE_CAPTCHA_SITE_KEY}
+          GOOGLE_WEB_CLIENT_ID=${GOOGLE_WEB_CLIENT_ID}
+          GOOGLE_IOS_CLIENT_ID=${GOOGLE_IOS_CLIENT_ID}
+          EOF
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_REDIRECT_URL: ${{ secrets.SUPABASE_REDIRECT_URL }}
+          SUPABASE_CAPTCHA_SITE_KEY: ${{ secrets.SUPABASE_CAPTCHA_SITE_KEY }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          GOOGLE_IOS_CLIENT_ID: ${{ secrets.GOOGLE_IOS_CLIENT_ID }}
+
       - name: Bump version
         id: bump_version
-        uses: shogo82148/actions-flutter-version-up@v1
-        with:
-          spec-file: pubspec.yaml
+        run: |
+          set -euo pipefail
+          # The script will print the new version to stdout
+          new_version=$(python3 script/bump-version.py)
+          echo "new-version=${new_version}" >> "$GITHUB_OUTPUT"
 
       - name: Commit version bump
         run: |
@@ -51,38 +115,89 @@ jobs:
           git push
           
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release -t lib/main_production.dart
 
       - name: Build Web
-        run: flutter build web --release
+        run: flutter build web --release -t lib/main_production.dart
 
-
-      - name: Setup Fastlane
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.7'
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-          working-directory: ./ios
-
-      - name: Run Fastlane
+      - name: Build iOS (without code signing)
         run: |
-          bundle exec fastlane match
-          bundle exec fastlane build
-        env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_PRIVATE_KEY: ${{ secrets.MATCH_GIT_PRIVATE_KEY }}
-        working-directory: ./ios
+          flutter build ios --release -t lib/main_production.dart --no-codesign
+          # Create IPA directory structure
+          mkdir -p Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r Runner.ipa Payload
+          rm -rf Payload
 
       - name: Archive Web build for release
         run: zip -r build-web.zip ./build/web
 
+      - name: Generate Changelog
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          head_sha="$(git rev-parse HEAD)"
+          latest_bump_sha="$(git log -n 1 --pretty=format:%H --grep='^ci: Bump version to ' || true)"
+
+          range=""
+          if [[ -z "${latest_bump_sha:-}" ]]; then
+            # No bump commits exist yet: treat as first release
+            start_base="$(git rev-list --max-parents=0 HEAD)"
+            range="${start_base}..${head_sha}"
+          else
+            if [[ "${head_sha}" == "${latest_bump_sha}" ]]; then
+              # HEAD is the bump we just created: compare to previous bump
+              prev_bump_sha="$(git log -n 1 --skip=1 --pretty=format:%H --grep='^ci: Bump version to ' || true)"
+              if [[ -z "${prev_bump_sha:-}" ]]; then
+                start_base="$(git rev-list --max-parents=0 HEAD)"
+                range="${start_base}..${latest_bump_sha}"
+              else
+                range="${prev_bump_sha}..${latest_bump_sha}"
+              fi
+            else
+              # HEAD is not a bump (e.g., manual release): compare latest bump to HEAD
+              range="${latest_bump_sha}..${head_sha}"
+            fi
+          fi
+
+          # Build the changelog; exclude merge commits and the bump commit lines themselves
+          # Use a temporary file instead of mapfile for compatibility with older bash versions
+          git log --no-merges --pretty=format:'- %s (%h)' "${range}" | grep -v '^- ci: Bump version to ' > /tmp/changelog_lines.txt || true
+
+          {
+            echo "## Changelog"
+            echo
+            if [[ ! -s /tmp/changelog_lines.txt ]]; then
+              echo "- No changes since last release."
+            else
+              cat /tmp/changelog_lines.txt
+            fi
+          } > CHANGELOG_BODY.md
+          
+          rm -f /tmp/changelog_lines.txt
+
+      - name: Commit Changelog
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p docs/changelogs
+          target="docs/changelogs/CHANGELOG_v${{ steps.bump_version.outputs.new-version }}.md"
+          cp CHANGELOG_BODY.md "$target"
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add "$target"
+          git commit -m "chore: update changelog for v${{ steps.bump_version.outputs.new-version }} [skip ci]" || echo "No changes to commit."
+          git push || true
+
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/flutter-apk/app-release.apk,ios/Runner.ipa,build-web.zip"
+          artifacts: "build/app/outputs/flutter-apk/app-release.apk,Runner.ipa,build-web.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: "v${{ steps.bump_version.outputs.new-version }}"
           name: "Release v${{ steps.bump_version.outputs.new-version }}"
+          bodyFile: CHANGELOG_BODY.md
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

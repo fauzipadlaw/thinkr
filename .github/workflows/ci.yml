@@ -1,0 +1,144 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - build
+
+jobs:
+  test:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read Flutter version from .fvmrc
+        id: fvm
+        run: echo "flutter_version=$(jq -r '.flutter' .fvmrc)" >> $GITHUB_OUTPUT
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm.outputs.flutter_version }}
+          cache: true
+
+      - name: Cache Pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Cache Dart tool
+        uses: actions/cache@v4
+        with:
+          path: .dart_tool
+          key: ${{ runner.os }}-dart-tool-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-dart-tool-
+
+      - name: Get pub dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed .
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+  build_check:
+    runs-on: macos-latest
+    needs: test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read Flutter version from .fvmrc
+        id: fvm
+        run: echo "flutter_version=$(jq -r '.flutter' .fvmrc)" >> $GITHUB_OUTPUT
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm.outputs.flutter_version }}
+          cache: true
+
+      - name: Cache Pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Cache Dart tool
+        uses: actions/cache@v4
+        with:
+          path: .dart_tool
+          key: ${{ runner.os }}-dart-tool-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-dart-tool-
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.android/build-cache
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+            ~/.cocoapods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Get pub dependencies
+        run: flutter pub get
+
+      - name: Prepare test env
+        run: |
+          bash script/generate-envs.sh
+          # Create a test .env.production file
+          cat > .env.production <<EOF
+          SUPABASE_URL=https://test.supabase.co
+          SUPABASE_ANON_KEY=test_key
+          SUPABASE_REDIRECT_URL=https://test.com
+          SUPABASE_CAPTCHA_SITE_KEY=test_captcha
+          GOOGLE_WEB_CLIENT_ID=test_web_client
+          GOOGLE_IOS_CLIENT_ID=test_ios_client
+          EOF
+
+      - name: Build APK (dry run)
+        run: flutter build apk --release -t lib/main_production.dart --dry-run || flutter build apk --release -t lib/main_production.dart --no-pub
+
+      - name: Build Web (dry run)
+        run: flutter build web --release -t lib/main_production.dart
+
+  all_checks_passed:
+    runs-on: ubuntu-latest
+    needs: [test, build_check]
+    if: always()
+    
+    steps:
+      - name: Check if all jobs succeeded
+        run: |
+          if [[ "${{ needs.test.result }}" != "success" ]] || [[ "${{ needs.build_check.result }}" != "success" ]]; then
+            echo "One or more required checks failed"
+            exit 1
+          fi
+          echo "All checks passed successfully"
