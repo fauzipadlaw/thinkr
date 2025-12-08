@@ -74,9 +74,7 @@ class _SplashScreen extends StatelessWidget {
               ),
             ),
           ),
-          Positioned.fill(
-            child: CustomPaint(painter: _SplashGlowPainter()),
-          ),
+          Positioned.fill(child: CustomPaint(painter: _SplashGlowPainter())),
           Center(
             child: FadeTransition(
               opacity: fade,
@@ -91,11 +89,16 @@ class _SplashScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: const LinearGradient(
-                          colors: [AppColors.brandPrimary, AppColors.brandAccent],
+                          colors: [
+                            AppColors.brandPrimary,
+                            AppColors.brandAccent,
+                          ],
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.brandPrimary.withValues(alpha: 0.5),
+                            color: AppColors.brandPrimary.withValues(
+                              alpha: 0.5,
+                            ),
                             blurRadius: 30,
                             spreadRadius: 4,
                             offset: const Offset(0, 12),

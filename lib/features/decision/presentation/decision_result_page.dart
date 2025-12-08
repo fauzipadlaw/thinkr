@@ -13,10 +13,7 @@ class DecisionResultArgs {
   final Decision decision;
   final bool fromEditor;
 
-  const DecisionResultArgs({
-    required this.decision,
-    this.fromEditor = false,
-  });
+  const DecisionResultArgs({required this.decision, this.fromEditor = false});
 }
 
 class DecisionResultPage extends StatelessWidget {
@@ -136,15 +133,15 @@ class _DecisionResultView extends StatelessWidget {
                           const SizedBox(height: 16),
                           _MetaChips(decision: state.decision),
                           const SizedBox(height: 16),
-                        _RankingList(ranking: state.ranking),
-                        const SizedBox(height: 16),
-                        _ResultNotes(),
-                        const SizedBox(height: 16),
-                        if (result.debug != null && result.debug!.isNotEmpty)
-                          _DebugCard(debug: result.debug!),
-                      ],
+                          _RankingList(ranking: state.ranking),
+                          const SizedBox(height: 16),
+                          _ResultNotes(),
+                          const SizedBox(height: 16),
+                          if (result.debug != null && result.debug!.isNotEmpty)
+                            _DebugCard(debug: result.debug!),
+                        ],
+                      ),
                     ),
-                  ),
                   ),
                 ),
               ],
@@ -196,8 +193,7 @@ class _BestOptionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final loc = context.loc;
-    final reliability =
-        (combinedReliability ?? (1 - errorRate)).clamp(0, 1);
+    final reliability = (combinedReliability ?? (1 - errorRate)).clamp(0, 1);
     String reliabilityLabel = loc.result_reliabilityNA;
     Color reliabilityColor = theme.colorScheme.onSurfaceVariant;
 
@@ -409,10 +405,7 @@ class _ResultNotes extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              loc.result_notesTitle,
-              style: theme.textTheme.titleMedium,
-            ),
+            Text(loc.result_notesTitle, style: theme.textTheme.titleMedium),
             const SizedBox(height: 8),
             ...items.map(
               (text) => Padding(

@@ -30,7 +30,7 @@ class _DecisionHistoryCubitImpl extends Cubit<DecisionHistoryState>
   final SoftDeleteDecisionUseCase _softDelete;
 
   _DecisionHistoryCubitImpl(this._getHistory, this._softDelete)
-      : super(DecisionHistoryState.initial);
+    : super(DecisionHistoryState.initial);
 
   @override
   Future<void> load() async {

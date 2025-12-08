@@ -41,21 +41,20 @@ class DocumentationPage extends StatelessWidget {
             child: ExpansionTile(
               tilePadding: const EdgeInsets.symmetric(horizontal: 16),
               childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              title: Text(
-                section.title,
-                style: theme.textTheme.titleMedium,
-              ),
+              title: Text(section.title, style: theme.textTheme.titleMedium),
               children: section.body
-                  .map((line) => Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('• '),
-                            Expanded(child: Text(line)),
-                          ],
-                        ),
-                      ))
+                  .map(
+                    (line) => Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('• '),
+                          Expanded(child: Text(line)),
+                        ],
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
           );
@@ -65,68 +64,40 @@ class DocumentationPage extends StatelessWidget {
   }
 
   List<_DocSection> _sections(AppLocalizations loc) => [
-        _DocSection(
-          loc.docs_gettingStartedTitle,
-          [
-            loc.docs_gettingStartedItem1,
-            loc.docs_gettingStartedItem2,
-          ],
-        ),
-        _DocSection(
-          loc.docs_createTitle,
-          [
-            loc.docs_createItem1,
-            loc.docs_createItem2,
-            loc.docs_createItem3,
-            loc.docs_createItem4,
-            loc.docs_createItem5,
-            loc.docs_createItem6,
-          ],
-        ),
-        _DocSection(
-          loc.docs_templatesTitle,
-          [
-            loc.docs_templatesItem1,
-            loc.docs_templatesItem2,
-          ],
-        ),
-        _DocSection(
-          loc.docs_resultsTitle,
-          [
-            loc.docs_resultsItem1,
-            loc.docs_resultsItem2,
-          ],
-        ),
-        _DocSection(
-          loc.docs_historyTitle,
-          [
-            loc.docs_historyItem1,
-            loc.docs_historyItem2,
-            loc.docs_historyItem3,
-            loc.docs_historyItem4,
-          ],
-        ),
-        _DocSection(
-          loc.docs_languageTitle,
-          [
-            loc.docs_languageItem1,
-          ],
-        ),
-        _DocSection(
-          loc.docs_authTitle,
-          [
-            loc.docs_authItem1,
-          ],
-        ),
-        _DocSection(
-          loc.docs_methodTitle,
-          [
-            loc.docs_methodItem1,
-            loc.docs_methodItem2,
-            loc.docs_methodItem3,
-          ],
-        ),
-      ];
+    _DocSection(loc.docs_gettingStartedTitle, [
+      loc.docs_gettingStartedItem1,
+      loc.docs_gettingStartedItem2,
+    ]),
+    _DocSection(loc.docs_createTitle, [
+      loc.docs_createItem1,
+      loc.docs_createItem2,
+      loc.docs_createItem3,
+      loc.docs_createItem4,
+      loc.docs_createItem5,
+      loc.docs_createItem6,
+    ]),
+    _DocSection(loc.docs_templatesTitle, [
+      loc.docs_templatesItem1,
+      loc.docs_templatesItem2,
+    ]),
+    _DocSection(loc.docs_resultsTitle, [
+      loc.docs_resultsItem1,
+      loc.docs_resultsItem2,
+    ]),
+    _DocSection(loc.docs_historyTitle, [
+      loc.docs_historyItem1,
+      loc.docs_historyItem2,
+      loc.docs_historyItem3,
+      loc.docs_historyItem4,
+    ]),
+    _DocSection(loc.docs_languageTitle, [loc.docs_languageItem1]),
+    _DocSection(loc.docs_authTitle, [loc.docs_authItem1]),
+    _DocSection(loc.docs_methodTitle, [
+      loc.docs_methodItem1,
+      loc.docs_methodItem2,
+      loc.docs_methodItem3,
+    ]),
+  ];
 }
 
 class _DocSection {
