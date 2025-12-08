@@ -143,10 +143,7 @@ void main() {
         bestOptionId: 'opt-1',
         scores: {'opt-1': 8.5},
         ranking: ['opt-1'],
-        debug: {
-          'ahpConsistencyRatio': '0.05',
-          'stability': '0.95',
-        },
+        debug: {'ahpConsistencyRatio': '0.05', 'stability': '0.95'},
       );
 
       const decision = Decision(

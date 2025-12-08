@@ -4,10 +4,7 @@ import 'package:thinkr/features/decision/domain/entities/decision.dart';
 void main() {
   group('DecisionOption', () {
     test('should create option with required fields', () {
-      const option = DecisionOption(
-        id: 'opt-1',
-        label: 'Option A',
-      );
+      const option = DecisionOption(id: 'opt-1', label: 'Option A');
 
       expect(option.id, 'opt-1');
       expect(option.label, 'Option A');
@@ -35,10 +32,7 @@ void main() {
 
   group('DecisionCriterion', () {
     test('should create criterion with default weight', () {
-      const criterion = DecisionCriterion(
-        id: 'crit-1',
-        label: 'Cost',
-      );
+      const criterion = DecisionCriterion(id: 'crit-1', label: 'Cost');
 
       expect(criterion.id, 'crit-1');
       expect(criterion.label, 'Cost');
@@ -127,10 +121,7 @@ void main() {
     });
 
     test('should create decision with title and method', () {
-      const decision = Decision(
-        title: 'Buy a Car',
-        method: DecisionMethod.ahp,
-      );
+      const decision = Decision(title: 'Buy a Car', method: DecisionMethod.ahp);
 
       expect(decision.title, 'Buy a Car');
       expect(decision.method, DecisionMethod.ahp);
@@ -139,7 +130,10 @@ void main() {
     test('should support all decision methods', () {
       const wsm = Decision(title: 'Test', method: DecisionMethod.weightedSum);
       const ahp = Decision(title: 'Test', method: DecisionMethod.ahp);
-      const fuzzy = Decision(title: 'Test', method: DecisionMethod.fuzzyWeightedSum);
+      const fuzzy = Decision(
+        title: 'Test',
+        method: DecisionMethod.fuzzyWeightedSum,
+      );
 
       expect(wsm.method, DecisionMethod.weightedSum);
       expect(ahp.method, DecisionMethod.ahp);
@@ -153,9 +147,7 @@ void main() {
           DecisionOption(id: 'opt-1', label: 'Option 1'),
           DecisionOption(id: 'opt-2', label: 'Option 2'),
         ],
-        criteria: [
-          DecisionCriterion(id: 'crit-1', label: 'Criterion 1'),
-        ],
+        criteria: [DecisionCriterion(id: 'crit-1', label: 'Criterion 1')],
       );
 
       expect(decision.options.length, 2);
@@ -165,10 +157,7 @@ void main() {
     test('should store scores with proper keys', () {
       const decision = Decision(
         title: 'Test',
-        scores: {
-          'opt-1|crit-1': 8.0,
-          'opt-2|crit-1': 7.5,
-        },
+        scores: {'opt-1|crit-1': 8.0, 'opt-2|crit-1': 7.5},
       );
 
       expect(decision.scores['opt-1|crit-1'], 8.0);
@@ -206,11 +195,8 @@ void main() {
         scores: {'opt-1': 8.5},
         ranking: ['opt-1'],
       );
-      
-      const decision = Decision(
-        title: 'Test',
-        result: result,
-      );
+
+      const decision = Decision(title: 'Test', result: result);
 
       expect(decision.result, isNotNull);
       expect(decision.result?.bestOptionId, 'opt-1');
@@ -218,11 +204,7 @@ void main() {
 
     test('should support timestamps', () {
       final now = DateTime.now();
-      final decision = Decision(
-        title: 'Test',
-        createdAt: now,
-        updatedAt: now,
-      );
+      final decision = Decision(title: 'Test', createdAt: now, updatedAt: now);
 
       expect(decision.createdAt, now);
       expect(decision.updatedAt, now);
@@ -231,10 +213,7 @@ void main() {
 
     test('should support soft delete', () {
       final deletedAt = DateTime.now();
-      final decision = Decision(
-        title: 'Test',
-        deletedAt: deletedAt,
-      );
+      final decision = Decision(title: 'Test', deletedAt: deletedAt);
 
       expect(decision.deletedAt, deletedAt);
     });

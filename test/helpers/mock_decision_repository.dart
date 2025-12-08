@@ -61,9 +61,7 @@ class MockDecisionRepository implements DecisionRepository {
     }
     final index = _decisions.indexWhere((d) => d.id == id);
     if (index != -1) {
-      _decisions[index] = _decisions[index].copyWith(
-        deletedAt: DateTime.now(),
-      );
+      _decisions[index] = _decisions[index].copyWith(deletedAt: DateTime.now());
     }
   }
 

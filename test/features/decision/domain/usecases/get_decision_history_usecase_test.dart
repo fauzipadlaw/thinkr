@@ -89,11 +89,13 @@ void main() {
 
       expect(
         () => useCase(),
-        throwsA(isA<Exception>().having(
-          (e) => e.toString(),
-          'message',
-          contains('Network error'),
-        )),
+        throwsA(
+          isA<Exception>().having(
+            (e) => e.toString(),
+            'message',
+            contains('Network error'),
+          ),
+        ),
       );
     });
   });

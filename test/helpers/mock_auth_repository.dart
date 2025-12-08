@@ -27,7 +27,10 @@ class MockAuthRepository implements AuthRepository {
     if (shouldThrowOnSignIn) {
       throw Exception(errorMessage ?? 'Google sign-in failed');
     }
-    final user = const AuthUser(id: 'google-user-123', email: 'test@google.com');
+    final user = const AuthUser(
+      id: 'google-user-123',
+      email: 'test@google.com',
+    );
     setCurrentUser(user);
   }
 

@@ -297,11 +297,16 @@ void main() {
         final result = await cubit.signInAnonymously();
 
         expect(result, isFalse);
-        expect(cubit.state.errorMessage, contains('Anonymous sign-in disabled'));
+        expect(
+          cubit.state.errorMessage,
+          contains('Anonymous sign-in disabled'),
+        );
       });
 
       test('should support captcha token', () async {
-        final result = await cubit.signInAnonymously(captchaToken: 'captcha-xyz');
+        final result = await cubit.signInAnonymously(
+          captchaToken: 'captcha-xyz',
+        );
 
         expect(result, isTrue);
       });
@@ -323,27 +328,33 @@ void main() {
         expect(result, isFalse);
       });
 
-      test('should return true for captcha error when not authenticated', () async {
-        final result = await cubit.shouldRunCaptcha(
-          requiresCaptcha: true,
-          errorMessage: 'captcha required',
-        );
+      test(
+        'should return true for captcha error when not authenticated',
+        () async {
+          final result = await cubit.shouldRunCaptcha(
+            requiresCaptcha: true,
+            errorMessage: 'captcha required',
+          );
 
-        expect(result, isTrue);
-      });
+          expect(result, isTrue);
+        },
+      );
 
-      test('should return false for captcha error when authenticated', () async {
-        mockRepository.setCurrentUser(
-          const AuthUser(id: 'user-123', email: 'test@example.com'),
-        );
+      test(
+        'should return false for captcha error when authenticated',
+        () async {
+          mockRepository.setCurrentUser(
+            const AuthUser(id: 'user-123', email: 'test@example.com'),
+          );
 
-        final result = await cubit.shouldRunCaptcha(
-          requiresCaptcha: true,
-          errorMessage: 'captcha required',
-        );
+          final result = await cubit.shouldRunCaptcha(
+            requiresCaptcha: true,
+            errorMessage: 'captcha required',
+          );
 
-        expect(result, isFalse);
-      });
+          expect(result, isFalse);
+        },
+      );
 
       test('should detect various captcha error messages', () async {
         final messages = [

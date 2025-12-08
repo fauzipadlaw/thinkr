@@ -71,13 +71,16 @@ void main() {
       expect(cubit.state.hasMore, isTrue);
     });
 
-    test('load should set hasMore to false when results are less than page size', () async {
-      await mockRepository.saveDecision(const Decision(title: 'Decision 1'));
+    test(
+      'load should set hasMore to false when results are less than page size',
+      () async {
+        await mockRepository.saveDecision(const Decision(title: 'Decision 1'));
 
-      await cubit.load();
+        await cubit.load();
 
-      expect(cubit.state.hasMore, isFalse);
-    });
+        expect(cubit.state.hasMore, isFalse);
+      },
+    );
 
     test('refresh should reload from first page', () async {
       await mockRepository.saveDecision(const Decision(title: 'Decision 1'));

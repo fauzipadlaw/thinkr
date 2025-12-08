@@ -34,17 +34,20 @@ void main() {
       expect(cubit.state.user, isNull);
     });
 
-    test('initialize with existing user should set authenticated state', () async {
-      const user = AuthUser(id: 'user-123', email: 'test@example.com');
-      mockRepository.setCurrentUser(user);
+    test(
+      'initialize with existing user should set authenticated state',
+      () async {
+        const user = AuthUser(id: 'user-123', email: 'test@example.com');
+        mockRepository.setCurrentUser(user);
 
-      await cubit.initialize();
+        await cubit.initialize();
 
-      expect(cubit.state.isUnknown, isFalse);
-      expect(cubit.state.isAuthenticated, isTrue);
-      expect(cubit.state.user?.id, 'user-123');
-      expect(cubit.state.user?.email, 'test@example.com');
-    });
+        expect(cubit.state.isUnknown, isFalse);
+        expect(cubit.state.isAuthenticated, isTrue);
+        expect(cubit.state.user?.id, 'user-123');
+        expect(cubit.state.user?.email, 'test@example.com');
+      },
+    );
 
     test('should listen to auth state changes after initialization', () async {
       await cubit.initialize();

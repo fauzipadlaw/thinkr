@@ -34,11 +34,13 @@ void main() {
 
       expect(
         () => useCase('some-id'),
-        throwsA(isA<Exception>().having(
-          (e) => e.toString(),
-          'message',
-          contains('Delete operation failed'),
-        )),
+        throwsA(
+          isA<Exception>().having(
+            (e) => e.toString(),
+            'message',
+            contains('Delete operation failed'),
+          ),
+        ),
       );
     });
 

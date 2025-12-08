@@ -20,13 +20,8 @@ void main() {
           DecisionOption(id: 'opt-1', label: 'Option 1'),
           DecisionOption(id: 'opt-2', label: 'Option 2'),
         ],
-        criteria: const [
-          DecisionCriterion(id: 'crit-1', label: 'Criterion 1'),
-        ],
-        scores: const {
-          'opt-1|crit-1': 8.0,
-          'opt-2|crit-1': 7.0,
-        },
+        criteria: const [DecisionCriterion(id: 'crit-1', label: 'Criterion 1')],
+        scores: const {'opt-1|crit-1': 8.0, 'opt-2|crit-1': 7.0},
       );
 
       final result = await useCase(decision);
@@ -45,11 +40,13 @@ void main() {
 
       expect(
         () => useCase(decision),
-        throwsA(isA<StateError>().having(
-          (e) => e.message,
-          'message',
-          contains('at least one option'),
-        )),
+        throwsA(
+          isA<StateError>().having(
+            (e) => e.message,
+            'message',
+            contains('at least one option'),
+          ),
+        ),
       );
     });
 
@@ -62,11 +59,13 @@ void main() {
 
       expect(
         () => useCase(decision),
-        throwsA(isA<StateError>().having(
-          (e) => e.message,
-          'message',
-          contains('at least one criterion'),
-        )),
+        throwsA(
+          isA<StateError>().having(
+            (e) => e.message,
+            'message',
+            contains('at least one criterion'),
+          ),
+        ),
       );
     });
 
@@ -82,11 +81,13 @@ void main() {
 
       expect(
         () => useCase(decision),
-        throwsA(isA<Exception>().having(
-          (e) => e.toString(),
-          'message',
-          contains('Evaluation service unavailable'),
-        )),
+        throwsA(
+          isA<Exception>().having(
+            (e) => e.toString(),
+            'message',
+            contains('Evaluation service unavailable'),
+          ),
+        ),
       );
     });
 
@@ -96,7 +97,9 @@ void main() {
           title: 'Test',
           method: method,
           options: const [DecisionOption(id: 'opt-1', label: 'Option 1')],
-          criteria: const [DecisionCriterion(id: 'crit-1', label: 'Criterion 1')],
+          criteria: const [
+            DecisionCriterion(id: 'crit-1', label: 'Criterion 1'),
+          ],
         );
 
         final result = await useCase(decision);

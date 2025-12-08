@@ -62,11 +62,13 @@ void main() {
 
       expect(
         () => useCase(decision),
-        throwsA(isA<Exception>().having(
-          (e) => e.toString(),
-          'message',
-          contains('Database error'),
-        )),
+        throwsA(
+          isA<Exception>().having(
+            (e) => e.toString(),
+            'message',
+            contains('Database error'),
+          ),
+        ),
       );
     });
 
@@ -77,10 +79,7 @@ void main() {
         ranking: ['opt-1'],
       );
 
-      const decision = Decision(
-        title: 'Evaluated',
-        result: result,
-      );
+      const decision = Decision(title: 'Evaluated', result: result);
 
       final saved = await useCase(decision);
 
