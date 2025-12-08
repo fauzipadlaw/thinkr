@@ -296,6 +296,18 @@ abstract class AppLocalizations {
   /// **'Stay'**
   String get login_discardStay;
 
+  /// No description provided for @login_captchaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify you\'re human'**
+  String get login_captchaTitle;
+
+  /// No description provided for @login_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get login_cancel;
+
   /// No description provided for @history_title.
   ///
   /// In en, this message translates to:

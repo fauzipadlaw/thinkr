@@ -33,6 +33,8 @@
   "login_discardMessage": "You have unsent input. Leaving will clear the form.",
   "login_discardConfirm": "Discard",
   "login_discardStay": "Stay",
+  "login_captchaTitle": "Verify you're human",
+  "login_cancel": "Cancel",
   "history_title": "Decision history",
   "history_emptyTitle": "No decisions yet",
   "history_emptySubtitle": "Create a decision to see it here.",
