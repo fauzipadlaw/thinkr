@@ -3,6 +3,8 @@ import 'package:thinkr/core/localization/app_locale.dart';
 import 'package:thinkr/features/settings/presentation/settings_cubit.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  
   late SettingsCubit cubit;
 
   setUp(() {
