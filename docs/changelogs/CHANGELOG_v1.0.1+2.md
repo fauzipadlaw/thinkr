@@ -1,0 +1,15 @@
+## Changelog
+
+- done: github actions (b3e8eaa)
+- done: setup github action (279a206)
+- done: improve decision methods, sign with google integration (tested on ios), etc (5c9f013)
+- done: improve decision methods, sign with google integration (tested on ios), etc (fd127e8)
+- add: decision method: ahp and fuzzy (a2325af)
+- done: add login anonymously and capthca verification for risky user (095620e)
+- done: improve UI and validation (873b617)
+- done: improve launcher (b4ef2ca)
+- done: improve snackbar (577c507)
+- done: supabase integration, working decision support features, including history, edit, evaluate, search, change language and user guide (d03aa7b)
+- done: supabase integration, working decision support features, including history, edit, evaluate, search, change language and user guide (1948461)
+- wip: decision feature (e15f753)
+- add: basic project setup (55226b9)
