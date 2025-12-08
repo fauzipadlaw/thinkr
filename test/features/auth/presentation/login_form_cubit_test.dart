@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:thinkr/features/auth/domain/auth_user.dart';
 import 'package:thinkr/features/auth/presentation/login_form_cubit.dart';
 import 'package:thinkr/features/auth/presentation/login_form_state.dart';
 import '../../../helpers/mock_auth_repository.dart';

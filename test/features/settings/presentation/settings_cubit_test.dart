@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:thinkr/core/localization/app_locale.dart';
 import 'package:thinkr/features/settings/presentation/settings_cubit.dart';
