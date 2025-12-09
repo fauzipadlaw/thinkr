@@ -6,7 +6,7 @@ abstract class AuthRepository {
   Stream<AuthUser?> get authStateChanges;
   Future<AuthUser?> get currentUser;
 
-  Future<void> signInWithGoogle(); // dummy for now
+  Future<void> signInWithGoogle();
   Future<void> signInAnonymously({String? captchaToken});
   Future<void> signInWithEmail({
     required String email,

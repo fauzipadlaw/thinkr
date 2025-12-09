@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthUser;
 
@@ -13,12 +12,9 @@ import '../domain/auth_user.dart';
 class SupabaseAuthRepository implements AuthRepository {
   final SupabaseClient _client;
   final EnvConfig _envConfig;
-  final GoogleSignIn _googleSignIn;
   final _controller = StreamController<AuthUser?>.broadcast();
-  bool _googleSignInInitialized = false;
 
-  SupabaseAuthRepository(this._client, this._envConfig)
-    : _googleSignIn = GoogleSignIn.instance {
+  SupabaseAuthRepository(this._client, this._envConfig) {
     final user = _client.auth.currentUser;
     _controller.add(_mapUser(user));
 
@@ -52,59 +48,17 @@ class SupabaseAuthRepository implements AuthRepository {
     }
   }
 
-  Future<void> _initializeGoogleSignIn() async {
-    if (_googleSignInInitialized || kIsWeb) return;
-
-    await _googleSignIn.initialize(
-      serverClientId: _envConfig.googleWebClientId.isNotEmpty
-          ? _envConfig.googleWebClientId
-          : null,
-      clientId: _envConfig.googleIosClientId.isNotEmpty
-          ? _envConfig.googleIosClientId
-          : null,
-    );
-    _googleSignInInitialized = true;
-  }
-
   @override
   Future<void> signInWithGoogle() async {
-    if (kIsWeb) {
-      // Web: use redirectTo from env (per environment)
-      final redirectTo = _envConfig.supabaseRedirectUrl.isNotEmpty
-          ? _envConfig.supabaseRedirectUrl
-          : null;
-      await _client.auth.signInWithOAuth(
-        OAuthProvider.google,
-        redirectTo: redirectTo,
-      );
-      return;
-    }
-
-    await _initializeGoogleSignIn();
-
-    try {
-      // Use `authenticate()` for interactive sign-in. `attemptLightweightAuthentication`
-      // is for silent sign-in and will fail for new users.
-      final googleUser = await _googleSignIn.authenticate();
-
-      final auth = googleUser.authentication;
-      final idToken = auth.idToken;
-
-      if (idToken == null) {
-        throw AuthException('No ID token returned from Google.');
-      }
-
-      await _client.auth.signInWithIdToken(
-        provider: OAuthProvider.google,
-        idToken: idToken,
-      );
-    } on GoogleSignInException catch (e) {
-      // The user canceled the sign-in flow.
-      if (e.code == GoogleSignInExceptionCode.canceled) {
-        return; // Not an error, just return.
-      }
-      throw AuthException(e.toString());
-    }
+    final redirectTo = kIsWeb
+        ? (_envConfig.supabaseRedirectUrl.isNotEmpty
+              ? _envConfig.supabaseRedirectUrl
+              : null)
+        : 'io.supabase.flutterquickstart://login-callback/';
+    await _client.auth.signInWithOAuth(
+      OAuthProvider.google,
+      redirectTo: redirectTo,
+    );
   }
 
   @override

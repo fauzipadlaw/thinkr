@@ -53,7 +53,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>io.supabase.flutter</string>
+				<string>io.supabase.flutterquickstart</string>
 				<string>com.googleusercontent.apps.929563005410-1r01s6god7008lvfup2j6k3ut6ds738b</string>
 			</array>
 		</dict>
