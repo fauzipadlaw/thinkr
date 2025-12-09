@@ -64,49 +64,41 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocBuilder<LoginFormCubit, LoginFormState>(
           builder: (context, state) {
             final cubit = context.read<LoginFormCubit>();
-            return PopScope(
-              canPop: false,
-              onPopInvokedWithResult: (didPop, _) async {
-                if (didPop) return;
-                final allow = await _confirmDiscard(context, state);
-                if (allow && context.mounted) {
-                  await Navigator.of(context).maybePop();
-                }
-              },
-              child: Scaffold(
-                body: Stack(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [AppColors.bgDeep, AppColors.bgCard],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
+            return Scaffold(
+              body: Stack(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColors.bgDeep, AppColors.bgCard],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: IconButton(
-                          color: Colors.white70,
-                          icon: const Icon(Icons.menu_book_outlined),
-                          tooltip: loc.docs_title,
-                          onPressed: () async {
-                            final canLeave = await _confirmDiscard(
-                              context,
-                              state,
-                            );
-                            if (canLeave) {
-                              if (!context.mounted) return;
-                              context.push(AppRoutes.docsPublic);
-                            }
-                          },
-                        ),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: IconButton(
+                        color: Colors.white70,
+                        icon: const Icon(Icons.menu_book_outlined),
+                        tooltip: loc.docs_title,
+                        onPressed: () async {
+                          final canLeave = await _confirmDiscard(
+                            context,
+                            state,
+                          );
+                          if (canLeave) {
+                            if (!context.mounted) return;
+                            context.push(AppRoutes.docsPublic);
+                          }
+                        },
                       ),
                     ),
-                    Center(
+                  ),
+                  Center(
+                    child: SingleChildScrollView(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 520),
                         child: Padding(
@@ -457,8 +449,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },

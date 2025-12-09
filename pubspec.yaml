@@ -48,7 +48,6 @@ dependencies:
   injectable: ^2.7.1
 
   supabase_flutter: ^2.10.3
-  google_sign_in: ^7.2.0
 
   # Localization
   flutter_localizations:
@@ -63,6 +62,7 @@ dependencies:
     git:
       url: https://github.com/fauzipadlaw/hcaptcha_flutter
       ref: 9c1b24febe2f7c156128a2c09672e73987eecb00
+  google_sign_in_web: ^1.1.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

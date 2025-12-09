@@ -760,7 +760,10 @@ class _DecisionEditorViewState extends State<_DecisionEditorView> {
     final accent = theme.colorScheme.primary;
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: 180, maxWidth: 240),
+      constraints: const BoxConstraints(
+        minWidth: 180,
+        maxWidth: double.infinity,
+      ),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
