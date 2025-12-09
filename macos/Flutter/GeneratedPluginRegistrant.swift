@@ -10,6 +10,11 @@ import path_provider_foundation
 import shared_preferences_foundation
 import url_launcher_macos
 
+/// Registers the generated Flutter macOS plugins with the given plugin registry.
+/// 
+/// This function registers the AppLinks, PathProvider, SharedPreferences, and UrlLauncher macOS plugins.
+— Parameters:
+///   - registry: The Flutter plugin registry to use for plugin registration.
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   AppLinksMacosPlugin.register(with: registry.registrar(forPlugin: "AppLinksMacosPlugin"))
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
