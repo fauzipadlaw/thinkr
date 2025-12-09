@@ -5469,7 +5469,6 @@ SOFTWARE.
 --------------------------------------------------------------------------------
 flutter_lints
 google_identity_services_web
-google_sign_in
 google_sign_in_platform_interface
 google_sign_in_web
 path_provider
@@ -10751,8 +10750,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --------------------------------------------------------------------------------
 go_router
-google_sign_in_android
-google_sign_in_ios
 path_provider_android
 url_launcher_linux
 url_launcher_windows
