@@ -58,13 +58,14 @@ void main() {
         id: 'existing-1',
         title: 'Existing Decision',
         method: DecisionMethod.ahp,
-        options: const [
-          DecisionOption(id: 'opt-1', label: 'Option 1'),
-        ],
+        options: const [DecisionOption(id: 'opt-1', label: 'Option 1')],
         criteria: const [
           DecisionCriterion(id: 'crit-1', label: 'Criterion 1', weight: 2.0),
         ],
         scores: const {'opt-1|crit-1': 8.0},
+        ahpMatrix: const [
+          [1.0],
+        ], // Add this line
         result: const DecisionResult(
           bestOptionId: 'opt-1',
           scores: {'opt-1': 8.0},
@@ -166,11 +167,7 @@ void main() {
 
       final optionId = cubit.state.decision!.options.first.id;
       final criterionId = cubit.state.decision!.criteria.first.id;
-      cubit.setScore(
-        optionId: optionId,
-        criterionId: criterionId,
-        score: 7.5,
-      );
+      cubit.setScore(optionId: optionId, criterionId: criterionId, score: 7.5);
 
       expect(cubit.state.decision!.options.length, 2);
       expect(cubit.state.decision!.scores.length, 1);
@@ -282,11 +279,7 @@ void main() {
 
       final optionId = cubit.state.decision!.options.first.id;
       final criterion1Id = cubit.state.decision!.criteria.first.id;
-      cubit.setScore(
-        optionId: optionId,
-        criterionId: criterion1Id,
-        score: 8.0,
-      );
+      cubit.setScore(optionId: optionId, criterionId: criterion1Id, score: 8.0);
 
       expect(cubit.state.decision!.criteria.length, 2);
       expect(cubit.state.decision!.scores.length, 1);
@@ -342,11 +335,7 @@ void main() {
       final optionId = cubit.state.decision!.options.first.id;
       final criterionId = cubit.state.decision!.criteria.first.id;
 
-      cubit.setScore(
-        optionId: optionId,
-        criterionId: criterionId,
-        score: 7.5,
-      );
+      cubit.setScore(optionId: optionId, criterionId: criterionId, score: 7.5);
 
       final key = '$optionId|$criterionId';
       expect(cubit.state.decision!.scores[key], 7.5);
@@ -362,18 +351,10 @@ void main() {
       final optionId = cubit.state.decision!.options.first.id;
       final criterionId = cubit.state.decision!.criteria.first.id;
 
-      cubit.setScore(
-        optionId: optionId,
-        criterionId: criterionId,
-        score: 0.5,
-      );
+      cubit.setScore(optionId: optionId, criterionId: criterionId, score: 0.5);
       expect(cubit.state.decision!.scores['$optionId|$criterionId'], 1.0);
 
-      cubit.setScore(
-        optionId: optionId,
-        criterionId: criterionId,
-        score: 15.0,
-      );
+      cubit.setScore(optionId: optionId, criterionId: criterionId, score: 15.0);
       expect(cubit.state.decision!.scores['$optionId|$criterionId'], 10.0);
     });
 
@@ -442,11 +423,7 @@ void main() {
       final option1Id = cubit.state.decision!.options[0].id;
       final criterionId = cubit.state.decision!.criteria.first.id;
 
-      cubit.setScore(
-        optionId: option1Id,
-        criterionId: criterionId,
-        score: 7.0,
-      );
+      cubit.setScore(optionId: option1Id, criterionId: criterionId, score: 7.0);
 
       expect(cubit.state.missingScores, 1);
     });
@@ -462,11 +439,7 @@ void main() {
       final option1Id = cubit.state.decision!.options[0].id;
       final criterionId = cubit.state.decision!.criteria.first.id;
 
-      cubit.setScore(
-        optionId: option1Id,
-        criterionId: criterionId,
-        score: 7.0,
-      );
+      cubit.setScore(optionId: option1Id, criterionId: criterionId, score: 7.0);
 
       expect(cubit.state.completionPercent, 50);
     });
@@ -699,6 +672,7 @@ void main() {
 
     test('applyTemplate should preserve method and weights', () {
       final template = Decision(
+        title: 'Template',
         method: DecisionMethod.ahp,
         options: const [DecisionOption(id: 'o1', label: 'Option')],
         criteria: const [
