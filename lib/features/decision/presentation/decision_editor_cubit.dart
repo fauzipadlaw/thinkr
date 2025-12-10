@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:thinkr/features/decision/domain/usecases/evaluate_decision_usecase.dart';
 import 'package:thinkr/features/decision/domain/usecases/save_decision_usecase.dart';
 import 'package:thinkr/features/decision/presentation/decision_editor_state.dart';
+import 'package:uuid/uuid.dart';
 
 import '../domain/entities/decision.dart';
 
@@ -67,16 +68,12 @@ class _DecisionEditorCubitImpl extends Cubit<DecisionEditorState>
     implements DecisionEditorCubit {
   final EvaluateDecisionUseCase _evaluate;
   final SaveDecisionUseCase _save;
-  final _rng = Random();
+  final _uuid = Uuid();
 
   _DecisionEditorCubitImpl(this._evaluate, this._save)
     : super(DecisionEditorState.initial);
 
-  String _newId() {
-    final time = DateTime.now().microsecondsSinceEpoch;
-    final rand = _rng.nextInt(1 << 32);
-    return '$time-$rand';
-  }
+  String _newId() => _uuid.v4();
 
   Decision _ensureDecision() {
     final decision = state.decision ?? Decision.empty;

@@ -63,6 +63,7 @@ dependencies:
       url: https://github.com/fauzipadlaw/hcaptcha_flutter
       ref: 9c1b24febe2f7c156128a2c09672e73987eecb00
   google_sign_in_web: ^1.1.0
+  uuid: ^4.5.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
