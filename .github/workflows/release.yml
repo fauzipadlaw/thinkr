@@ -162,8 +162,20 @@ jobs:
           fi
 
           # Build the changelog; exclude merge commits and the bump commit lines themselves
-          # Use a temporary file instead of mapfile for compatibility with older bash versions
-          git log --no-merges --pretty=format:'- %s (%h)' "${range}" | grep -v '^- ci: Bump version to ' > /tmp/changelog_lines.txt || true
+          # Use a temporary file for compatibility with older bash versions
+          tmpfile="$(mktemp)"
+          trap 'rm -f -- "$tmpfile"' EXIT
+
+          # Create lines in the form: "- subject (short-sha)"
+          git log --no-merges --pretty=format:'- %s (%h)' "${range}" > "$tmpfile" || true
+
+          # Filter out:
+          #  - bump commit messages we've already filtered by grep -v earlier (kept as safety)
+          #  - commits that update changelog for a version like v1.0.4 or v1.0.4+5
+          #  - commits that include [skip ci]
+          # The version pattern accepts an optional +suffix (e.g. +5).
+          # Use case-insensitive matching.
+          grep -E -i -v "^- ci: Bump version to |update changelog for v[0-9]+\.[0-9]+\.[0-9]+(\+[0-9]+)?|\\[skip ci\\]" "$tmpfile" > /tmp/changelog_lines.txt || true
 
           {
             echo "## Changelog"
@@ -174,9 +186,8 @@ jobs:
               cat /tmp/changelog_lines.txt
             fi
           } > CHANGELOG_BODY.md
-          
-          rm -f /tmp/changelog_lines.txt
 
+          # cleanup handled by trap
       - name: Commit Changelog
         shell: bash
         run: |
